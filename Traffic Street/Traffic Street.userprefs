@@ -1,0 +1,20 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LightsGamer.cs">
+    <Files>
+      <File FileName="..\..\..\Pass me\Assets\Scripts\CarsGenerator.cs" Line="10" Column="29" />
+      <File FileName="..\..\..\Pass me\Assets\Scripts\CarController.cs" Line="124" Column="21" />
+      <File FileName="..\..\..\Pass me\Assets\Scripts\CarsManager.cs" Line="3" Column="33" />
+      <File FileName="Assets\Scripts\Vehicle.cs" Line="7" Column="3" />
+      <File FileName="Assets\Scripts\TrafficLight.cs" Line="11" Column="28" />
+      <File FileName="Assets\Scripts\VehicleController.cs" Line="6" Column="2" />
+      <File FileName="Assets\Scripts\LightsGamer.cs" Line="53" Column="54" />
+      <File FileName="Assets\Scripts\Street.cs" Line="22" Column="35" />
+      <File FileName="Assets\Scripts\StreetsGenerator.cs" Line="26" Column="41" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
