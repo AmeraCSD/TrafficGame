@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class StreetsGenerator : MonoBehaviour {
-	private List<Street>  Streets;
-	//public List<string> Directions;
-	//public List<float> Sizes;
-	public GameObject lightPrefab = null;
 	
-	public string direction = "";
-	public float size = 0;
+	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
 	
+	public GameObject lightPrefab = null;		//this should be initialized in unity with the traffic light
+	
+	// variables for storing the streets at first (GRAPHICS NEEDS)
+	public string direction = "";				//this should be initialized in unity when the game starts
+	public float size = 0;						//this should be initialized in unity when the game starts
 	private bool pressed;
 	private bool finished;
 	private Vector3 mousePos;
+	//
 	
 	
 	
@@ -23,7 +24,7 @@ public class StreetsGenerator : MonoBehaviour {
 	
 	void Awake(){
 		Streets = new List<Street>();
-		GenerateTempStreets(); //for temp test
+		GenerateTempStreets(); 					//for temp test
 	}
 	
 	// Use this for initialization
@@ -31,6 +32,43 @@ public class StreetsGenerator : MonoBehaviour {
 		pressed = false;
 		finished = true;
 		
+	}
+	
+	///// For temp test *****************
+	private void GenerateTempStreets(){
+		Street s1 = new Street((FindLightObject("gpDown")as GameObject).transform.position , 
+								new TrafficLight(Direction.Down,
+												FindLightObject("lightDown"),
+												true),
+								20.0f,
+								-45.0f);
+		Street s2 = new Street((FindLightObject("gpUp")as GameObject).transform.position , 
+								new TrafficLight(Direction.Up,
+												FindLightObject("lightUp"),
+												true),
+								-20.0f,
+								45.0f);
+		Street s3 = new Street((FindLightObject("gpLeft")as GameObject).transform.position , 
+								new TrafficLight(Direction.Left,
+												FindLightObject("lightLeft"),
+												true),
+								20.0f,
+								-45.0f);
+		Street s4 = new Street((FindLightObject("gpRight")as GameObject).transform.position , 
+								new TrafficLight(Direction.Right,
+												FindLightObject("lightRight"),
+												true),
+								-20.0f,
+								45.0f);
+		Streets.Add(s1);
+		Streets.Add(s2);
+		Streets.Add(s3);
+		Streets.Add(s4);
+	}
+	
+	private GameObject FindLightObject(string name){
+		GameObject target = GameObject.FindGameObjectWithTag(name);
+		return target;
 	}
 	
 	// Update is called once per frame
@@ -59,46 +97,21 @@ public class StreetsGenerator : MonoBehaviour {
 		*/
 	}
 	
-	private void GenerateTempStreets(){
-		Street s1 = new Street((FindLightObject("gpDown")as GameObject).transform.position , 
-								new TrafficLight(LightPositionType.Down,
-												FindLightObject("lightDown"),
-												true));
-		Street s2 = new Street((FindLightObject("gpUp")as GameObject).transform.position , 
-								new TrafficLight(LightPositionType.Up,
-												FindLightObject("lightUp"),
-												true));
-		Street s3 = new Street((FindLightObject("gpLeft")as GameObject).transform.position , 
-								new TrafficLight(LightPositionType.Left,
-												FindLightObject("lightLeft"),
-												true));
-		Street s4 = new Street((FindLightObject("gpRight")as GameObject).transform.position , 
-								new TrafficLight(LightPositionType.Right,
-												FindLightObject("lightRight"),
-												true));
-		Streets.Add(s1);
-		Streets.Add(s2);
-		Streets.Add(s3);
-		Streets.Add(s4);
-	}
 	
-	private GameObject FindLightObject(string name){
-		GameObject target = GameObject.FindGameObjectWithTag(name);
-		return target;
-	}
 	
 	private void GenerateStreets(){
-		//LoadStreets();
+		//at the original version of the game we shoul call LoadStreets();
 					
+		//this piece of code is called to store the streets at first
 		if(direction != "" && size != 0 ){
 			//Street(Vector3 go, TrafficLight l)
 			//TrafficLight(LightPositionType n, GameObject l, bool s)
 			if(finished){
 				Debug.Log(mousePos);
 				GameObject go = Instantiate(lightPrefab, GetLightPosition(direction, size, mousePos) ,Quaternion.identity)as GameObject;
-				Street s = new Street(mousePos, new TrafficLight(ConvertFromStringToEnum(direction),
+				Street s = new Street(mousePos, new TrafficLight(ConvertFromStringToLightEnum(direction),
 																go,
-																false));
+																false), 0.0f, 0.0f);
 				Streets.Add(s);
 				go.renderer.material.color = Color.green;
 				pressed = false;
@@ -109,6 +122,7 @@ public class StreetsGenerator : MonoBehaviour {
 		
 	}
 	
+	//this method returns the wanted position for the traffic light to be placed in (only for storing the streets)
 	private Vector3 GetLightPosition(string s, float sz, Vector3 v){
 		if(s == "l"){
 			return new Vector3(v.x - sz, 10, v.z);
@@ -126,18 +140,19 @@ public class StreetsGenerator : MonoBehaviour {
 		
 	}
 	
-	private LightPositionType ConvertFromStringToEnum(string s){
+	//this method takes a string and returns the analogous light position type of type ENUM
+	private Direction ConvertFromStringToLightEnum(string s){
 		if(s == "l"){
-			return LightPositionType.Left;
+			return Direction.Left;
 		}
 		else if(s == "r"){
-			return LightPositionType.Right;
+			return Direction.Right;
 		}
 		else if(s == "u"){
-			return LightPositionType.Up;
+			return Direction.Up;
 		}
 		else{
-			return LightPositionType.Down;
+			return Direction.Down;
 		}
 	}
 	

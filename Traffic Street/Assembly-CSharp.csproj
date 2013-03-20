@@ -46,6 +46,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\GameMaster.cs" />
      <Compile Include="Assets\Scripts\LightsGamer.cs" />
+     <Compile Include="Assets\Scripts\Mayor.cs" />
      <Compile Include="Assets\Scripts\Street.cs" />
      <Compile Include="Assets\Scripts\StreetsGenerator.cs" />
      <Compile Include="Assets\Scripts\TrafficLight.cs" />

@@ -7,17 +7,17 @@ using System.Collections;
 */
 public class TrafficLight  {
 	
-	private LightPositionType _type;
+	private Direction _type;
 	private GameObject _light;
 	private bool _stopped;
 	
-	public TrafficLight(LightPositionType n, GameObject light, bool stopped){
+	public TrafficLight(Direction n, GameObject light, bool stopped){
 		_type = n;
 		_light = light;
 		_stopped = stopped; 		
 	}
 	
-	public LightPositionType Type{
+	public Direction Type{
 		get{return _type;}
 		set{_type = value;}
 	}
@@ -45,7 +45,7 @@ public class TrafficLight  {
 	}
 }
 
-public enum LightPositionType{
+public enum Direction{
 	Down,
 	Up,
 	Right,

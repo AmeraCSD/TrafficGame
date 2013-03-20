@@ -10,21 +10,27 @@ public class Vehicle  {
 	private VehicleType _type;			//the vehicle type
 	private float _speed;				//the vehicle speed
 	private float _size;				//howlong the vehicle is
-	private GameObject _vecPrefab;		//the object of the vehicle
-	private string _currentDirection;	//the initialized direction of moving the vehicle
+
+	//***********************************************************Don't forget the collider*******************
+	
+	private Direction _currentDirection;	//the current direction of moving the vehicle
+	private Street _currentStreet;
 	
 	
 	//attributes to specialize the events
 	private bool _stoppable;			//for thief
 	
 	//the constructor
-	public Vehicle(VehicleType t,float sp,float sz, GameObject go, string curDir){
-		_type = t;
-		_speed = sp;
-		_size = sz;
-		_vecPrefab = go;
+	
+	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet){
+		_type = type;
+		_speed = speed;
+		_size = size;
 		_currentDirection = curDir;
+		_currentStreet = curStreet;
 	}
+
+	
 	
 	//setters and getters
 	public VehicleType Type{
@@ -42,20 +48,22 @@ public class Vehicle  {
 		set{_size = value;}
 	}
 	
-	public GameObject VecObject{
-		get{return _vecPrefab;}
-		set{_vecPrefab = value;}
-	}
-	
-	public string CurrentDirection{
+	public Direction CurrentDirection{
 		get{return _currentDirection;}
 		set{_currentDirection = value;}
 	}
+	
+	public Street CurrentStreet{
+		get{return _currentStreet;}
+		set{_currentStreet = value;}
+	} 
 	
 	public bool Stoppable{
 		get{return _stoppable;}
 		set{_stoppable = value;}
 	}
+	
+	
 	
 }
 

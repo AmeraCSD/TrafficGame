@@ -1,17 +1,16 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\StreetsGenerator.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\VehicleController.cs">
     <Files>
-      <File FileName="..\..\..\Pass me\Assets\Scripts\CarsGenerator.cs" Line="7" Column="2" />
-      <File FileName="..\..\..\Pass me\Assets\Scripts\CarController.cs" Line="124" Column="21" />
-      <File FileName="..\..\..\Pass me\Assets\Scripts\CarsManager.cs" Line="143" Column="24" />
-      <File FileName="Assets\Scripts\Vehicle.cs" Line="7" Column="3" />
-      <File FileName="Assets\Scripts\TrafficLight.cs" Line="17" Column="21" />
-      <File FileName="Assets\Scripts\VehicleController.cs" Line="1" Column="2" />
-      <File FileName="Assets\Scripts\LightsGamer.cs" Line="86" Column="43" />
-      <File FileName="Assets\Scripts\Street.cs" Line="8" Column="2" />
-      <File FileName="Assets\Scripts\StreetsGenerator.cs" Line="65" Column="19" />
-      <File FileName="Assets\Scripts\GameMaster.cs" Line="8" Column="24" />
+      <File FileName="..\..\..\Pass me\Assets\Scripts\CarController.cs" Line="90" Column="20" />
+      <File FileName="..\..\..\Pass me\Assets\Scripts\CarsManager.cs" Line="108" Column="3" />
+      <File FileName="Assets\Scripts\TrafficLight.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\LightsGamer.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Street.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\StreetsGenerator.cs" Line="55" Column="14" />
+      <File FileName="Assets\Scripts\Vehicle.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameMaster.cs" Line="106" Column="91" />
+      <File FileName="Assets\Scripts\VehicleController.cs" Line="107" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

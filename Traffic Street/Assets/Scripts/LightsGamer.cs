@@ -46,7 +46,7 @@ public class LightsGamer : MonoBehaviour {
 	
 	private void InitLightsColors(){
 		for(int i=0; i<4; i++ ){
-			Streets[i].LightPosition.tLight.renderer.material.color = Color.red;
+			Streets[i].StreetLight.tLight.renderer.material.color = Color.red;
 		}
 		
 		/*_up.tLight.renderer.material.color = Color.red;
@@ -83,17 +83,17 @@ public class LightsGamer : MonoBehaviour {
 	
 	private void ChangeStatesOnMouseHit(RaycastHit hit){
 		if(hit.collider.gameObject.tag == "lightDown"){
-			Streets[0].LightPosition.ChangeState();
+			Streets[0].StreetLight.ChangeState();
 		}
 		if(hit.collider.gameObject.tag == "lightUp"){
-			Streets[1].LightPosition.ChangeState();
+			Streets[1].StreetLight.ChangeState();
 		}
 		if(hit.collider.gameObject.tag == "lightLeft"){
-			Streets[2].LightPosition.ChangeState();
+			Streets[2].StreetLight.ChangeState();
 			//Debug.Log("Tikkkkaaaaa");
 		}
 		if(hit.collider.gameObject.tag == "lightRight"){
-			Streets[3].LightPosition.ChangeState();
+			Streets[3].StreetLight.ChangeState();
 		}
 	}
 	
