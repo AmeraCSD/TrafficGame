@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class StreetsGenerator : MonoBehaviour {
 	
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
+	public const float STREET_WIDTH = 15;
 	
 	public GameObject lightPrefab = null;		//this should be initialized in unity with the traffic light
 	
@@ -41,25 +42,29 @@ public class StreetsGenerator : MonoBehaviour {
 												FindLightObject("lightDown"),
 												true),
 								20.0f,
-								-45.0f);
+								-45.0f, 
+								STREET_WIDTH);
 		Street s2 = new Street((FindLightObject("gpUp")as GameObject).transform.position , 
 								new TrafficLight(Direction.Up,
 												FindLightObject("lightUp"),
 												true),
 								-20.0f,
-								45.0f);
+								45.0f, 
+								STREET_WIDTH);
 		Street s3 = new Street((FindLightObject("gpLeft")as GameObject).transform.position , 
 								new TrafficLight(Direction.Left,
 												FindLightObject("lightLeft"),
 												true),
 								20.0f,
-								-45.0f);
+								-45.0f, 
+								STREET_WIDTH);
 		Street s4 = new Street((FindLightObject("gpRight")as GameObject).transform.position , 
 								new TrafficLight(Direction.Right,
 												FindLightObject("lightRight"),
 												true),
 								-20.0f,
-								45.0f);
+								45.0f, 
+								STREET_WIDTH);
 		Streets.Add(s1);
 		Streets.Add(s2);
 		Streets.Add(s3);
@@ -111,7 +116,7 @@ public class StreetsGenerator : MonoBehaviour {
 				GameObject go = Instantiate(lightPrefab, GetLightPosition(direction, size, mousePos) ,Quaternion.identity)as GameObject;
 				Street s = new Street(mousePos, new TrafficLight(ConvertFromStringToLightEnum(direction),
 																go,
-																false), 0.0f, 0.0f);
+																false), 0.0f, 0.0f, STREET_WIDTH);
 				Streets.Add(s);
 				go.renderer.material.color = Color.green;
 				pressed = false;

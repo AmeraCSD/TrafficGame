@@ -5,19 +5,21 @@ public class Street {
 	
 	private Vector3 _myGenerationPoint;
 	private TrafficLight _myLight;
-	private float _stopPosition;				//this is the maximum position that the cars can stop in when the traffic light is red
-	private float _streetEndPosition;			//this is the poisition that the cars leave the street in
+	private float _stopPosition;					//this is the maximum position that the cars can stop in when the traffic light is red
+	private float _streetEndPosition;				//this is the poisition that the cars leave the street in
+	private float _minDistanceToOpenTrafficLight;	//this is the minimum distance to change the light for preventing (collisions)
 	
 	//These variables are for the vehicles
-	private Queue _queue;					//this queue would contain the vehicles that are found in this street at the current time
-	private int _vehiclesNumber; 			//this is the number of all of the vehciles that would be generated arround the whole game time (should be generated in the game master class)
+	private Queue _queue;							//this queue would contain the vehicles that are found in this street at the current time
+	private int _vehiclesNumber; 					//this is the number of all of the vehciles that would be generated arround the whole game time (should be generated in the game master class)
 	
 	//constructor
-	public Street(Vector3 generationPoint, TrafficLight trafficLight, float stopPosition, float endPosition){
+	public Street(Vector3 generationPoint, TrafficLight trafficLight, float stopPosition, float endPosition, float minDistOpenLight){
 		_myGenerationPoint = generationPoint;
 		_myLight = trafficLight;
 		_stopPosition = stopPosition;
 		_streetEndPosition = endPosition;
+		_minDistanceToOpenTrafficLight = minDistOpenLight;
 		_queue = new Queue();
 		_vehiclesNumber = 0;
 		
@@ -42,6 +44,11 @@ public class Street {
 	public float StreetEndPosition{
 		get{return _streetEndPosition;}
 		set{_streetEndPosition = value;}
+	}
+	
+	public float MinimumDistanceToOpenTrafficLight{
+		get {return _minDistanceToOpenTrafficLight;}
+		set {_minDistanceToOpenTrafficLight = value;}
 	}
 	
 	public Queue StrQueue{

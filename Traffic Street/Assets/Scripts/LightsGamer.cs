@@ -16,8 +16,13 @@ public class LightsGamer : MonoBehaviour {
 	private TrafficLight _left;
 	private TrafficLight _right;
 	
+	private bool mousePressed;
+	private float time;
+	private RaycastHit curHit;
+	
 	void Awake(){
 		//InitLightsObjects();
+		mousePressed = false;
 	}
 	
 	//This method is intializing the objects of the traffic lights
@@ -40,8 +45,8 @@ public class LightsGamer : MonoBehaviour {
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getStreets();
 
 		InitLightsColors();	
-
-
+		
+		InvokeRepeating("CountDown", 1.0f, Time.deltaTime);
 	}
 	
 	private void InitLightsColors(){
@@ -56,12 +61,25 @@ public class LightsGamer : MonoBehaviour {
 		*/
 	}
 	
-
+	void CountDown ()
+	{
+		if(--time == 0)
+		{
+			CancelInvoke("CountDown");
+			//gameOver = true;
+			
+		}
+		// here
+		if(mousePressed)
+			ChangeStatesOnMouseHit(curHit);
+	}
+	
 	
 	// Update is called once per frame
 	void Update () {
 		//OnArrowsPressed();
 		OnMousePressed();
+		
 		
 	}
 	
@@ -70,12 +88,14 @@ public class LightsGamer : MonoBehaviour {
 	private void OnMousePressed(){
 		if(Input.GetMouseButtonDown(1)){
 			Ray ray = (GameObject.FindGameObjectWithTag("MainCamera")).camera.ScreenPointToRay(Input.mousePosition);
-    		RaycastHit hit;
+    		RaycastHit hit ;
     		if (Physics.Raycast(ray, out hit)){
 	      		// the object identified by hit.transform was clicked
 	      		// do whatever you want
 				//Streets[i].LightPosition.ChangeState();
-				ChangeStatesOnMouseHit(hit);
+				mousePressed = true;
+				curHit = hit;
+			//	ChangeStatesOnMouseHit(hit);
    			 }
 			
 		}
@@ -83,17 +103,18 @@ public class LightsGamer : MonoBehaviour {
 	
 	private void ChangeStatesOnMouseHit(RaycastHit hit){
 		if(hit.collider.gameObject.tag == "lightDown"){
-			Streets[0].StreetLight.ChangeState();
+			Streets[0].StreetLight.ChangeState(Streets[0].MinimumDistanceToOpenTrafficLight);
+			Debug.Log("MinimumDistanceToOpenTrafficLight ====== " + Streets[0].MinimumDistanceToOpenTrafficLight);
 		}
 		if(hit.collider.gameObject.tag == "lightUp"){
-			Streets[1].StreetLight.ChangeState();
+			Streets[1].StreetLight.ChangeState(Streets[1].MinimumDistanceToOpenTrafficLight);
 		}
 		if(hit.collider.gameObject.tag == "lightLeft"){
-			Streets[2].StreetLight.ChangeState();
+			Streets[2].StreetLight.ChangeState(Streets[2].MinimumDistanceToOpenTrafficLight);
 			//Debug.Log("Tikkkkaaaaa");
 		}
 		if(hit.collider.gameObject.tag == "lightRight"){
-			Streets[3].StreetLight.ChangeState();
+			Streets[3].StreetLight.ChangeState(Streets[3].MinimumDistanceToOpenTrafficLight);
 		}
 	}
 	

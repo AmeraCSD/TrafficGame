@@ -5,11 +5,13 @@ using System.Collections;
  This class is the base class for the 4 traffic lights
 
 */
-public class TrafficLight  {
+public class TrafficLight   : MonoBehaviour{
 	
 	private Direction _type;
 	private GameObject _light;
 	private bool _stopped;
+	
+	public const float MIN_VEHICLE_SPEED = 8.0f;		//this should be in the global class 
 	
 	public TrafficLight(Direction n, GameObject light, bool stopped){
 		_type = n;
@@ -32,8 +34,12 @@ public class TrafficLight  {
 		set{_stopped = value;}
 	}
 	
-	public void ChangeState(){
+	public void ChangeState(float streetWidth){
+		Debug.Log("STOPPEDDDDD is = " + _stopped);
 		if(_stopped){
+			Debug.Log("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+			_light.renderer.material.color = Color.yellow;
+			StartCoroutine(WaitForMe());
 			_stopped = false;
 			_light.renderer.material.color = Color.green;
 		}
@@ -42,6 +48,11 @@ public class TrafficLight  {
 			_light.renderer.material.color = Color.red;
 		}
 		//Debug.Log("****"+ stoppedUD);
+	}
+	
+	IEnumerator WaitForMe(){
+		//yield return new WaitForSeconds( streetWidth / MIN_VEHICLE_SPEED *Time.deltaTime);
+		yield return new WaitForSeconds(3);
 	}
 }
 
