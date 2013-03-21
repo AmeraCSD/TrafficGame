@@ -103,7 +103,7 @@ public class GameMaster : MonoBehaviour {
 		Streets[pos].VehiclesNumber ++;
 		vehicle.name = "____"+Streets[pos].StreetLight.Type.ToString() + " # " + Streets[pos].VehiclesNumber;
 		
-		vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(VehicleType.Normal, 20.0f, getVehicleLargeSize(vehicle), Streets[pos].StreetLight.Type, Streets[pos]);
+		vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(VehicleType.Normal, 15.0f, getVehicleLargeSize(vehicle), Streets[pos].StreetLight.Type, Streets[pos]);
 		
 		
 		//Vehicle vehicleObj;

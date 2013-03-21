@@ -6,11 +6,11 @@
       <File FileName="..\..\..\Pass me\Assets\Scripts\CarsManager.cs" Line="108" Column="3" />
       <File FileName="Assets\Scripts\TrafficLight.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\LightsGamer.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Street.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\StreetsGenerator.cs" Line="55" Column="14" />
+      <File FileName="Assets\Scripts\Street.cs" Line="20" Column="36" />
+      <File FileName="Assets\Scripts\StreetsGenerator.cs" Line="43" Column="10" />
       <File FileName="Assets\Scripts\Vehicle.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameMaster.cs" Line="106" Column="91" />
-      <File FileName="Assets\Scripts\VehicleController.cs" Line="107" Column="38" />
+      <File FileName="Assets\Scripts\GameMaster.cs" Line="129" Column="3" />
+      <File FileName="Assets\Scripts\VehicleController.cs" Line="126" Column="66" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
