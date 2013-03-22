@@ -10,13 +10,14 @@ public class TrafficLight   : MonoBehaviour{
 	private Direction _type;
 	private GameObject _light;
 	private bool _stopped;
+	private bool _onHold;
 	
-	public const float MIN_VEHICLE_SPEED = 8.0f;		//this should be in the global class 
 	
 	public TrafficLight(Direction n, GameObject light, bool stopped){
 		_type = n;
 		_light = light;
-		_stopped = stopped; 		
+		_stopped = stopped; 
+		_onHold = false;
 	}
 	
 	public Direction Type{
@@ -34,26 +35,11 @@ public class TrafficLight   : MonoBehaviour{
 		set{_stopped = value;}
 	}
 	
-	public void ChangeState(float streetWidth){
-		Debug.Log("STOPPEDDDDD is = " + _stopped);
-		if(_stopped){
-			Debug.Log("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-			_light.renderer.material.color = Color.yellow;
-			StartCoroutine(WaitForMe());
-			_stopped = false;
-			_light.renderer.material.color = Color.green;
-		}
-		else{
-			_stopped = true;
-			_light.renderer.material.color = Color.red;
-		}
-		//Debug.Log("****"+ stoppedUD);
+	public bool OnHold{
+		get{return _onHold;}
+		set{_onHold = value;}
 	}
 	
-	IEnumerator WaitForMe(){
-		//yield return new WaitForSeconds( streetWidth / MIN_VEHICLE_SPEED *Time.deltaTime);
-		yield return new WaitForSeconds(3);
-	}
 }
 
 public enum Direction{

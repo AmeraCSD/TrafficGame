@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class StreetsGenerator : MonoBehaviour {
 	
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
-	public const float STREET_WIDTH = 15;
+	public const float STREET_WIDTH = 30;
 	
 	public GameObject lightPrefab = null;		//this should be initialized in unity with the traffic light
 	

@@ -81,7 +81,7 @@ public class VehicleController : MonoBehaviour {
 		
 		
 		
-		if(_light.tLight.renderer.material.color == Color.green && !haveToStop){
+		if((_light.tLight.renderer.material.color == Color.green) && !haveToStop){
 			_speed = myVehicle.Speed;
 			
 		}
@@ -97,7 +97,7 @@ public class VehicleController : MonoBehaviour {
 			_direction == Direction.Up && transform.position.z > _stopPosition ){		
 				
 			passed = true ;
-			if(!dequeued && _light.tLight.renderer.material.color == Color.green){
+			if(!dequeued && (_light.tLight.renderer.material.color == Color.green)){
 				if(_myQueue.Count > 0){
 					_myQueue.Dequeue();
 					dequeued = true;
@@ -159,16 +159,16 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void StopMovingOnRed(){
-		if(_direction == Direction.Right && _light.tLight.renderer.material.color == Color.red && transform.position.x > _stopPosition - Offset ){
+		if(_direction == Direction.Right && !(_light.tLight.renderer.material.color == Color.green) && transform.position.x > _stopPosition - Offset ){
 			_speed = 0.0f;
 		}
-		else if(_direction == Direction.Left && _light.tLight.renderer.material.color == Color.red && transform.position.x < _stopPosition + Offset ){
+		else if(_direction == Direction.Left && !(_light.tLight.renderer.material.color == Color.green) && transform.position.x < _stopPosition + Offset ){
 			_speed = 0.0f;
 		}
-		else if(_direction == Direction.Down && _light.tLight.renderer.material.color == Color.red && transform.position.z < _stopPosition + Offset ){
+		else if(_direction == Direction.Down && !(_light.tLight.renderer.material.color == Color.green) && transform.position.z < _stopPosition + Offset ){
 			_speed = 0.0f;
 		}
-		else if(_direction == Direction.Up && _light.tLight.renderer.material.color == Color.red && transform.position.z > _stopPosition - Offset ){
+		else if(_direction == Direction.Up && !(_light.tLight.renderer.material.color == Color.green) && transform.position.z > _stopPosition - Offset ){
 			_speed = 0.0f;
 		}
 	}
