@@ -17,7 +17,7 @@ public class LightsGamer : MonoBehaviour {
 	private TrafficLight _right;
 	
 	
-	public const float MIN_VEHICLE_SPEED = 8.0f;		//this should be in the global class 
+	public const float MIN_VEHICLE_SPEED = 10.0f;		//this should be in the global class 
 	
 	//These variables are for changing the traffic lights (for the steady state)
 	private Queue timersQueue;
@@ -50,8 +50,10 @@ public class LightsGamer : MonoBehaviour {
 	
 	//This method for setting the lights at first all with red light "all stopped" (should be called in the Start() method)_
 	private void InitLightsColors(){
-		for(int i=0; i<4; i++ ){
-			Streets[i].StreetLight.tLight.renderer.material.color = Color.red;
+		for(int i=0; i<Streets.Count; i++ ){
+			if(Streets[i].StreetLight.tLight != null){
+				Streets[i].StreetLight.tLight.renderer.material.color = Color.red;
+			}
 		}
 		
 	}
@@ -81,18 +83,35 @@ public class LightsGamer : MonoBehaviour {
 	
 	
 	private void PutOnHoldOnMouseHit(RaycastHit hit){
-		if(hit.collider.gameObject.tag == "lightDown"){
+		if(hit.collider.gameObject.tag == "lightLeft"){
 			PutStateOnHold(Streets[0]);
 		}
-		if(hit.collider.gameObject.tag == "lightUp"){
+		
+		if(hit.collider.gameObject.tag == "lightRight"){
 			PutStateOnHold(Streets[1]);
 		}
-		if(hit.collider.gameObject.tag == "lightLeft"){
+		
+		if(hit.collider.gameObject.tag == "lightRight1" ){
 			PutStateOnHold(Streets[2]);
 		}
-		if(hit.collider.gameObject.tag == "lightRight"){
-			PutStateOnHold(Streets[3]);
+		
+		if(hit.collider.gameObject.tag == "lightUp"){
+			PutStateOnHold(Streets[5]);
 		}
+		
+		if(hit.collider.gameObject.tag == "lightDown"  ){
+			PutStateOnHold(Streets[7]);
+		}
+		
+		if(hit.collider.gameObject.tag == "lightDown1"  ){
+			PutStateOnHold(Streets[8]);
+		}
+		
+		
+		
+		
+		
+		
 	}
 	
 	//this method called when we hold on a state .. it enqueues the holded light street and the current time + the time it has to change the state in 

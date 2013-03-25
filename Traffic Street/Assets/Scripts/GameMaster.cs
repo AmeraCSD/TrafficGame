@@ -14,20 +14,19 @@ public class GameMaster : MonoBehaviour {
 	//HUDs variables 
 	public int score;
 	public float gameTime;
-	private const float GAME_TIME = 10;			//should equal to 5 minutes
+	private const float GAME_TIME = 30;			//should equal to 5 minutes
 	
-	
+	private List<Path> Paths;
 	private List<Street> Streets;
-	private List<Vector3> _generationPoints;
 	private List<float> _timeSlots;
 	private int vehiclesNumber;
 	// These constants for the random generation of vehicles
-	private const int VEHICLES_LEAST_NUMBER = 8;
-	private const int VEHICLES_MOST_NUMBER = 8;
+	private const int VEHICLES_LEAST_NUMBER = 20;
+	private const int VEHICLES_MOST_NUMBER = 20;
 	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	
-//	public bool gameOver;
+	public bool gameOver;
 	
 	
 	
@@ -43,18 +42,25 @@ public class GameMaster : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//initializing the vehicles needs
-		_generationPoints = new List<Vector3>();
+		//_generationPoints = new List<Vector3>();
+		
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getStreets();
-		InitAllGenerationPoints();
+		Paths = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getPaths();
+		
+		//InitAllGenerationPoints();
 		_timeSlots = new List<float>();
 		CalculateRandomTimeSlots();
 		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
 	}
 	
-	//This method initialized all the generation points for the streets in the map
+		
+	//This method initializes all the generation points for the streets in the map
 	private void InitAllGenerationPoints(){
 		for(int i=0; i<Streets.Count; i++){
-			_generationPoints.Add(Streets[i].GenerationPointPosition);
+			//if(Streets[i].GenerationPointPosition != Vector3.zero){
+			//	_generationPoints.Add(Streets[i].GenerationPointPosition);
+			//}
+			
 		}
 	}
 	
@@ -66,14 +72,13 @@ public class GameMaster : MonoBehaviour {
 			timeRatio = Random.Range(0.0f, gameTime);
 			if(!_timeSlots.Contains(timeRatio))
 				_timeSlots.Add(timeRatio);
-			Debug.Log("time slotttt ... "+ timeRatio);
 		}
 	}	
 	
 	//This method is called in the Start() it counts down the game time each second and generates the vehicles in the random time calculated at the first of the game
 	void CountTimeDown ()
 	{
-		Debug.Log("Game Time= "+gameTime);
+		//Debug.Log("Game Time= "+gameTime);
 		if(--gameTime == 0)
 		{
 			CancelInvoke("CountTimeDown");
@@ -98,26 +103,31 @@ public class GameMaster : MonoBehaviour {
 	
 	//here we give the vehicle all of its properities
 	private void GenerateRandomVehicle(){	
-		int pos = Random.Range(0, _generationPoints.Count);
-		GameObject vehicle = Instantiate(vehiclePrefab, _generationPoints[pos] ,Quaternion.identity) as GameObject;
-		Streets[pos].VehiclesNumber ++;
-		vehicle.name = "____"+Streets[pos].StreetLight.Type.ToString() + " # " + Streets[pos].VehiclesNumber;
+		//int pos = Random.Range(0, _generationPoints.Count);
+		int pos = Random.Range(0, Paths.Count);
 		
-		vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(VehicleType.Normal, 15.0f, getVehicleLargeSize(vehicle), Streets[pos].StreetLight.Type, Streets[pos]);
+		Debug.Log("Pos ===== "+  pos);
+		//if(Paths[pos] != Vector3.zero){
+		if(vehiclePrefab != null){
+		GameObject vehicle = Instantiate(vehiclePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
+		Paths[pos].PathStreets[0].VehiclesNumber ++;
+		vehicle.name = "____"+Paths[pos].PathStreets[0].StreetLight.Type.ToString() + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
+		
+		//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
+		vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
+																			15.0f, 
+																			getVehicleLargeSize(vehicle), 
+																			Paths[pos].PathStreets[0].StreetLight.Type, 
+																			Paths[pos].PathStreets[0], 
+																			Paths[pos].PathStreets[1], 
+																			0,
+																			Paths[pos]);
 		
 		
-		//Vehicle vehicleObj;
 		
-		//vehicleObj = vehicle.GetComponent<Vehicle>();
-		//vehicleObj.Type = VehicleType.Normal;
-		//vehicleObj.Speed = 50.0f;
-		//vehicleObj.Size = 14;
-		//vehicleObj.CurrentDirection = Streets[pos].StreetLight.Type;
-		Debug.Log("Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee______"+ Streets[pos].StreetLight.Type);
-		//vehicleObj.CurrentStreet = Streets[pos];
-		
-		//vehicle.GetComponent<Vehicle>()= vehicleObj;
-		
+		Debug.Log("Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee______"+ Paths[pos].PathStreets[0].StreetLight.Type);
+		//}
+		}
 	}
 	
 	private float getVehicleLargeSize(GameObject v){
@@ -142,7 +152,25 @@ public class GameMaster : MonoBehaviour {
 		GUI.Label( new Rect(10, 10, 100, 35), "Time: "+ gameTime);
 		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score.ToString());
 
-		
+		if(gameOver){
+		//	st.fontSize = 50;
+			//Destroy( GameObject.Find("  Game Master"));
+			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
+			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 - 12, 100, 25), "LOSER !!");
+			string temp = score.ToString();
+			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2+30-12 , 100, 25), "Score : "+ temp);
+			
+			GameObject [] gos = GameObject.FindGameObjectsWithTag("vehicle");
+			for(int i = 0; i < gos.Length; i++){
+				gos[i].SetActive(false);
+			}
+			
+			CancelInvoke("CountTimeDown");
+		//	gameObject.SetActive(false);
+			
+			//Application.Quit();
+			
+		}
 	}
 	
 	

@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 /*
  This class is the base class for all Vehicles
@@ -15,6 +17,9 @@ public class Vehicle  {
 	
 	private Direction _currentDirection;	//the current direction of moving the vehicle
 	private Street _currentStreet;
+	private Street _nextStreet;
+	private int _curStreetNumber;
+	private Path _myPath;
 	
 	
 	//attributes to specialize the events
@@ -22,12 +27,15 @@ public class Vehicle  {
 	
 	//the constructor
 	
-	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet){
+	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet,int curStrNum, Path path){
 		_type = type;
 		_speed = speed;
 		_size = size;
 		_currentDirection = curDir;
 		_currentStreet = curStreet;
+		_nextStreet = nextStreet;
+		_curStreetNumber = curStrNum;
+		_myPath = path;
 	}
 
 	
@@ -56,6 +64,21 @@ public class Vehicle  {
 	public Street CurrentStreet{
 		get{return _currentStreet;}
 		set{_currentStreet = value;}
+	} 
+	
+	public Street NextStreet{
+		get{return _nextStreet;}
+		set{_nextStreet = value;}
+	} 
+	
+	public int CurrentStreetNumber{
+		get{return _curStreetNumber;}
+		set{_curStreetNumber = value;}
+	}
+	
+	public Path MyPath{
+		get{return _myPath;}
+		set{_myPath = value;}
 	} 
 	
 	public bool Stoppable{

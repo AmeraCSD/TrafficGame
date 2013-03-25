@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{E24ECC77-0840-BFB7-A61F-FD43E6881ED7}</ProjectGuid>
+	<ProjectGuid>{118C923C-963C-B32B-83AB-6D0458E09A02}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-UnityScript</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,15 +44,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\GameMaster.cs" />
-     <Compile Include="Assets\Scripts\LightsGamer.cs" />
-     <Compile Include="Assets\Scripts\Mayor.cs" />
-     <Compile Include="Assets\Scripts\Path.cs" />
-     <Compile Include="Assets\Scripts\Street.cs" />
-     <Compile Include="Assets\Scripts\StreetsGenerator.cs" />
-     <Compile Include="Assets\Scripts\TrafficLight.cs" />
-     <Compile Include="Assets\Scripts\Vehicle.cs" />
-     <Compile Include="Assets\Scripts\VehicleController.cs" />
+     <Compile Include="Assets\Scripts\NewBehaviourScript.js" />
  <Reference Include="Assembly-UnityScript-firstpass">
  <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>

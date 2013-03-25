@@ -9,12 +9,15 @@ public class VehicleController : MonoBehaviour {
 	public Vehicle myVehicle;
 	//for the street
 	private Street _street;
+	private Path _path;
 	private TrafficLight _light;
 	private float _stopPosition;
-	private float _streetEndPosition;
+	private Vector3 _endPosition;
 	private Queue _myQueue;
 	private int _queueSize;
 	//for the vehicle
+	
+	private Direction lastDirection;
 	private Direction _direction;
 	private float _speed;
 	private float _size;
@@ -31,11 +34,13 @@ public class VehicleController : MonoBehaviour {
 	private bool gameOver;
 	
 	private float Offset;
+	
+	private GameMaster gameMasterScript;
 		
 	
 	// Use this for initialization
 	void Awake(){
-		 
+		 gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
 		
 		Offset = 0;
 		dequeued = false;
@@ -53,18 +58,51 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void InitStreetAndVehicleAttributes(){
-		_street = myVehicle.CurrentStreet;
-		_light = _street.StreetLight;
-		_stopPosition = _street.StopPosition;
-		_streetEndPosition = _street.StreetEndPosition;
-		_myQueue = _street.StrQueue;
-		_queueSize = _street.StrQueue.Count;
+		_path			= myVehicle.MyPath;
+		_endPosition 	= _path.EndPosition;
 		
-		_direction = myVehicle.CurrentDirection;
-		_speed = myVehicle.Speed;
-		_size = myVehicle.Size;
+		_street 		= myVehicle.CurrentStreet;
+		_direction 		= myVehicle.CurrentDirection;
+		_speed 			= myVehicle.Speed;
+		_size 			= myVehicle.Size;
+		
+		_light 			= _street.StreetLight;
+		_stopPosition 	= _street.StopPosition;
+		_myQueue 		= _street.StrQueue;
+		_queueSize 		= _street.StrQueue.Count;
+		
+		lastDirection = _direction;
+		
 	}
 	
+	private void ResetVehicleAttributes(){
+		lastDirection = _direction;
+		myVehicle.CurrentStreet = myVehicle.NextStreet;
+		myVehicle.CurrentStreetNumber ++;
+		if(myVehicle.CurrentStreetNumber+1 != _path.PathStreets.Count )
+			myVehicle.NextStreet =_path.PathStreets[myVehicle.CurrentStreetNumber];
+		else
+			myVehicle.NextStreet = null;
+		
+		_street = myVehicle.CurrentStreet; 
+		
+		myVehicle.CurrentDirection = _street.StreetLight.Type;
+		_direction 		= myVehicle.CurrentDirection;
+		//Debug.Log(gameObject.name + " direction" + _direction);
+		
+		_street.VehiclesNumber++;
+		_light 			= _street.StreetLight;
+		_stopPosition 	= _street.StopPosition;
+		_myQueue 		= _street.StrQueue;
+		_queueSize 		= _street.StrQueue.Count;
+		
+		Offset = 0;
+		dequeued = false;
+		enqueued = false;
+		haveToStop = false;
+		insideOnTriggerEnter = false;
+		passed = false;
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -81,13 +119,12 @@ public class VehicleController : MonoBehaviour {
 		
 		
 		
-		if((_light.tLight.renderer.material.color == Color.green) && !haveToStop){
+		if(!(_light.Stopped) && !haveToStop){
 			_speed = myVehicle.Speed;
 			
 		}
 	
 	}
-	
 	
 	private void CheckPosition_DeqIfPassed(){
 		
@@ -95,9 +132,11 @@ public class VehicleController : MonoBehaviour {
 			_direction == Direction.Left && transform.position.x < _stopPosition ||
 			_direction == Direction.Down  && transform.position.z < _stopPosition ||
 			_direction == Direction.Up && transform.position.z > _stopPosition ){		
-				
+			
+			
 			passed = true ;
-			if(!dequeued && (_light.tLight.renderer.material.color == Color.green)){
+			
+			if(!dequeued && !(_light.Stopped)){
 				if(_myQueue.Count > 0){
 					_myQueue.Dequeue();
 					dequeued = true;
@@ -105,6 +144,9 @@ public class VehicleController : MonoBehaviour {
 					Debug.Log(gameObject.name +" is dequeued" );
 				}
 			}
+			if(myVehicle.NextStreet != null)
+				TransfereToNextStreet();
+			
 		}
 	}
 	
@@ -112,12 +154,13 @@ public class VehicleController : MonoBehaviour {
 		if(!enqueued ){
 				_myQueue.Enqueue(gameObject);
 				enqueued = true;
+				Debug.Log(gameObject.name +" is enqueued" );
 		}
 	}
 	
 	private void SetStopOffset(){
 	//	Debug.Log("QUEUE SIZEEEEEEE of  " + gameObject.name +"      "+ _queueSize);
-		Offset =  (_queueSize) * (_size + 3);
+		Offset =  (_queueSize) * (_size + 5);
 	}
 	
 	private void SetupColliderSize(){
@@ -126,89 +169,111 @@ public class VehicleController : MonoBehaviour {
 			boxColl.size = new Vector3(1  , 1 , transform.localScale.z  );
 		}
 		else{
-			boxColl.size = new Vector3(transform.localScale.x  , 1 , 1 );
+			boxColl.size = new Vector3(transform.localScale.x   , 1 , 1 );
 		}
 		
 	}
 	
 	private void CheckAndDestroyAtEnd(){
-		if(_direction == Direction.Left && transform.position.x < _streetEndPosition){
+		if(_direction == Direction.Left && transform.position.x < _endPosition.x){
 			Destroy(gameObject) ;
-			//curScore += 500;
+			gameMasterScript.score += 500;
 		}
-		else if(_direction == Direction.Right && transform.position.x > _streetEndPosition){
+		else if(_direction == Direction.Right && transform.position.x > _endPosition.x){
 			Destroy(gameObject) ;
-			//curScore += 500;
+			gameMasterScript.score += 500;
 		}
-		else if(_direction == Direction.Down && transform.position.z < _streetEndPosition){
+		else if(_direction == Direction.Down && transform.position.z < _endPosition.z){
 			Destroy(gameObject) ;
-			//curScore += 500;
+			gameMasterScript.score += 500;
 		}
-		else if(_direction == Direction.Up && transform.position.z > _streetEndPosition){
+		else if(_direction == Direction.Up && transform.position.z > _endPosition.z){
 			Destroy(gameObject) ;
-			//curScore += 500;
+			gameMasterScript.score += 500;
 		}
+		
 	}
-
 	
-	private void StopMovingOnRed2(){
-		_myQueue.Enqueue(gameObject);
-		enqueued = true;
-		_speed = 0.0f;
-	//	Debug.Log(gameObject.name +" is enqueued" );
+	
+	
+	private void TransfereToNextStreet(){
+		if(_direction == Direction.Left && transform.position.x < _street.EndPoint.x){
+			ResetVehicleAttributes();
+		}
+		else if(_direction == Direction.Right && transform.position.x > _street.EndPoint.x){
+			ResetVehicleAttributes();
+		}
+		else if(_direction == Direction.Down && transform.position.z < _street.EndPoint.z){
+			ResetVehicleAttributes();
+		}
+		else if(_direction == Direction.Up && transform.position.z >_street.EndPoint.z){
+			ResetVehicleAttributes();
+		}
 	}
 	
 	private void StopMovingOnRed(){
-		if(_direction == Direction.Right && !(_light.tLight.renderer.material.color == Color.green) && transform.position.x > _stopPosition - Offset ){
-			_speed = 0.0f;
-		}
-		else if(_direction == Direction.Left && !(_light.tLight.renderer.material.color == Color.green) && transform.position.x < _stopPosition + Offset ){
-			_speed = 0.0f;
-		}
-		else if(_direction == Direction.Down && !(_light.tLight.renderer.material.color == Color.green) && transform.position.z < _stopPosition + Offset ){
-			_speed = 0.0f;
-		}
-		else if(_direction == Direction.Up && !(_light.tLight.renderer.material.color == Color.green) && transform.position.z > _stopPosition - Offset ){
-			_speed = 0.0f;
-		}
+		//if(_light.tLight != null){
+			if(_direction == Direction.Right && (_light.Stopped) && transform.position.x > _stopPosition - Offset ){
+				_speed = 0.0f;
+			}
+			else if(_direction == Direction.Left && (_light.Stopped) && transform.position.x < _stopPosition + Offset ){
+				_speed = 0.0f;
+			}
+			else if(_direction == Direction.Down && (_light.Stopped) && transform.position.z < _stopPosition + Offset ){
+				_speed = 0.0f;
+			}
+			else if(_direction == Direction.Up && (_light.Stopped) && transform.position.z > _stopPosition - Offset ){
+				_speed = 0.0f;
+			}
+		//}
 	}
 
 	private void Move(){
+		Debug.Log(gameObject.name + " ------> " + _direction);
 		if(_direction == Direction.Left){
 			//_charController.Move(transform.TransformDirection(Vector3.left) * _speed * Time.deltaTime);
+			//ReverseLastDirectionMove();
 			transform.Translate(transform.TransformDirection(Vector3.left) * _speed * Time.deltaTime, Space.Self);
 			//haveToStop = false;
 		}
 		else if(_direction == Direction.Right){
 			//_charController.Move(transform.TransformDirection(Vector3.right) * _speed * Time.deltaTime);
+		//	ReverseLastDirectionMove();
+			
+
 			transform.Translate(transform.TransformDirection(Vector3.right) * _speed * Time.deltaTime, Space.Self);
 			//haveToStop = false;
 		}
 		else if(_direction == Direction.Down){
-    		transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+    		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
 			//_charController.Move(transform.TransformDirection(Vector3.right) * _speed * Time.deltaTime);
+			//transform.Rotate(Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.forward) * _speed * Time.deltaTime, Space.Self);
 			//haveToStop = false;
 		}
 		else if(_direction == Direction.Up){
-    		transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+    		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
 			//_charController.Move(transform.TransformDirection(Vector3.left) * _speed * Time.deltaTime);
 			transform.Translate(transform.TransformDirection(Vector3.back) * _speed * Time.deltaTime, Space.Self);
 			//haveToStop = false;
 		}
 	}
 		
+	private void ReverseLastDirectionMove(){
+		
+		//if((lastDirection == Direction.Down || lastDirection == Direction.Up)){
+			transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+		//}
+	}
+	
 	void OnTriggerEnter(Collider other) {
 		//if(other.transform.tag == "vehicle")
 	//	{
-			Debug.Log("The collision  is entered------------------------------------------");
-			Debug.Log(other);
-			Debug.Log(gameObject.name);
-			Debug.LogWarning ("Stopping vehicle after trigger");
 			haveToStop = true;
 			_speed = 0.0f;
 	//	}
 		Debug.Log ("speed " + _speed);
+		gameMasterScript.gameOver = true;
    	}	
 	/*
 	void OnCollisionExit(Collision other){

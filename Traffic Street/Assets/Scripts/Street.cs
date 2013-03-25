@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Street {
 	
-	private Vector3 _myGenerationPoint;
+	private Vector3 _startPoint;
+	private Vector3 _endPoint;
 	private TrafficLight _myLight;
 	private float _stopPosition;					//this is the maximum position that the cars can stop in when the traffic light is red
-	private float _streetEndPosition;				//this is the poisition that the cars leave the street in
 	private float _minDistanceToOpenTrafficLight;	//this is the minimum distance to change the light for preventing (collisions)
 	
 	//These variables are for the vehicles
@@ -14,11 +14,11 @@ public class Street {
 	private int _vehiclesNumber; 					//this is the number of all of the vehciles that would be generated arround the whole game time (should be generated in the game master class)
 	
 	//constructor
-	public Street(Vector3 generationPoint, TrafficLight trafficLight, float stopPosition, float endPosition, float minDistOpenLight){
-		_myGenerationPoint = generationPoint;
+	public Street(Vector3 startPoint, Vector3 endPoint, TrafficLight trafficLight, float stopPosition, float minDistOpenLight){
+		_startPoint = startPoint;
+		_endPoint = endPoint;
 		_myLight = trafficLight;
 		_stopPosition = stopPosition;
-		_streetEndPosition = endPosition;
 		_minDistanceToOpenTrafficLight = minDistOpenLight;
 		_queue = new Queue();
 		_vehiclesNumber = 0;
@@ -26,10 +26,16 @@ public class Street {
 	}
 	
 	//setters and getters
-	public Vector3 GenerationPointPosition{
-		get{return _myGenerationPoint;}
-		set{_myGenerationPoint = value;}
+	public Vector3 StartPoint{
+		get{return _startPoint;}
+		set{_startPoint = value;}
 	}
+	
+	public Vector3 EndPoint{
+		get{return _endPoint;}
+		set{_endPoint = value;}
+	}
+	
 	
 	public TrafficLight StreetLight{
 		get{return _myLight;}
@@ -41,10 +47,7 @@ public class Street {
 		set{_stopPosition = value;}
 	}
 	
-	public float StreetEndPosition{
-		get{return _streetEndPosition;}
-		set{_streetEndPosition = value;}
-	}
+	
 	
 	public float MinimumDistanceToOpenTrafficLight{
 		get {return _minDistanceToOpenTrafficLight;}

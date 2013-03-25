@@ -5,7 +5,8 @@ using System.Collections.Generic;
 public class StreetsGenerator : MonoBehaviour {
 	
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
-	public const float STREET_WIDTH = 30;
+	private List<Path> Paths;
+	public const float STREET_WIDTH = 15;
 	
 	public GameObject lightPrefab = null;		//this should be initialized in unity with the traffic light
 	
@@ -23,9 +24,67 @@ public class StreetsGenerator : MonoBehaviour {
 		return Streets;
 	}
 	
+	public List<Path> getPaths(){
+		return Paths;
+	}
+	
 	void Awake(){
 		Streets = new List<Street>();
-		GenerateTempStreets(); 					//for temp test
+	//	GenerateTempStreetsLevel1(); 					//for temp test
+		GenerateTempStreetsLevel2(); 					//for temp test
+		
+		InitAllPaths();
+	}
+	
+	private void InitAllPaths(){
+		//Path0 (left, up)
+		List<Street> tempPath = new List<Street>() ;
+		Paths = new List<Path>() ;
+		tempPath.Add(Streets[0]);
+		tempPath.Add(Streets[6]);
+		
+		Paths.Add(new Path(tempPath, (FindTagObject("gpLeft")as GameObject).transform.position, new Vector3(10, 5, 50)));
+		
+		//Path1 (up, right)
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[4]);
+		tempPath.Add(Streets[3]);
+		
+		//Paths.Add(new Path(tempPath, (FindTagObject("gpUp")as GameObject).transform.position, new Vector3(50, 5, 15)));
+		
+		//Path2 (up, up, up)
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[4]);
+		tempPath.Add(Streets[5]);
+		tempPath.Add(Streets[6]);
+		
+		Paths.Add(new Path(tempPath,(FindTagObject("gpUp")as GameObject).transform.position, new Vector3(10, 5, 50)));
+		
+		//Path3 (down, down, down)
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[7]);
+		tempPath.Add(Streets[8]);
+		tempPath.Add(Streets[9]);
+		
+		Paths.Add(new Path(tempPath,(FindTagObject("gpDown")as GameObject).transform.position, new Vector3(-10, 5, -50)));
+		
+		//Path4 (right, down, down)
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[2]);
+		tempPath.Add(Streets[8]);
+		tempPath.Add(Streets[9]);
+		
+		Paths.Add(new Path(tempPath,(FindTagObject("gpRight1")as GameObject).transform.position, new Vector3(-10, 5, -50)));
+		
+		//Path5 (right, down)
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[1]);
+		tempPath.Add(Streets[9]);
+		
+		Paths.Add(new Path(tempPath,(FindTagObject("gpRight")as GameObject).transform.position, new Vector3(-10, 5, -50)));
+		
+		Debug.Log("All paths are inited" + Paths.Count);
+
 	}
 	
 	// Use this for initialization
@@ -35,32 +94,138 @@ public class StreetsGenerator : MonoBehaviour {
 		
 	}
 	
+	
+	
 	///// For temp test *****************
-	private void GenerateTempStreets(){
-		Street s1 = new Street((FindLightObject("gpDown")as GameObject).transform.position , 
+	private void GenerateTempStreetsLevel2(){
+		Street s0 = new Street( new Vector3(50, 5, 15), 
+								new Vector3(15, 5, 15),  
+								new TrafficLight(Direction.Left,
+												FindTagObject("lightLeft"),
+												true),
+								25.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s1 = new Street( new Vector3(-50, 5, 25), 
+								new Vector3(-15, 5, 25), 
+								new TrafficLight(Direction.Right,
+												FindTagObject("lightRight"),
+												true),
+								-25.0f,
+								STREET_WIDTH);
+		
+		Street s2 = new Street( new Vector3(-50, 5, -15), 
+								new Vector3(-15, 5, -15), 
+								new TrafficLight(Direction.Right,
+												FindTagObject("lightRight1"),
+												true),
+								-25.0f,
+								STREET_WIDTH);
+		
+		//without light
+		Street s3 = new Street( new Vector3(10, 5, -35), 
+								new Vector3(50, 5, 15), 
+								new TrafficLight(Direction.Right,
+												null,
+												false),
+								50.0f,
+								STREET_WIDTH);
+		//without light
+		Street s4 = new Street( new Vector3(10, 5, -50), 
+								new Vector3(10, 5, -35),
+								new TrafficLight(Direction.Up,
+												null,
+												false),
+								-42.0f,
+								STREET_WIDTH);
+		
+		Street s5 = new Street( new Vector3(10, 5, -35), 
+								new Vector3(10, 5, 15),
+								new TrafficLight(Direction.Up,
+												FindTagObject("lightUp"),
+												true),
+								5.0f,
+								STREET_WIDTH);
+		
+		Street s6 = new Street( new Vector3(10, 5, 15), 
+								new Vector3(10, 5, 50),
+								new TrafficLight(Direction.Up,
+												null,
+												false),
+								0.0f,
+								STREET_WIDTH);
+		
+		Street s7 = new Street( new Vector3(-10, 5, 50), 
+								new Vector3(-10, 5, 25),
 								new TrafficLight(Direction.Down,
-												FindLightObject("lightDown"),
+												FindTagObject("lightDown"),
+												true),
+								35.0f,
+								STREET_WIDTH);
+		
+		Street s8 = new Street( new Vector3(-10, 5, 25), 
+								new Vector3(-10, 5, -15),
+								new TrafficLight(Direction.Down,
+												null,
+												false),
+								0.0f,
+								STREET_WIDTH);
+		
+		Street s9 = new Street( new Vector3(-10, 5, -15), 
+								new Vector3(-10, 5, -50),
+								new TrafficLight(Direction.Down,
+												null,
+												false),
+								0.0f,
+								STREET_WIDTH);
+		Streets.Add(s0);
+		Streets.Add(s1);
+		Streets.Add(s2);
+		Streets.Add(s3);
+		Streets.Add(s4);
+		Streets.Add(s5);
+		Streets.Add(s6);
+		Streets.Add(s7);
+		Streets.Add(s8);
+		Streets.Add(s9);
+		
+	}
+	
+	/*
+	private void GenerateTempStreetsLevel1(){
+		
+		Street s1 = new Street( Vector3.zero,
+								Vector3.zero,
+								(FindTagObject("gpDown")as GameObject).transform.position , 
+								new TrafficLight(Direction.Down,
+												FindTagObject("lightDown"),
 												true),
 								20.0f,
 								-45.0f, 
 								STREET_WIDTH);
-		Street s2 = new Street((FindLightObject("gpUp")as GameObject).transform.position , 
+		Street s2 = new Street( Vector3.zero,
+								Vector3.zero,
+								(FindTagObject("gpUp")as GameObject).transform.position , 
 								new TrafficLight(Direction.Up,
-												FindLightObject("lightUp"),
+												FindTagObject("lightUp"),
 												true),
 								-20.0f,
 								45.0f, 
 								STREET_WIDTH);
-		Street s3 = new Street((FindLightObject("gpLeft")as GameObject).transform.position , 
+		Street s3 = new Street( Vector3.zero,
+								Vector3.zero,
+								(FindTagObject("gpLeft")as GameObject).transform.position , 
 								new TrafficLight(Direction.Left,
-												FindLightObject("lightLeft"),
+												FindTagObject("lightLeft"),
 												true),
 								20.0f,
 								-45.0f, 
 								STREET_WIDTH);
-		Street s4 = new Street((FindLightObject("gpRight")as GameObject).transform.position , 
+		Street s4 = new Street( Vector3.zero,
+								Vector3.zero,
+								(FindTagObject("gpRight")as GameObject).transform.position , 
 								new TrafficLight(Direction.Right,
-												FindLightObject("lightRight"),
+												FindTagObject("lightRight"),
 												true),
 								-20.0f,
 								45.0f, 
@@ -71,7 +236,8 @@ public class StreetsGenerator : MonoBehaviour {
 		Streets.Add(s4);
 	}
 	
-	private GameObject FindLightObject(string name){
+	*/
+	private GameObject FindTagObject(string name){
 		GameObject target = GameObject.FindGameObjectWithTag(name);
 		return target;
 	}
@@ -103,7 +269,7 @@ public class StreetsGenerator : MonoBehaviour {
 	}
 	
 	
-	
+	/*
 	private void GenerateStreets(){
 		//at the original version of the game we shoul call LoadStreets();
 					
@@ -126,6 +292,7 @@ public class StreetsGenerator : MonoBehaviour {
 		}
 		
 	}
+	*/
 	
 	//this method returns the wanted position for the traffic light to be placed in (only for storing the streets)
 	private Vector3 GetLightPosition(string s, float sz, Vector3 v){
