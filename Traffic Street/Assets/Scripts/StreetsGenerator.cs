@@ -6,7 +6,7 @@ public class StreetsGenerator : MonoBehaviour {
 	
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
 	private List<Path> Paths;
-	public const float STREET_WIDTH = 15;
+	public const float STREET_WIDTH = 10;
 	
 	public GameObject lightPrefab = null;		//this should be initialized in unity with the traffic light
 	
@@ -31,12 +31,201 @@ public class StreetsGenerator : MonoBehaviour {
 	void Awake(){
 		Streets = new List<Street>();
 	//	GenerateTempStreetsLevel1(); 					//for temp test
-		GenerateTempStreetsLevel2(); 					//for temp test
+		GenerateTempStreetsLevel3(); 					//for temp test
 		
-		InitAllPaths();
+		InitAllPathsForLevel3();
+		Debug.Log("we henaaa el Paths count === "+ Paths.Count);
 	}
 	
-	private void InitAllPaths(){
+	private void GenerateTempStreetsLevel3(){
+		//*********** UPs
+		Street s0 = new Street( new Vector3(15, 5, -50), 
+								new Vector3(15, 5, 5),  
+								new TrafficLight(Direction.Up,
+												FindTagObject("lightUp"),
+												true),
+								-15.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s1 = new Street( new Vector3(15, 5, 5), 
+								new Vector3(15, 5, 50),  
+								new TrafficLight(Direction.Up,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s2 = new Street( new Vector3(5, 5, -50), 
+								new Vector3(5, 5, -5),  
+								new TrafficLight(Direction.Up,
+												FindTagObject("lightUp"),
+												true),
+								-15.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s3 = new Street( new Vector3(5, 5, -5), 
+								new Vector3(5, 5, 50),  
+								new TrafficLight(Direction.Up,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		//*********** DOWNs
+		
+		Street s4 = new Street( new Vector3(-5, 5, 50), 
+								new Vector3(-5, 5, 5),  
+								new TrafficLight(Direction.Down,
+												FindTagObject("lightDown"),
+												true),
+								15.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s5 = new Street( new Vector3(-5, 5, 5), 
+								new Vector3(-5, 5, -50),  
+								new TrafficLight(Direction.Down,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s6 = new Street( new Vector3(-15, 5, 50), 
+								new Vector3(-15, 5, -5),  
+								new TrafficLight(Direction.Down,
+												FindTagObject("lightDown"),
+												true),
+								15.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s7 = new Street( new Vector3(-15, 5, -5), 
+								new Vector3(-15, 5, -50),  
+								new TrafficLight(Direction.Down,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		//*********** LEFTs
+		
+		Street s8 = new Street( new Vector3(50, 5, 5), 
+								new Vector3(15, 5, 5),  
+								new TrafficLight(Direction.Left,
+												FindTagObject("lightLeft"),
+												true),
+								25.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s9 = new Street( new Vector3(50, 5, -5), 
+								new Vector3(5, 5, -5),  
+								new TrafficLight(Direction.Left,
+												FindTagObject("lightLeft"),
+												true),
+								25.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		//*********** RIGHTs
+		
+		Street s10 = new Street( new Vector3(-50, 5, 5), 
+								new Vector3(-5, 5, -5),  
+								new TrafficLight(Direction.Right,
+												FindTagObject("lightRight"),
+												true),
+								-25.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Street s11 = new Street( new Vector3(-50, 5, -5), 
+								new Vector3(-15, 5, 5),  
+								new TrafficLight(Direction.Right,
+												FindTagObject("lightRight"),
+												true),
+								-25.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Streets.Add(s0);
+		Streets.Add(s1);
+		Streets.Add(s2);
+		Streets.Add(s3);
+		Streets.Add(s4);
+		Streets.Add(s5);
+		Streets.Add(s6);
+		Streets.Add(s7);
+		Streets.Add(s8);
+		Streets.Add(s9);
+		Streets.Add(s10);
+		Streets.Add(s11);
+
+	}
+	
+	private void InitAllPathsForLevel3(){
+		//Path0 (up, up)1
+		List<Street> tempPath = new List<Street>() ;
+		Paths = new List<Path>() ;
+		tempPath.Add(Streets[0]);
+		tempPath.Add(Streets[1]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(15, 5, -50), new Vector3(15, 5, 50)));
+		
+		
+		//Path1(up, up)2
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[2]);
+		tempPath.Add(Streets[3]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(5, 5, -50), new Vector3(5, 5, 50)));
+		
+		//Path2 (down, down)1
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[4]);
+		tempPath.Add(Streets[5]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(-5, 5, 50), new Vector3(-5, 5, -50)));
+		
+		//Path3 (down, down)2
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[6]);
+		tempPath.Add(Streets[7]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(-15, 5, 50), new Vector3(-15, 5, -50)));
+		
+		//Path4 (left, up)1
+		
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[8]);
+		tempPath.Add(Streets[1]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(50, 5, 5), new Vector3(15, 5, 50)));
+		
+		
+		//Path5 (left, up)2
+		
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[9]);
+		tempPath.Add(Streets[3]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(50, 5, -5), new Vector3(5, 5, 50)));
+		
+		//Path6 (right, down)1
+		
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[10]);
+		tempPath.Add(Streets[5]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(-50, 5, 5), new Vector3(-5, 5, -50)));
+		
+		
+		//Path7 (right, down)2
+		
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[11]);
+		tempPath.Add(Streets[7]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(-50, 5, -5), new Vector3(-15, 5, -50)));
+		
+	}
+	
+	
+	
+	
+	private void InitAllPathsForLevel2(){
 		//Path0 (left, up)
 		List<Street> tempPath = new List<Street>() ;
 		Paths = new List<Path>() ;
@@ -50,7 +239,7 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[4]);
 		tempPath.Add(Streets[3]);
 		
-		//Paths.Add(new Path(tempPath, (FindTagObject("gpUp")as GameObject).transform.position, new Vector3(50, 5, 15)));
+		Paths.Add(new Path(tempPath, (FindTagObject("gpUp")as GameObject).transform.position, new Vector3(50, 5, 15)));
 		
 		//Path2 (up, up, up)
 		tempPath = new List<Street>() ;
@@ -93,7 +282,6 @@ public class StreetsGenerator : MonoBehaviour {
 		finished = true;
 		
 	}
-	
 	
 	
 	///// For temp test *****************

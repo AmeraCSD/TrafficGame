@@ -14,15 +14,15 @@ public class GameMaster : MonoBehaviour {
 	//HUDs variables 
 	public int score;
 	public float gameTime;
-	private const float GAME_TIME = 30;			//should equal to 5 minutes
+	private const float GAME_TIME = 50;			//should equal to 5 minutes
 	
 	private List<Path> Paths;
 	private List<Street> Streets;
 	private List<float> _timeSlots;
 	private int vehiclesNumber;
 	// These constants for the random generation of vehicles
-	private const int VEHICLES_LEAST_NUMBER = 20;
-	private const int VEHICLES_MOST_NUMBER = 20;
+	private const int VEHICLES_LEAST_NUMBER = 150;
+	private const int VEHICLES_MOST_NUMBER = 200;
 	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	
@@ -106,7 +106,7 @@ public class GameMaster : MonoBehaviour {
 		//int pos = Random.Range(0, _generationPoints.Count);
 		int pos = Random.Range(0, Paths.Count);
 		
-		Debug.Log("Pos ===== "+  pos);
+		Debug.Log("Paths Number ======= "+  Paths.Count);
 		//if(Paths[pos] != Vector3.zero){
 		if(vehiclePrefab != null){
 		GameObject vehicle = Instantiate(vehiclePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
@@ -115,7 +115,7 @@ public class GameMaster : MonoBehaviour {
 		
 		//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 		vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																			15.0f, 
+																			35.0f, 
 																			getVehicleLargeSize(vehicle), 
 																			Paths[pos].PathStreets[0].StreetLight.Type, 
 																			Paths[pos].PathStreets[0], 
@@ -125,7 +125,7 @@ public class GameMaster : MonoBehaviour {
 		
 		
 		
-		Debug.Log("Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee______"+ Paths[pos].PathStreets[0].StreetLight.Type);
+		//Debug.Log("Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee______"+ Paths[pos].PathStreets[0].StreetLight.Type);
 		//}
 		}
 	}
@@ -152,7 +152,7 @@ public class GameMaster : MonoBehaviour {
 		GUI.Label( new Rect(10, 10, 100, 35), "Time: "+ gameTime);
 		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score.ToString());
 
-		if(gameOver){
+	/*	if(gameOver || gameTime == 0){
 		//	st.fontSize = 50;
 			//Destroy( GameObject.Find("  Game Master"));
 			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
@@ -170,7 +170,7 @@ public class GameMaster : MonoBehaviour {
 			
 			//Application.Quit();
 			
-		}
+		}*/
 	}
 	
 	

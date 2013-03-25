@@ -175,11 +175,12 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void CheckAndDestroyAtEnd(){
-		if(_direction == Direction.Left && transform.position.x < _endPosition.x){
+		if(_direction == Direction.Left && transform.position.x < _endPosition.x && transform.position.z > _endPosition.z){
 			Destroy(gameObject) ;
 			gameMasterScript.score += 500;
 		}
-		else if(_direction == Direction.Right && transform.position.x > _endPosition.x){
+		else if(_direction == Direction.Right && transform.position.x > _endPosition.x && transform.position.z < _endPosition.z){
+			Debug.Log("I'm here ....................");
 			Destroy(gameObject) ;
 			gameMasterScript.score += 500;
 		}
@@ -231,29 +232,24 @@ public class VehicleController : MonoBehaviour {
 	private void Move(){
 		Debug.Log(gameObject.name + " ------> " + _direction);
 		if(_direction == Direction.Left){
-			//_charController.Move(transform.TransformDirection(Vector3.left) * _speed * Time.deltaTime);
-			//ReverseLastDirectionMove();
+		//	ReverseLastDirectionMove();
+    		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.left) * _speed * Time.deltaTime, Space.Self);
-			//haveToStop = false;
 		}
 		else if(_direction == Direction.Right){
-			//_charController.Move(transform.TransformDirection(Vector3.right) * _speed * Time.deltaTime);
 		//	ReverseLastDirectionMove();
 			
-
+    		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.right) * _speed * Time.deltaTime, Space.Self);
-			//haveToStop = false;
 		}
 		else if(_direction == Direction.Down){
     		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
-			//_charController.Move(transform.TransformDirection(Vector3.right) * _speed * Time.deltaTime);
-			//transform.Rotate(Vector3.up);
+		//	ReverseLastDirectionMove();
 			transform.Translate(transform.TransformDirection(Vector3.forward) * _speed * Time.deltaTime, Space.Self);
-			//haveToStop = false;
 		}
 		else if(_direction == Direction.Up){
     		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
-			//_charController.Move(transform.TransformDirection(Vector3.left) * _speed * Time.deltaTime);
+		//	ReverseLastDirectionMove();
 			transform.Translate(transform.TransformDirection(Vector3.back) * _speed * Time.deltaTime, Space.Self);
 			//haveToStop = false;
 		}
@@ -261,10 +257,12 @@ public class VehicleController : MonoBehaviour {
 		
 	private void ReverseLastDirectionMove(){
 		
-		//if((lastDirection == Direction.Down || lastDirection == Direction.Up)){
-			transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
-		//}
-	}
+		if((lastDirection == Direction.Down || lastDirection == Direction.Up) && (_direction == Direction.Right || _direction == Direction.Left)){
+			transform.Rotate(transform.TransformDirection(Vector3.up)  * (float)(Time.time/.9));
+		}
+		if((_direction == Direction.Down || _direction == Direction.Up) && (lastDirection == Direction.Right || lastDirection == Direction.Left)){
+			transform.Rotate(transform.TransformDirection(Vector3.up)  * (float)(Time.time/.9));
+		}	}
 	
 	void OnTriggerEnter(Collider other) {
 		//if(other.transform.tag == "vehicle")
