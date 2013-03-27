@@ -11,6 +11,7 @@ public class TrafficLight   : MonoBehaviour{
 	private GameObject _light;
 	private bool _stopped;
 	private bool _onHold;
+	private bool _locked;
 	
 	
 	public TrafficLight(Direction n, GameObject light, bool stopped){
@@ -18,6 +19,7 @@ public class TrafficLight   : MonoBehaviour{
 		_light = light;
 		_stopped = stopped; 
 		_onHold = false;
+		_locked = false;
 	}
 	
 	public Direction Type{
@@ -40,6 +42,10 @@ public class TrafficLight   : MonoBehaviour{
 		set{_onHold = value;}
 	}
 	
+	public bool Locked{
+		get{return _locked;}
+		set{_locked = value;}
+	}
 }
 
 public enum Direction{

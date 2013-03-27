@@ -24,6 +24,9 @@ public class LightsGamer : MonoBehaviour {
 	private Queue streetObjectsQueue;
 	private float timer;
 	private float checkedTimer;
+	private int changedLights;
+	
+	private const int MAX_AVAILABLE_LIGHTS_TO_CHANGE = 2;
 	
 	void Awake(){
 	}
@@ -31,7 +34,7 @@ public class LightsGamer : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		 
+		changedLights = 0;
 		initVariablesAtStart();
 
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getStreets(); //To get the streets in the whole game here in one list
@@ -59,7 +62,7 @@ public class LightsGamer : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		
 		OnMousePressed();
 		
@@ -75,12 +78,48 @@ public class LightsGamer : MonoBehaviour {
 			Ray ray = (GameObject.FindGameObjectWithTag("MainCamera")).camera.ScreenPointToRay(Input.mousePosition);
     		RaycastHit hit ;
     		if (Physics.Raycast(ray, out hit)){
-				timer = Time.time ;
-				PutOnHoldOnMouseHit(hit);
+			//	Debug.LogError("Click happened");
+				
+				if(isRed(hit) && changedLights < 2){
+					changedLights++;
+					timer = Time.time ;
+					PutOnHoldOnMouseHit(hit);
+					Debug.Log ("changedLights++ " + changedLights);
+				}
+				if(!isRed(hit) && changedLights <= 2){
+					changedLights--;
+					timer = Time.time ;
+					PutOnHoldOnMouseHit(hit);
+					Debug.Log ("changedLights-- " + changedLights);
+
+				}
    			 }	
 		}
 	}
 	
+	
+	private bool isRed(RaycastHit hit){
+		if(hit.collider.gameObject.tag == "lightUp"){
+			if((Streets[0].StreetLight.Stopped) || (Streets[2].StreetLight.Stopped))
+				return true;
+		}
+		
+		if(hit.collider.gameObject.tag == "lightDown"){
+			if(Streets[4].StreetLight.Stopped || Streets[6].StreetLight.Stopped)
+				return true;
+		}
+		
+		if(hit.collider.gameObject.tag == "lightLeft"){
+			if(Streets[8].StreetLight.Stopped || Streets[9].StreetLight.Stopped)
+				return true;
+		}
+		
+		if(hit.collider.gameObject.tag == "lightRight"  ){
+			if(Streets[10].StreetLight.Stopped || Streets[11].StreetLight.Stopped)
+				return true;
+		}
+		return false;
+	}
 	
 	private void PutOnHoldOnMouseHit(RaycastHit hit){
 		if(hit.collider.gameObject.tag == "lightUp"){
@@ -115,18 +154,20 @@ public class LightsGamer : MonoBehaviour {
 	//(the calculations of the timer are based on street width and the minimum speed of the slowest vehicle)
 	public void PutStateOnHold(Street str){
 		if(!str.StreetLight.OnHold){
-			str.StreetLight.OnHold = true;
-			Debug.Log("Inside Put State On hold");
-			str.StreetLight.tLight.renderer.material.color = Color.yellow;
 			
-			timer += str.MinimumDistanceToOpenTrafficLight / MIN_VEHICLE_SPEED ;
-						
-			Debug.Log("The current time is --->  " + Time.time + "and the timer is ---> " + timer);
-			if(timersQueue.Count == 0){
-				checkedTimer = timer;
-			}
-			timersQueue.Enqueue(timer);
-			streetObjectsQueue.Enqueue(str);
+				str.StreetLight.OnHold = true;
+				//Debug.Log("Inside Put State On hold");
+				str.StreetLight.tLight.renderer.material.color = Color.yellow;
+				
+				timer += str.MinimumDistanceToOpenTrafficLight / MIN_VEHICLE_SPEED ;
+							
+				//Debug.Log("The current time is --->  " + Time.time + "and the timer is ---> " + timer);
+				if(timersQueue.Count == 0){
+					checkedTimer = timer;
+				}
+				timersQueue.Enqueue(timer);
+				streetObjectsQueue.Enqueue(str);
+			
 		}
 	}
 	
@@ -139,6 +180,7 @@ public class LightsGamer : MonoBehaviour {
 				Street s = streetObjectsQueue.Dequeue() as Street;
 				ChangeState(s);
 				s.StreetLight.OnHold = false;
+			//	LockOthers(MAX_AVAILABLE_LIGHTS_TO_CHANGE);
 				if(timersQueue.Count != 0)
 					checkedTimer = (float) timersQueue.Peek();	//setting the next checkedTimer from the queue
 			}
@@ -154,11 +196,15 @@ public class LightsGamer : MonoBehaviour {
 		else if(!(str.StreetLight.Stopped)){
 			str.StreetLight.Stopped = true;
 			str.StreetLight.tLight.renderer.material.color = Color.red;
+			str.StreetLight.Locked = false;
+			//changedLights --;
 		}
 		else{
 			Debug.LogWarning("you can't change the light while it is yellow");
 		}
 		
 	}
+	
+	
 	
 }

@@ -14,25 +14,34 @@ public class GameMaster : MonoBehaviour {
 	//HUDs variables 
 	public int score;
 	public float gameTime;
-	private const float GAME_TIME = 50;			//should equal to 5 minutes
+	public int satisfyBar;
+	private const float GAME_TIME = 150;			//should equal to 5 minutes
+
 	
 	private List<Path> Paths;
 	private List<Street> Streets;
 	private List<float> _timeSlots;
 	private int vehiclesNumber;
 	// These constants for the random generation of vehicles
-	private const int VEHICLES_LEAST_NUMBER = 150;
-	private const int VEHICLES_MOST_NUMBER = 200;
+	private const int VEHICLES_LEAST_NUMBER = 1900;
+	private const int VEHICLES_MOST_NUMBER = 2000;
 	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	
 	public bool gameOver;
-	
-	
+	private int initedCarsNumber;
+	private bool cancelInvokeFirst15Vehicles;
+	private bool canInstatiateTheRest;
+	private int currentCarsNumber;
+	private int secondsCounterFor30;
 	
 	void Awake(){
 		//initializing the huds 
+		secondsCounterFor30 = 0;
+		canInstatiateTheRest = false;
+		cancelInvokeFirst15Vehicles = false;
 		gameTime = GAME_TIME;
+		initedCarsNumber = 0;
 	//	gameOver = false;
 		score = 0;
 		
@@ -50,8 +59,20 @@ public class GameMaster : MonoBehaviour {
 		//InitAllGenerationPoints();
 		_timeSlots = new List<float>();
 		CalculateRandomTimeSlots();
+		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.1f);
 		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
 	}
+	
+	private void generateFirst15Cars(){
+		if(cancelInvokeFirst15Vehicles){
+			canInstatiateTheRest =true;
+			CancelInvoke("generateFirst15Cars");
+			
+		}
+	
+		GenerateRandomVehicle();
+	}
+	
 	
 		
 	//This method initializes all the generation points for the streets in the map
@@ -85,7 +106,18 @@ public class GameMaster : MonoBehaviour {
 			//gameOver = true;
 			
 		}
-		if(InsideTimeSlotsList())
+		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 15){
+			secondsCounterFor30 ++;
+			if(secondsCounterFor30 == 5){	//should be 30 (5 for test)// ************************************ to be increased
+				satisfyBar --;
+				secondsCounterFor30 = 0;
+			}
+		}
+		else{
+			secondsCounterFor30 = 0;
+		}
+		
+		if(InsideTimeSlotsList() && canInstatiateTheRest)
 			GenerateRandomVehicle();
 	}
 	
@@ -104,30 +136,55 @@ public class GameMaster : MonoBehaviour {
 	//here we give the vehicle all of its properities
 	private void GenerateRandomVehicle(){	
 		//int pos = Random.Range(0, _generationPoints.Count);
-		int pos = Random.Range(0, Paths.Count);
 		
-		Debug.Log("Paths Number ======= "+  Paths.Count);
-		//if(Paths[pos] != Vector3.zero){
-		if(vehiclePrefab != null){
-		GameObject vehicle = Instantiate(vehiclePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
-		Paths[pos].PathStreets[0].VehiclesNumber ++;
-		vehicle.name = "____"+Paths[pos].PathStreets[0].StreetLight.Type.ToString() + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
+		if(!CheckAllStreetsFullness()){
 		
-		//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
-		vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																			35.0f, 
-																			getVehicleLargeSize(vehicle), 
-																			Paths[pos].PathStreets[0].StreetLight.Type, 
-																			Paths[pos].PathStreets[0], 
-																			Paths[pos].PathStreets[1], 
-																			0,
-																			Paths[pos]);
-		
-		
-		
-		//Debug.Log("Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee______"+ Paths[pos].PathStreets[0].StreetLight.Type);
-		//}
+			int pos = Random.Range(0, Paths.Count);
+			
+			while(Paths[pos].PathStreets[0].VehiclesNumber == 3){
+				pos = Random.Range(0, Paths.Count);
+			}
+			Debug.Log("Paths Number ======= "+  Paths.Count);
+			//if(Paths[pos] != Vector3.zero){
+			if(vehiclePrefab != null){
+			GameObject vehicle = Instantiate(vehiclePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
+			Paths[pos].PathStreets[0].VehiclesNumber ++;
+			vehicle.name = "____"+Paths[pos].PathStreets[0].StreetLight.Type.ToString() + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
+			
+			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
+			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
+																				25.0f, 
+																				getVehicleLargeSize(vehicle), 
+																				Paths[pos].PathStreets[0].StreetLight.Type, 
+																				Paths[pos].PathStreets[0], 
+																				Paths[pos].PathStreets[1], 
+																				0,
+																				Paths[pos]);
+			
+			
+			
+			//Debug.Log("Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee______"+ Paths[pos].PathStreets[0].StreetLight.Type);
+			//}
+			}
+			initedCarsNumber ++;
+			if(initedCarsNumber == 15){
+				cancelInvokeFirst15Vehicles = true;
+				satisfyBar += 2;
+				initedCarsNumber =0;
+			}
 		}
+	}
+	
+	private bool CheckAllStreetsFullness(){
+		int counter = 0;
+		for(int i= 0 ; i < Paths.Count ; i++){
+			if(Paths[i].PathStreets[0].VehiclesNumber == 3)
+				counter ++ ;
+		}
+		if(counter == Paths.Count)
+			return true;
+		else
+			return false;
 	}
 	
 	private float getVehicleLargeSize(GameObject v){
@@ -144,13 +201,15 @@ public class GameMaster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		if(UD_queue.Count == 6 || DU_queue.Count == 6 || LR_queue.Count == 6 || RL_queue.Count == 6)
-//			gameOver = true;
+
+		
+		
 	}
 	
 	void OnGUI(){
 		GUI.Label( new Rect(10, 10, 100, 35), "Time: "+ gameTime);
-		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score.ToString());
+		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score);
+		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar "+satisfyBar);
 
 	/*	if(gameOver || gameTime == 0){
 		//	st.fontSize = 50;
@@ -172,6 +231,7 @@ public class GameMaster : MonoBehaviour {
 			
 		}*/
 	}
+	
 	
 	
 }

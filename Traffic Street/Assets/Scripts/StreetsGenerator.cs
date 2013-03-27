@@ -133,7 +133,7 @@ public class StreetsGenerator : MonoBehaviour {
 								STREET_WIDTH);
 		
 		Street s11 = new Street( new Vector3(-50, 5, -5), 
-								new Vector3(-15, 5, 5),  
+								new Vector3(-15, 5, -5),  
 								new TrafficLight(Direction.Right,
 												FindTagObject("lightRight"),
 												true),

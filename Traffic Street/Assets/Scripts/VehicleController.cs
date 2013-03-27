@@ -128,10 +128,10 @@ public class VehicleController : MonoBehaviour {
 	
 	private void CheckPosition_DeqIfPassed(){
 		
-		if( _direction == Direction.Right && transform.position.x > _stopPosition ||
-			_direction == Direction.Left && transform.position.x < _stopPosition ||
+		if( _direction == Direction.Right && (transform.position.x > _stopPosition ) ||
+			_direction == Direction.Left && transform.position.x < _stopPosition   ||
 			_direction == Direction.Down  && transform.position.z < _stopPosition ||
-			_direction == Direction.Up && transform.position.z > _stopPosition ){		
+			_direction == Direction.Up && transform.position.z > _stopPosition ){
 			
 			
 			passed = true ;
@@ -142,6 +142,7 @@ public class VehicleController : MonoBehaviour {
 					dequeued = true;
 				//	boxColl.isTrigger = true;
 					Debug.Log(gameObject.name +" is dequeued" );
+					_street.VehiclesNumber --;
 				}
 			}
 			if(myVehicle.NextStreet != null)
@@ -166,10 +167,10 @@ public class VehicleController : MonoBehaviour {
 	private void SetupColliderSize(){
 		boxColl = GetComponent<BoxCollider>();
 		if(getVehicleLargerAxis(gameObject) == "x"){
-			boxColl.size = new Vector3(1  , 1 , transform.localScale.z  );
+			boxColl.size = new Vector3(.4f  , 1 , transform.localScale.z/1.5f  );
 		}
 		else{
-			boxColl.size = new Vector3(transform.localScale.x   , 1 , 1 );
+			boxColl.size = new Vector3(transform.localScale.x/1.5f   , 1 , .4f );
 		}
 		
 	}
@@ -180,15 +181,14 @@ public class VehicleController : MonoBehaviour {
 			gameMasterScript.score += 500;
 		}
 		else if(_direction == Direction.Right && transform.position.x > _endPosition.x && transform.position.z < _endPosition.z){
-			Debug.Log("I'm here ....................");
 			Destroy(gameObject) ;
 			gameMasterScript.score += 500;
 		}
-		else if(_direction == Direction.Down && transform.position.z < _endPosition.z){
+		else if(_direction == Direction.Down && transform.position.z < _endPosition.z ){
 			Destroy(gameObject) ;
 			gameMasterScript.score += 500;
 		}
-		else if(_direction == Direction.Up && transform.position.z > _endPosition.z){
+		else if(_direction == Direction.Up && transform.position.z > _endPosition.z ){
 			Destroy(gameObject) ;
 			gameMasterScript.score += 500;
 		}
@@ -228,9 +228,10 @@ public class VehicleController : MonoBehaviour {
 			}
 		//}
 	}
-
+	
+	
 	private void Move(){
-		Debug.Log(gameObject.name + " ------> " + _direction);
+		//Debug.Log(gameObject.name + " ------> " + _direction);
 		if(_direction == Direction.Left){
 		//	ReverseLastDirectionMove();
     		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
