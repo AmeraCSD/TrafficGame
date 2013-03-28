@@ -23,8 +23,8 @@ public class GameMaster : MonoBehaviour {
 	private List<float> _timeSlots;
 	private int vehiclesNumber;
 	// These constants for the random generation of vehicles
-	private const int VEHICLES_LEAST_NUMBER = 1900;
-	private const int VEHICLES_MOST_NUMBER = 2000;
+	private const int VEHICLES_LEAST_NUMBER = 9500;
+	private const int VEHICLES_MOST_NUMBER = 10000;
 	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	
@@ -77,12 +77,7 @@ public class GameMaster : MonoBehaviour {
 		
 	//This method initializes all the generation points for the streets in the map
 	private void InitAllGenerationPoints(){
-		for(int i=0; i<Streets.Count; i++){
-			//if(Streets[i].GenerationPointPosition != Vector3.zero){
-			//	_generationPoints.Add(Streets[i].GenerationPointPosition);
-			//}
-			
-		}
+		
 	}
 	
 	//This method calculates random time intervals that the vehicles should be generated in
@@ -108,9 +103,11 @@ public class GameMaster : MonoBehaviour {
 		}
 		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 15){
 			secondsCounterFor30 ++;
-			if(secondsCounterFor30 == 5){	//should be 30 (5 for test)// ************************************ to be increased
-				satisfyBar --;
-				secondsCounterFor30 = 0;
+			if(secondsCounterFor30 == 30){	//should be 30 (5 for test)// ************************************ to be increased
+				if(satisfyBar >=0){
+					satisfyBar --;
+					secondsCounterFor30 = 0;
+				}
 			}
 		}
 		else{
@@ -126,7 +123,7 @@ public class GameMaster : MonoBehaviour {
 		bool found = false;
 		int i=0;
 		while(!found && i < _timeSlots.Count){
-			if((int)_timeSlots [i] == (int)gameTime)
+			if(gameTime >= _timeSlots [i])
 				found = true;
 			i++;
 		}
@@ -141,19 +138,19 @@ public class GameMaster : MonoBehaviour {
 		
 			int pos = Random.Range(0, Paths.Count);
 			
-			while(Paths[pos].PathStreets[0].VehiclesNumber == 3){
+			while(Paths[pos].PathStreets[0].VehiclesNumber == 5){
 				pos = Random.Range(0, Paths.Count);
 			}
-			Debug.Log("Paths Number ======= "+  Paths.Count);
+			//Debug.Log("Paths Number ======= "+  Paths.Count);
 			//if(Paths[pos] != Vector3.zero){
 			if(vehiclePrefab != null){
 			GameObject vehicle = Instantiate(vehiclePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
 			Paths[pos].PathStreets[0].VehiclesNumber ++;
-			vehicle.name = "____"+Paths[pos].PathStreets[0].StreetLight.Type.ToString() + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
+			vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
 			
 			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																				25.0f, 
+																				20.0f, 
 																				getVehicleLargeSize(vehicle), 
 																				Paths[pos].PathStreets[0].StreetLight.Type, 
 																				Paths[pos].PathStreets[0], 
@@ -178,7 +175,7 @@ public class GameMaster : MonoBehaviour {
 	private bool CheckAllStreetsFullness(){
 		int counter = 0;
 		for(int i= 0 ; i < Paths.Count ; i++){
-			if(Paths[i].PathStreets[0].VehiclesNumber == 3)
+			if(Paths[i].PathStreets[0].VehiclesNumber == 5)
 				counter ++ ;
 		}
 		if(counter == Paths.Count)
@@ -210,10 +207,23 @@ public class GameMaster : MonoBehaviour {
 		GUI.Label( new Rect(10, 10, 100, 35), "Time: "+ gameTime);
 		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score);
 		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar "+satisfyBar);
-
-	/*	if(gameOver || gameTime == 0){
-		//	st.fontSize = 50;
-			//Destroy( GameObject.Find("  Game Master"));
+		
+		if(score >= 70){
+			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
+			GUI.Label(new Rect(Screen.width/2 - 15 , Screen.height/2 - 12, 100, 25), "Congratulations! ");
+			string temp = score.ToString();
+			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2+30-12 , 100, 25), "Score : "+ temp);
+			
+			GameObject [] gos = GameObject.FindGameObjectsWithTag("vehicle");
+			for(int i = 0; i < gos.Length; i++){
+				gos[i].SetActive(false);
+			}
+			
+			CancelInvoke("CountTimeDown");
+		}
+		
+		else if(gameOver || gameTime == 0){
+		
 			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
 			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 - 12, 100, 25), "LOSER !!");
 			string temp = score.ToString();
@@ -229,7 +239,7 @@ public class GameMaster : MonoBehaviour {
 			
 			//Application.Quit();
 			
-		}*/
+		}
 	}
 	
 	

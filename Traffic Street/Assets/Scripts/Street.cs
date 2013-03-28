@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Street {
 	
+	private int _id;
 	private Vector3 _startPoint;
 	private Vector3 _endPoint;
 	private TrafficLight _myLight;
@@ -14,7 +15,8 @@ public class Street {
 	private int _vehiclesNumber; 					//this is the number of all of the vehciles that would be generated arround the whole game time (should be generated in the game master class)
 	
 	//constructor
-	public Street(Vector3 startPoint, Vector3 endPoint, TrafficLight trafficLight, float stopPosition, float minDistOpenLight){
+	public Street(int id, Vector3 startPoint, Vector3 endPoint, TrafficLight trafficLight, float stopPosition, float minDistOpenLight){
+		_id = id;
 		_startPoint = startPoint;
 		_endPoint = endPoint;
 		_myLight = trafficLight;
@@ -25,7 +27,13 @@ public class Street {
 		
 	}
 	
+	
 	//setters and getters
+	
+	public int ID{
+		get{return _id;}
+		set{_id = value;}
+	}
 	public Vector3 StartPoint{
 		get{return _startPoint;}
 		set{_startPoint = value;}

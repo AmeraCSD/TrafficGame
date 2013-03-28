@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class VehicleController : MonoBehaviour {
@@ -19,6 +20,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private Direction lastDirection;
 	private Direction _direction;
+	private Direction _nextDirection;
 	private float _speed;
 	private float _size;
 	
@@ -34,6 +36,7 @@ public class VehicleController : MonoBehaviour {
 	private bool gameOver;
 	
 	private float Offset;
+	private int carsStillInsideNumber;
 	
 	private GameMaster gameMasterScript;
 		
@@ -72,6 +75,7 @@ public class VehicleController : MonoBehaviour {
 		_queueSize 		= _street.StrQueue.Count;
 		
 		lastDirection = _direction;
+		_nextDirection = myVehicle.NextStreet.StreetLight.Type;
 		
 	}
 	
@@ -107,8 +111,14 @@ public class VehicleController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		SetupColliderSize();
-		SetStopOffset();
+		//here 
+	//	MakeMyQZeroIfYellow();
+		
 		PerformEnqueue();
+		
+		SetStopOffset();
+		
+		
 		CheckPosition_DeqIfPassed();
 		
 		Move();
@@ -126,73 +136,157 @@ public class VehicleController : MonoBehaviour {
 	
 	}
 	
-	private void CheckPosition_DeqIfPassed(){
+	private void MakeMyQZeroIfYellow(){
+		if(_light.tLight!= null){
+			if(_light.tLight.renderer.material.color == Color.yellow){
+						Debug.Log("Yellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+				Object [] array  = _myQueue.ToArray() as Object [] ;
+				if(array != null){
+					for(int i=0; i<array.Length; i++){
+						if(((GameObject)array[i]).transform.position.x + _street.MinimumDistanceToOpenTrafficLight >= _stopPosition){
+							_queueSize=0;
+							Debug.Log("hereeeeeeeeeeeeeeeeeeeeeeeeee");
+						}
+					}
+				}
+			}
+		}
 		
-		if( _direction == Direction.Right && (transform.position.x > _stopPosition ) ||
+	}
+	
+	private void CheckPosition_DeqIfPassed(){
+		Debug.Log(gameObject.name +" The queue Size ------------> " + _queueSize );
+
+		if( _direction == Direction.Right && transform.position.x > _stopPosition  ||
 			_direction == Direction.Left && transform.position.x < _stopPosition   ||
-			_direction == Direction.Down  && transform.position.z < _stopPosition ||
-			_direction == Direction.Up && transform.position.z > _stopPosition ){
+			_direction == Direction.Down  && transform.position.z < _stopPosition  ||
+			_direction == Direction.Up && transform.position.z > _stopPosition  ){
 			
 			
 			passed = true ;
 			
 			if(!dequeued && !(_light.Stopped)){
 				if(_myQueue.Count > 0){
+					
 					_myQueue.Dequeue();
 					dequeued = true;
-				//	boxColl.isTrigger = true;
-					Debug.Log(gameObject.name +" is dequeued" );
+					
 					_street.VehiclesNumber --;
+					Debug.Log(gameObject.name +" is dequeued and Vecss Number ==== " + _street.VehiclesNumber);
+					
 				}
 			}
-			if(myVehicle.NextStreet != null)
+			if(myVehicle.NextStreet != null){
 				TransfereToNextStreet();
+				boxColl.isTrigger = true;
+			}
 			
 		}
+		
 	}
+	
+	private float ConstantDistanceToStop(){
+		return _street.MinimumDistanceToOpenTrafficLight;
+	}
+	
 	
 	private void PerformEnqueue(){
 		if(!enqueued ){
-				_myQueue.Enqueue(gameObject);
-				enqueued = true;
-				Debug.Log(gameObject.name +" is enqueued" );
+			_myQueue.Enqueue(gameObject);
+			enqueued = true;
+			Debug.Log(gameObject.name +" is enqueued" );
 		}
 	}
 	
 	private void SetStopOffset(){
-	//	Debug.Log("QUEUE SIZEEEEEEE of  " + gameObject.name +"      "+ _queueSize);
-		Offset =  (_queueSize) * (_size + 5);
+		//Debug.Log("QUEUE SIZEEEEEEE of  " + gameObject.name +"      "+ _queueSize);
+		Offset =  (_queueSize ) * (_size + 5);
 	}
 	
 	private void SetupColliderSize(){
 		boxColl = GetComponent<BoxCollider>();
 		if(getVehicleLargerAxis(gameObject) == "x"){
-			boxColl.size = new Vector3(.4f  , 1 , transform.localScale.z/1.5f  );
+			boxColl.size = new Vector3(.3f  , 1 , transform.localScale.z/2.0f  );
 		}
 		else{
-			boxColl.size = new Vector3(transform.localScale.x/1.5f   , 1 , .4f );
+			boxColl.size = new Vector3(transform.localScale.x/2.0f   , 1 , .3f );
 		}
 		
 	}
 	
 	private void CheckAndDestroyAtEnd(){
-		if(_direction == Direction.Left && transform.position.x < _endPosition.x && transform.position.z > _endPosition.z){
+		if(CheckMyEndPosition()){
 			Destroy(gameObject) ;
-			gameMasterScript.score += 500;
-		}
-		else if(_direction == Direction.Right && transform.position.x > _endPosition.x && transform.position.z < _endPosition.z){
-			Destroy(gameObject) ;
-			gameMasterScript.score += 500;
-		}
-		else if(_direction == Direction.Down && transform.position.z < _endPosition.z ){
-			Destroy(gameObject) ;
-			gameMasterScript.score += 500;
-		}
-		else if(_direction == Direction.Up && transform.position.z > _endPosition.z ){
-			Destroy(gameObject) ;
-			gameMasterScript.score += 500;
+			gameMasterScript.score += 1;
 		}
 		
+	}
+	
+	private bool CheckMyEndPosition(){
+		//For Lefts
+		if(_direction == Direction.Left && (_nextDirection == null || _nextDirection == Direction.Left)){
+			if(transform.position.x < _endPosition.x)
+				return true;
+		}
+		
+		if(_direction == Direction.Left && _nextDirection == Direction.Down){
+			if(transform.position.x < _endPosition.x && transform.position.z < _endPosition.z)
+				return true;
+		}
+		
+		if(_direction == Direction.Left && _nextDirection == Direction.Up){
+			if(transform.position.x < _endPosition.x && transform.position.z > _endPosition.z)
+				return true;
+		}
+		
+		//For Rights
+		if(_direction == Direction.Right && (_nextDirection == null || _nextDirection == Direction.Right)){
+			if(transform.position.x > _endPosition.x)
+				return true;
+		}
+		
+		if(_direction == Direction.Right &&  _nextDirection == Direction.Down){
+			if(transform.position.x > _endPosition.x && transform.position.z < _endPosition.z)
+				return true;
+		}
+		
+		if(_direction == Direction.Right && _nextDirection == Direction.Up){
+			if(transform.position.x > _endPosition.x && transform.position.z > _endPosition.z)
+				return true;
+		}
+		
+		//For Ups
+		if(_direction == Direction.Up && (_nextDirection == null || _nextDirection == Direction.Up)){
+			if(transform.position.z > _endPosition.z)
+				return true;
+		}
+		
+		if(_direction == Direction.Up && _nextDirection == Direction.Right){
+			if(transform.position.z > _endPosition.z && transform.position.x > _endPosition.x)
+				return true;
+		}
+		
+		if(_direction == Direction.Up && _nextDirection == Direction.Left){
+			if(transform.position.z > _endPosition.z && transform.position.x < _endPosition.x)
+				return true;
+		}
+		
+		//For Downs
+		if(_direction == Direction.Down && (_nextDirection == null || _nextDirection == Direction.Down)){
+			if(transform.position.z < _endPosition.z)
+				return true;
+		}
+		
+		if(_direction == Direction.Down && _nextDirection == Direction.Right ){
+			if(transform.position.z < _endPosition.z && transform.position.x > _endPosition.x)
+				return true;
+		}
+		
+		if(_direction == Direction.Down && _nextDirection == Direction.Left ){
+			if(transform.position.z < _endPosition.z && transform.position.x < _endPosition.x)
+				return true;
+		}
+		return false;
 	}
 	
 	
@@ -213,24 +307,25 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void StopMovingOnRed(){
-		//if(_light.tLight != null){
-			if(_direction == Direction.Right && (_light.Stopped) && transform.position.x > _stopPosition - Offset ){
+		if(_light.tLight != null){
+			if(_direction == Direction.Right && (_light.tLight.renderer.material.color != Color.green) && transform.position.x > _stopPosition - Offset ){
 				_speed = 0.0f;
 			}
-			else if(_direction == Direction.Left && (_light.Stopped) && transform.position.x < _stopPosition + Offset ){
+			else if(_direction == Direction.Left && (_light.tLight.renderer.material.color != Color.green) && transform.position.x < _stopPosition + Offset ){
 				_speed = 0.0f;
 			}
-			else if(_direction == Direction.Down && (_light.Stopped) && transform.position.z < _stopPosition + Offset ){
+			else if(_direction == Direction.Down && (_light.tLight.renderer.material.color != Color.green) && transform.position.z < _stopPosition + Offset ){
 				_speed = 0.0f;
 			}
-			else if(_direction == Direction.Up && (_light.Stopped) && transform.position.z > _stopPosition - Offset ){
+			else if(_direction == Direction.Up && (_light.tLight.renderer.material.color != Color.green) && transform.position.z > _stopPosition - Offset ){
 				_speed = 0.0f;
 			}
-		//}
+		}
 	}
 	
 	
 	private void Move(){
+		SetStopOffset();
 		//Debug.Log(gameObject.name + " ------> " + _direction);
 		if(_direction == Direction.Left){
 		//	ReverseLastDirectionMove();

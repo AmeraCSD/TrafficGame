@@ -16,6 +16,7 @@ public class StreetsGenerator : MonoBehaviour {
 	private bool pressed;
 	private bool finished;
 	private Vector3 mousePos;
+	private int streetsCounter;
 	//
 	
 	
@@ -29,14 +30,163 @@ public class StreetsGenerator : MonoBehaviour {
 	}
 	
 	void Awake(){
+		streetsCounter = -1;
 		Streets = new List<Street>();
 	//	GenerateTempStreetsLevel1(); 					//for temp test
-		GenerateTempStreetsLevel3(); 					//for temp test
+		GenerateFirstLevelStreets(); 					//for temp test
 		
-		InitAllPathsForLevel3();
+		InitFirstLevelPaths();
 		Debug.Log("we henaaa el Paths count === "+ Paths.Count);
 	}
 	
+	private void GenerateFirstLevelStreets(){
+		
+		//Downs
+		streetsCounter ++ ;
+		Street s0 = new Street( streetsCounter,
+								new Vector3(-15, 5, 50), 
+								new Vector3(-15, 5, 5),  
+								new TrafficLight(Direction.Down,
+												FindTagObject("lightDown"),
+												true),
+								15.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		streetsCounter ++ ;
+		Street s1 = new Street( streetsCounter,
+								new Vector3(-15, 5, 5), 
+								new Vector3(-15, 5, -50),  
+								new TrafficLight(Direction.Down,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		streetsCounter ++ ;
+		Street s2 = new Street( streetsCounter,
+								new Vector3(-5, 5, 50), 
+								new Vector3(-5, 5, -5),  
+								new TrafficLight(Direction.Down,
+												FindTagObject("lightDown"),
+												true),
+								15.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH/4);
+		
+		streetsCounter ++ ;
+		Street s3 = new Street( streetsCounter,
+								new Vector3(-5, 5, -5), 
+								new Vector3(-5, 5, -50),  
+								new TrafficLight(Direction.Down,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		//Lefts
+		streetsCounter ++ ;
+		Street s4 = new Street( streetsCounter,
+								new Vector3(50, 5, 5), 
+								new Vector3(-15, 5, 5),  
+								new TrafficLight(Direction.Left,
+												FindTagObject("lightLeft"),
+												true),
+								5.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		streetsCounter ++ ;
+		Street s5 = new Street( streetsCounter,
+								new Vector3(50, 5, -5), 
+								new Vector3(-5, 5, -5),  
+								new TrafficLight(Direction.Left,
+												FindTagObject("lightLeft"),
+												true),
+								5.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH/4);
+		streetsCounter ++ ;
+		Street s6 = new Street( streetsCounter,
+								new Vector3(-15, 5, 5), 
+								new Vector3(-50, 5, 5),  
+								new TrafficLight(Direction.Left,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		streetsCounter ++ ;
+		Street s7 = new Street( streetsCounter,
+								new Vector3(-5, 5, -5), 
+								new Vector3(-50, 5, -5),  
+								new TrafficLight(Direction.Left,
+												null,
+												false),
+								0.0f,					//stop position calculation based on the end point of the street
+								STREET_WIDTH);
+		
+		Streets.Add(s0);
+		Streets.Add(s1);
+		Streets.Add(s2);
+		Streets.Add(s3);
+		Streets.Add(s4);
+		Streets.Add(s5);
+		Streets.Add(s6);
+		Streets.Add(s7);
+		
+	}
+	
+	
+	private void InitFirstLevelPaths(){
+		Paths = new List<Path>();
+		List<Street> tempPath;
+
+		//Path0 (down, down)1
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[0]);
+		tempPath.Add(Streets[1]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(-15, 5, 50), new Vector3(-15, 5, -50)));
+		
+		//Path1 (down, down)2
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[2]);
+		tempPath.Add(Streets[3]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(-5, 5, 50), new Vector3(-5, 5, -50)));
+		
+		//Path2 (left, left)1
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[4]);
+		tempPath.Add(Streets[6]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(50, 5, 5), new Vector3(-50, 5, 5)));
+		
+		
+		//Path3 (left, left)2
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[5]);
+		tempPath.Add(Streets[7]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(50, 5, -5), new Vector3(-50, 5, -5)));
+		
+		
+		//Path4 (left, down)
+		
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[5]);
+		tempPath.Add(Streets[3]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(50, 5, -5), new Vector3(-5, 5, -50)));
+		
+		//Path5 (down, left)
+		
+		tempPath = new List<Street>() ;
+		tempPath.Add(Streets[0]);
+		tempPath.Add(Streets[6]);
+		
+		Paths.Add(new Path(tempPath, new Vector3(-15, 5, 50), new Vector3(-50, 5, 5)));
+		
+		
+		
+	}
+
+	/*
 	private void GenerateTempStreetsLevel3(){
 		//*********** UPs
 		Street s0 = new Street( new Vector3(15, 5, -50), 
@@ -154,7 +304,9 @@ public class StreetsGenerator : MonoBehaviour {
 		Streets.Add(s11);
 
 	}
+	*/
 	
+	/*
 	private void InitAllPathsForLevel3(){
 		//Path0 (up, up)1
 		List<Street> tempPath = new List<Street>() ;
@@ -222,9 +374,9 @@ public class StreetsGenerator : MonoBehaviour {
 		
 	}
 	
+	*/
 	
-	
-	
+	/*
 	private void InitAllPathsForLevel2(){
 		//Path0 (left, up)
 		List<Street> tempPath = new List<Street>() ;
@@ -276,6 +428,7 @@ public class StreetsGenerator : MonoBehaviour {
 
 	}
 	
+	*/
 	// Use this for initialization
 	void Start () {
 		pressed = false;
@@ -285,6 +438,7 @@ public class StreetsGenerator : MonoBehaviour {
 	
 	
 	///// For temp test *****************
+	/*
 	private void GenerateTempStreetsLevel2(){
 		Street s0 = new Street( new Vector3(50, 5, 15), 
 								new Vector3(15, 5, 15),  
@@ -378,7 +532,7 @@ public class StreetsGenerator : MonoBehaviour {
 		Streets.Add(s9);
 		
 	}
-	
+	*/
 	/*
 	private void GenerateTempStreetsLevel1(){
 		
