@@ -102,6 +102,13 @@ public class LightsGamer : MonoBehaviour {
 		if(!str.StreetLight.OnHold){
 			str.StreetLight.OnHold = true;
 			Debug.Log("Inside Put State On hold");
+			if(str.StreetLight.tLight.renderer.material.color == Color.red){
+				str.StreetLight.YellowAfterRed = true;
+			}
+			if(str.StreetLight.tLight.renderer.material.color == Color.green){
+				str.StreetLight.YellowAfterGreen = true;
+			}
+				
 			str.StreetLight.tLight.renderer.material.color = Color.yellow;
 			
 			timer += str.MinimumDistanceToOpenTrafficLight / MIN_VEHICLE_SPEED ;
@@ -124,6 +131,8 @@ public class LightsGamer : MonoBehaviour {
 				Street s = streetObjectsQueue.Dequeue() as Street;
 				ChangeState(s);
 				s.StreetLight.OnHold = false;
+				
+				
 				if(timersQueue.Count != 0)
 					checkedTimer = (float) timersQueue.Peek();	//setting the next checkedTimer from the queue
 			}
@@ -133,10 +142,14 @@ public class LightsGamer : MonoBehaviour {
 	//this method changes the state of the light from red to green and vice versa	
 	public void ChangeState(Street str){
 		if(str.StreetLight.Stopped){
+			
+			str.StreetLight.YellowAfterRed = false;
 			str.StreetLight.Stopped = false;
 			str.StreetLight.tLight.renderer.material.color = Color.green;
 		}
 		else if(!(str.StreetLight.Stopped)){
+			
+			str.StreetLight.YellowAfterGreen = false;
 			str.StreetLight.Stopped = true;
 			str.StreetLight.tLight.renderer.material.color = Color.red;
 		}

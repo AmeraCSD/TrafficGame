@@ -208,7 +208,7 @@ public class GameMaster : MonoBehaviour {
 		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score);
 		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar "+satisfyBar);
 		
-		if(score >= 70){
+		if(score >= 100){
 			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
 			GUI.Label(new Rect(Screen.width/2 - 15 , Screen.height/2 - 12, 100, 25), "Congratulations! ");
 			string temp = score.ToString();

@@ -158,14 +158,14 @@ public class VehicleController : MonoBehaviour {
 		Debug.Log(gameObject.name +" The queue Size ------------> " + _queueSize );
 
 		if( _direction == Direction.Right && transform.position.x > _stopPosition  ||
-			_direction == Direction.Left && transform.position.x < _stopPosition   ||
+			_direction == Direction.Left && transform.position.x < _stopPosition ||
 			_direction == Direction.Down  && transform.position.z < _stopPosition  ||
-			_direction == Direction.Up && transform.position.z > _stopPosition  ){
+			_direction == Direction.Up && transform.position.z > _stopPosition ){
 			
 			
 			passed = true ;
 			
-			if(!dequeued && !(_light.Stopped)){
+			if(!dequeued && (!(_light.Stopped) || (_light.YellowAfterGreen))){
 				if(_myQueue.Count > 0){
 					
 					_myQueue.Dequeue();
@@ -178,7 +178,7 @@ public class VehicleController : MonoBehaviour {
 			}
 			if(myVehicle.NextStreet != null){
 				TransfereToNextStreet();
-				boxColl.isTrigger = true;
+				//boxColl.isTrigger = true;
 			}
 			
 		}
@@ -308,6 +308,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private void StopMovingOnRed(){
 		if(_light.tLight != null){
+			SetStopOffset();
 			if(_direction == Direction.Right && (_light.tLight.renderer.material.color != Color.green) && transform.position.x > _stopPosition - Offset ){
 				_speed = 0.0f;
 			}

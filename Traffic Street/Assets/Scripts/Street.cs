@@ -13,6 +13,7 @@ public class Street {
 	//These variables are for the vehicles
 	private Queue _queue;							//this queue would contain the vehicles that are found in this street at the current time
 	private int _vehiclesNumber; 					//this is the number of all of the vehciles that would be generated arround the whole game time (should be generated in the game master class)
+	private int _existedVehiclesNumberOnYellow;
 	
 	//constructor
 	public Street(int id, Vector3 startPoint, Vector3 endPoint, TrafficLight trafficLight, float stopPosition, float minDistOpenLight){
@@ -24,6 +25,7 @@ public class Street {
 		_minDistanceToOpenTrafficLight = minDistOpenLight;
 		_queue = new Queue();
 		_vehiclesNumber = 0;
+		_existedVehiclesNumberOnYellow = 0;
 		
 	}
 	
@@ -72,6 +74,14 @@ public class Street {
 		set{_vehiclesNumber = value;}
 	}
 	
+	public int GetVehiclesOnYellow(){
+		if(_myLight.tLight != null){
+			if(_myLight.tLight.renderer.material.color == Color.yellow){
+				return _vehiclesNumber;	
+			}
+		}
 	
+		return 0;
+	}
 	
 }
