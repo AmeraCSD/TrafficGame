@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -43,24 +44,30 @@ public class VehicleController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Awake(){
-		 gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
+		 
+		initInstancesAtFirst();
 		
+		
+	}
+	
+	public void initInstancesAtFirst(){
+		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
 		Offset = 0;
 		dequeued = false;
 		enqueued = false;
 		haveToStop = false;
 		insideOnTriggerEnter = false;
-		
+		passed = false;
 	}
 	
 	void Start () {
 		InitStreetAndVehicleAttributes();
 	//	_charController = GetComponent<CharacterController>();
 		//Physics.IgnoreCollision(collider, boxColl);
-		passed = false;
+		
 	}
 	
-	private void InitStreetAndVehicleAttributes(){
+	public void InitStreetAndVehicleAttributes(){
 		_path			= myVehicle.MyPath;
 		_endPosition 	= _path.EndPosition;
 		
@@ -72,7 +79,7 @@ public class VehicleController : MonoBehaviour {
 		_light 			= _street.StreetLight;
 		_stopPosition 	= _street.StopPosition;
 		_myQueue 		= _street.StrQueue;
-		_queueSize 		= _street.StrQueue.Count;
+		_queueSize 		= _myQueue.Count;
 		
 		lastDirection = _direction;
 		_nextDirection = myVehicle.NextStreet.StreetLight.Type;
@@ -110,19 +117,14 @@ public class VehicleController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		SetupColliderSize();
-		//here 
-	//	MakeMyQZeroIfYellow();
-		
 		PerformEnqueue();
-		
 		SetStopOffset();
-		
-		
+				
 		CheckPosition_DeqIfPassed();
 		
 		Move();
-		
 		CheckAndDestroyAtEnd();
 		if(!passed)
 			StopMovingOnRed();
@@ -133,29 +135,12 @@ public class VehicleController : MonoBehaviour {
 			_speed = myVehicle.Speed;
 			
 		}
-	
-	}
-	
-	private void MakeMyQZeroIfYellow(){
-		if(_light.tLight!= null){
-			if(_light.tLight.renderer.material.color == Color.yellow){
-						Debug.Log("Yellowwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
-				Object [] array  = _myQueue.ToArray() as Object [] ;
-				if(array != null){
-					for(int i=0; i<array.Length; i++){
-						if(((GameObject)array[i]).transform.position.x + _street.MinimumDistanceToOpenTrafficLight >= _stopPosition){
-							_queueSize=0;
-							Debug.Log("hereeeeeeeeeeeeeeeeeeeeeeeeee");
-						}
-					}
-				}
-			}
-		}
 		
 	}
 	
+	
 	private void CheckPosition_DeqIfPassed(){
-		Debug.Log(gameObject.name +" The queue Size ------------> " + _queueSize );
+		//Debug.Log(gameObject.name +" The queue Size ------------> " + _queueSize );
 
 		if( _direction == Direction.Right && transform.position.x > _stopPosition  ||
 			_direction == Direction.Left && transform.position.x < _stopPosition ||
@@ -165,58 +150,63 @@ public class VehicleController : MonoBehaviour {
 			
 			passed = true ;
 			
-			if(!dequeued && (!(_light.Stopped) || (_light.YellowAfterGreen))){
+			if(!dequeued && (!(_light.Stopped)) ){
 				if(_myQueue.Count > 0){
 					
 					_myQueue.Dequeue();
 					dequeued = true;
 					
 					_street.VehiclesNumber --;
-					Debug.Log(gameObject.name +" is dequeued and Vecss Number ==== " + _street.VehiclesNumber);
+					//Debug.Log(gameObject.name +" is dequed"  +"  and The queue Size ------------>>> " + _queueSize  );
 					
 				}
 			}
 			if(myVehicle.NextStreet != null){
 				TransfereToNextStreet();
-				//boxColl.isTrigger = true;
+				boxColl.isTrigger = true;
 			}
 			
 		}
 		
 	}
 	
-	private float ConstantDistanceToStop(){
-		return _street.MinimumDistanceToOpenTrafficLight;
-	}
-	
 	
 	private void PerformEnqueue(){
 		if(!enqueued ){
+			
 			_myQueue.Enqueue(gameObject);
+			
 			enqueued = true;
-			Debug.Log(gameObject.name +" is enqueued" );
+			//Debug.Log(gameObject.name +" is enqueued"  +"  and The queue Size ------------> " + _queueSize  );
 		}
 	}
 	
 	private void SetStopOffset(){
 		//Debug.Log("QUEUE SIZEEEEEEE of  " + gameObject.name +"      "+ _queueSize);
-		Offset =  (_queueSize ) * (_size + 5);
+		Offset =  (GetMyOrderInQueue()) * (_size + 5);
+	}
+	
+	private int GetMyOrderInQueue(){
+		object [] array  = _myQueue.ToArray();
+		return Array.IndexOf(array, gameObject);
 	}
 	
 	private void SetupColliderSize(){
 		boxColl = GetComponent<BoxCollider>();
 		if(getVehicleLargerAxis(gameObject) == "x"){
-			boxColl.size = new Vector3(.3f  , 1 , transform.localScale.z/2.0f  );
+			boxColl.size = new Vector3(.5f  , 1 , transform.localScale.z/2.0f  );
 		}
 		else{
-			boxColl.size = new Vector3(transform.localScale.x/2.0f   , 1 , .3f );
+			boxColl.size = new Vector3(transform.localScale.x/2.0f   , 1 , .5f );
 		}
 		
 	}
 	
 	private void CheckAndDestroyAtEnd(){
 		if(CheckMyEndPosition()){
-			Destroy(gameObject) ;
+			//Destroy(gameObject) ;
+			gameObject.SetActive(false);
+			gameMasterScript.existedVehicles.Enqueue(gameObject);
 			gameMasterScript.score += 1;
 		}
 		
@@ -309,16 +299,16 @@ public class VehicleController : MonoBehaviour {
 	private void StopMovingOnRed(){
 		if(_light.tLight != null){
 			SetStopOffset();
-			if(_direction == Direction.Right && (_light.tLight.renderer.material.color != Color.green) && transform.position.x > _stopPosition - Offset ){
+			if(_direction == Direction.Right && (_light.Stopped) && transform.position.x > _stopPosition - Offset ){
 				_speed = 0.0f;
 			}
-			else if(_direction == Direction.Left && (_light.tLight.renderer.material.color != Color.green) && transform.position.x < _stopPosition + Offset ){
+			else if(_direction == Direction.Left && (_light.Stopped) && transform.position.x < _stopPosition + Offset ){
 				_speed = 0.0f;
 			}
-			else if(_direction == Direction.Down && (_light.tLight.renderer.material.color != Color.green) && transform.position.z < _stopPosition + Offset ){
+			else if(_direction == Direction.Down && (_light.Stopped) && transform.position.z < _stopPosition + Offset ){
 				_speed = 0.0f;
 			}
-			else if(_direction == Direction.Up && (_light.tLight.renderer.material.color != Color.green) && transform.position.z > _stopPosition - Offset ){
+			else if(_direction == Direction.Up && (_light.Stopped) && transform.position.z > _stopPosition - Offset ){
 				_speed = 0.0f;
 			}
 		}

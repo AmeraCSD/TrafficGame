@@ -17,7 +17,7 @@ public class LightsGamer : MonoBehaviour {
 	private TrafficLight _right;
 	
 	
-	public const float MIN_VEHICLE_SPEED = 10.0f;		//this should be in the global class 
+	public const float MIN_VEHICLE_SPEED = 23.0f;		//this should be in the global class 
 	
 	//These variables are for changing the traffic lights (for the steady state)
 	private Queue timersQueue;
@@ -96,23 +96,24 @@ public class LightsGamer : MonoBehaviour {
 		
 	}
 	
+	
 	//this method called when we hold on a state .. it enqueues the holded light street and the current time + the time it has to change the state in 
 	//(the calculations of the timer are based on street width and the minimum speed of the slowest vehicle)
 	public void PutStateOnHold(Street str){
 		if(!str.StreetLight.OnHold){
 			str.StreetLight.OnHold = true;
-			Debug.Log("Inside Put State On hold");
-			if(str.StreetLight.tLight.renderer.material.color == Color.red){
+			//Debug.Log("Inside Put State On hold");
+			if(str.StreetLight.Stopped){
 				str.StreetLight.YellowAfterRed = true;
 			}
-			if(str.StreetLight.tLight.renderer.material.color == Color.green){
+			if(!str.StreetLight.Stopped){
 				str.StreetLight.YellowAfterGreen = true;
 			}
 				
 			str.StreetLight.tLight.renderer.material.color = Color.yellow;
 			
 			timer += str.MinimumDistanceToOpenTrafficLight / MIN_VEHICLE_SPEED ;
-						
+			//timer +=1;			
 			//Debug.Log("The current time is --->  " + Time.time + "and the timer is ---> " + timer);
 			if(timersQueue.Count == 0){
 				checkedTimer = timer;
@@ -121,6 +122,7 @@ public class LightsGamer : MonoBehaviour {
 			streetObjectsQueue.Enqueue(str);
 		}
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////
 	
 	//This method checks ,each frame, if the hold time is finished for any existed changed traffic light then changes the state (if any)
 	//(called each frame)

@@ -6,7 +6,7 @@ public class StreetsGenerator : MonoBehaviour {
 	
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
 	private List<Path> Paths;
-	public const float STREET_WIDTH = 10;
+	public const float STREET_WIDTH = 23;
 	
 	public GameObject lightPrefab = null;		//this should be initialized in unity with the traffic light
 	
@@ -141,21 +141,21 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[0]);
 		tempPath.Add(Streets[1]);
 		
-		Paths.Add(new Path(tempPath, new Vector3(-15, 5, 50), new Vector3(-15, 5, -50)));
+		Paths.Add(new Path(tempPath, Streets[0].StartPoint , Streets[1].EndPoint, false));
 		
 		//Path1 (down, down)2
 		tempPath = new List<Street>() ;
 		tempPath.Add(Streets[2]);
 		tempPath.Add(Streets[3]);
 		
-		Paths.Add(new Path(tempPath, new Vector3(-5, 5, 50), new Vector3(-5, 5, -50)));
+		Paths.Add(new Path(tempPath, Streets[2].StartPoint, Streets[3].EndPoint, true));
 		
 		//Path2 (left, left)1
 		tempPath = new List<Street>() ;
 		tempPath.Add(Streets[4]);
 		tempPath.Add(Streets[6]);
 		
-		Paths.Add(new Path(tempPath, new Vector3(50, 5, 5), new Vector3(-50, 5, 5)));
+		Paths.Add(new Path(tempPath, Streets[4].StartPoint, Streets[6].EndPoint, true));
 		
 		
 		//Path3 (left, left)2
@@ -163,7 +163,7 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[5]);
 		tempPath.Add(Streets[7]);
 		
-		Paths.Add(new Path(tempPath, new Vector3(50, 5, -5), new Vector3(-50, 5, -5)));
+		Paths.Add(new Path(tempPath, Streets[5].StartPoint, Streets[7].EndPoint, false));
 		
 		
 		//Path4 (left, down)
@@ -172,7 +172,7 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[5]);
 		tempPath.Add(Streets[3]);
 		
-		Paths.Add(new Path(tempPath, new Vector3(50, 5, -5), new Vector3(-5, 5, -50)));
+		Paths.Add(new Path(tempPath, Streets[5].StartPoint, Streets[3].EndPoint, false));
 		
 		//Path5 (down, left)
 		
@@ -180,7 +180,7 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[0]);
 		tempPath.Add(Streets[6]);
 		
-		Paths.Add(new Path(tempPath, new Vector3(-15, 5, 50), new Vector3(-50, 5, 5)));
+		Paths.Add(new Path(tempPath, Streets[0].StartPoint, Streets[6].EndPoint, false));
 		
 		
 		
