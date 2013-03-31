@@ -31,6 +31,7 @@ public class GameMaster : MonoBehaviour {
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	public Queue existedVehicles;
 	
+	private SatisfyBar satisfyBarScript;
 	public bool gameOver;
 	private int initedCarsNumber;
 	private bool cancelInvokeFirst15Vehicles;
@@ -42,7 +43,14 @@ public class GameMaster : MonoBehaviour {
 	
 	private int tempCounter;
 	
+	public Texture2D veryHappyIcon;
+	public Texture2D happyIcon;
+	public Texture2D notHappyIcon;
+	public Texture2D sadIcon;
+	public Texture2D verySadIcon;
+	
 	void Awake(){
+		satisfyBarScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>();
 		existedVehicles = new Queue();
 		//initializing the huds 
 		tempCounter = 0;
@@ -55,6 +63,7 @@ public class GameMaster : MonoBehaviour {
 	//	gameOver = false;
 		score = 0;
 		satisfyBar = 2;
+		satisfyBarScript.AddjustSatisfaction(2);
 		
 		
 	}
@@ -63,7 +72,6 @@ public class GameMaster : MonoBehaviour {
 	void Start () {
 		//initializing the vehicles needs
 		//_generationPoints = new List<Vector3>();
-		
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getStreets();
 		Paths = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getPaths();
 		
@@ -123,6 +131,7 @@ public class GameMaster : MonoBehaviour {
 				if(satisfyBar >=0){
 					satisfyBar --;
 					secondsCounterFor30 = 0;
+					satisfyBarScript.AddjustSatisfaction(-1);
 				}
 			}
 		}
@@ -131,6 +140,7 @@ public class GameMaster : MonoBehaviour {
 			secondsCounterForAnger ++;
 			if(secondsCounterForAnger == 5){	
 				satisfyBar += 2;
+				satisfyBarScript.AddjustSatisfaction(2);
 				secondsCounterForAnger = 0;
 				
 			}
@@ -338,11 +348,31 @@ public class GameMaster : MonoBehaviour {
 	void OnGUI(){
 		GUI.Label( new Rect(10, 10, 100, 35), "Time: "+ gameTime);
 		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score);
-		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar "+satisfyBar);
+		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar: ");
+		//GUI.Box(new Rect(10, 100, 300, 300), veryHappyIcon);
+		
+		if(satisfyBar == 2){
+			GUI.Label(new Rect(10, 100, 80, 80), veryHappyIcon);
+		}
+		else if(satisfyBar == 4){
+			GUI.Label(new Rect(10, 100, 80, 80), happyIcon);
+		}
+		
+		else if(satisfyBar == 6){
+			GUI.Label(new Rect(10, 100, 80, 80), notHappyIcon);
+		}
+		
+		else if(satisfyBar == 8){
+			GUI.Label(new Rect(10, 100, 80, 80), sadIcon);
+		}
+		
+		else if(satisfyBar == 10){
+			GUI.Label(new Rect(10, 100, 80, 80), verySadIcon);
+		}
 		
 		if(score >= 200){
 			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
-			GUI.Label(new Rect(Screen.width/2 - 15 , Screen.height/2 - 12, 100, 25), "Congratulations! ");
+			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 , 100, 25), "Congratulations! ");
 			string temp = score.ToString();
 			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2+30-12 , 100, 25), "Score : "+ temp);
 			
@@ -357,6 +387,26 @@ public class GameMaster : MonoBehaviour {
 				Application.LoadLevel("Level 1");
 			}
 		}
+		else if(satisfyBar >= 10){
+		
+			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
+			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 , 100, 25), "Traffic Gam !!!");
+			string temp = score.ToString();
+			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2+30-12 , 100, 25), "Score : "+ temp);
+			
+			GameObject [] gos = GameObject.FindGameObjectsWithTag("vehicle");
+			for(int i = 0; i < gos.Length; i++){
+				gos[i].SetActive(false);
+			}
+			
+			CancelInvoke("CountTimeDown");
+			if(GUI.Button(new Rect(Screen.width/2 - 40 , Screen.height/2+70-12 , 100, 25), "Replay ")){
+				Application.LoadLevel("Level 1");
+			}
+		
+			
+		}
+		
 		
 		else if(gameOver || gameTime == 0){
 		
