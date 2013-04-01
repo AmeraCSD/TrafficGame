@@ -25,10 +25,12 @@ public class GameMaster : MonoBehaviour {
 	private List<List <int>> _multiPositions;
 	private int vehiclesNumber;
 	// These constants for the random generation of vehicles
-	private const int VEHICLES_LEAST_NUMBER = 500;
-	private const int VEHICLES_MOST_NUMBER = 600;
+	//private const int VEHICLES_LEAST_NUMBER = 500;
+	//private const int VEHICLES_MOST_NUMBER = 600;
 	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
+	public GameObject ambulancePrefab;				//this object should be initialized in unity with the AmbulancePrefab
+	
 	public Queue existedVehicles;
 	
 	private SatisfyBar satisfyBarScript;
@@ -76,9 +78,9 @@ public class GameMaster : MonoBehaviour {
 		Paths = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getPaths();
 		
 		//InitAllGenerationPoints();
-		//_timeSlots = new List<float>();
+		_timeSlots = new List<float>();
 		//_multiPositions = new List<List<int>>();
-//		CalculateRandomTimeSlots();
+		SetAmbulanceRandomTime();
 		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.1f);
 		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
 	}
@@ -93,26 +95,34 @@ public class GameMaster : MonoBehaviour {
 		GenerateRandomVehicle(pos);
 	}
 	
-	
-		
-	
-	//This method calculates random time intervals that the vehicles should be generated in
-/*	private void CalculateRandomTimeSlots(){
-		vehiclesNumber = Random.Range(VEHICLES_LEAST_NUMBER, VEHICLES_MOST_NUMBER);
+	private void SetAmbulanceRandomTime(){
+		_timeSlots.Add(125);
+		_timeSlots.Add(115);
+		/*
+		int timesNumber = 2;
 		float timeRatio = 0.0f;
-		for (int i = 0 ; i<vehiclesNumber; i++){
-			timeRatio = Random.Range(0.0f, gameTime);
+		for (int i = 0 ; i<timesNumber; i++){
+			timeRatio = Random.Range(135, 145);
 			if(!_timeSlots.Contains(timeRatio)){
 				_timeSlots.Add(timeRatio);
 				Debug.Log("time ... " + timeRatio);
 				//_multiPositions.Add(GetOneTimePositions());
-			}
-				
-		}
-		
-		
+			}	
+		}	
+		*/	
 	}
-*/
+	
+	private bool InsideTimeSlotsList(){
+		bool found = false;
+		int i=0;
+		Debug.Log("timeSlots.count "+ _timeSlots.Count);
+		while(!found && i < _timeSlots.Count){
+			if(_timeSlots [i] == gameTime)
+				found = true;
+			i++;
+		}
+		return found;
+	}
 	
 	//This method is called in the Start() it counts down the game time each second and generates the vehicles in the random time calculated at the first of the game
 	void CountTimeDown ()
@@ -138,7 +148,7 @@ public class GameMaster : MonoBehaviour {
 		else{
 			secondsCounterFor30 = 0;
 			secondsCounterForAnger ++;
-			if(secondsCounterForAnger == 5){	
+			if(secondsCounterForAnger == 8){	
 				satisfyBar += 2;
 				satisfyBarScript.AddjustSatisfaction(2);
 				secondsCounterForAnger = 0;
@@ -152,14 +162,20 @@ public class GameMaster : MonoBehaviour {
 		if( canInstatiateTheRest){
 			
 			if(!CheckAllStreetsFullness()){
+				//this piece of code is for the ambulance
 				int pos1 = Random.Range(0, Paths.Count);
-				
 				while(Paths[pos1].PathStreets[0].VehiclesNumber >= MAX_STREET_VEHICLES_NUMBER){
-					pos1 = Random.Range(0, Paths.Count);
+						pos1 = Random.Range(0, Paths.Count);
 				}
 				
-				GenerateRandomVehicle(pos1);
-				
+				if(InsideTimeSlotsList()){
+					Debug.Log("should be ambulance");
+					GenerateAmbulance(pos1);
+				}
+				else {
+					GenerateRandomVehicle(pos1);
+				}
+					
 				int pos2 = Random.Range(0, Paths.Count);
 				if(!CheckAllStreetsFullness()){
 					while(Paths[pos2].PathStreets[0].VehiclesNumber >= MAX_STREET_VEHICLES_NUMBER){
@@ -169,52 +185,20 @@ public class GameMaster : MonoBehaviour {
 						GenerateRandomVehicle(pos2);
 				}
 				
-				//Debug.Log("pos1 , pos2  ... " + pos1 +" , "+ pos2);
-			}
-			
-		}
-	}
-/*	
-	private List<int> GetOneTimePositions(){
-		int pos = Random.Range(0, Paths.Count);
-		List<int> positions = new List<int>();
-			
-		int i = 0;
-		//Debug.Log("the pos is ---->  "+ pos);
-			
-		while (positions.Count< Paths.Count/2){
-			if(!positions.Contains(pos+i)){
-				if(!hasSameGeneration(positions, pos+i)){
-					positions.Add(pos+i);
-					Debug.Log("Adding element ... " + (pos+i));
+				int pos3 = Random.Range(0, Paths.Count);
+				if(!CheckAllStreetsFullness()){
+					while(Paths[pos3].PathStreets[0].VehiclesNumber >= MAX_STREET_VEHICLES_NUMBER){
+						pos3 = Random.Range(0, Paths.Count);
+					}
+					if((Paths[pos1].GenerationPointPosition != Paths[pos3].GenerationPointPosition)
+						&&(Paths[pos2].GenerationPointPosition != Paths[pos3].GenerationPointPosition)){
+	
+						GenerateRandomVehicle(pos3);
+					}
 				}
 			}
-			if(pos+i == Paths.Count-1){
-				i -= pos+i;
-				
-			}
-			else
-				i++;
 		}
-		Debug.Log("positions number ... " + positions.Count);
-		return positions;
 	}
-	*/
-	/*
-	private bool hasSameGeneration(List<int> positions, int pos){
-		if(positions.Count == 0){
-			return false;	
-		}
-		for(int i=0; i<positions.Count ; i++){
-			Debug.LogWarning(positions[i] + " versus not againest " + pos);
-			if(Paths[positions[i]].GenerationPointPosition == Paths[pos].GenerationPointPosition){
-				Debug.Log("its true");
-				return true;
-			}
-		}
-		return false;
-	}
-	*/	
 	
 	
 	private bool CanInstantiatThisTime(){
@@ -226,35 +210,15 @@ public class GameMaster : MonoBehaviour {
 			return true;
 	}
 	
-/*	
-	private int InsideTimeSlotsList(){
-		bool found = false;
-		int i=0;
-		while(!found && i < _timeSlots.Count){
-			if(gameTime >= _timeSlots [i])
-				found = true;
-			else
-				i++;
-		}
-		if(found)
-			return i;
-		else
-			return -1;
-	}
-	*/
 	//here we give the vehicle all of its properities
 	private void GenerateRandomVehicle(int pos){	
-		//int pos = Random.Range(0, _generationPoints.Count);
 		
 		if(!CheckAllStreetsFullness()){
-		
-			
 			if(!cancelInvokeFirst15Vehicles){
 				while(Paths[pos].PathStreets[0].VehiclesNumber >= MAX_STREET_VEHICLES_NUMBER){
 					pos = Random.Range(0, Paths.Count);
 				}
 			}
-			
 			if(vehiclePrefab != null){
 				tempCounter ++;
 				//*****************************optimization
@@ -277,7 +241,7 @@ public class GameMaster : MonoBehaviour {
 				}
 				else{
 					vehicle = existedVehicles.Dequeue() as GameObject;
-					Debug.Log("dequeuing ..." + vehicle.name);
+				//	Debug.Log("dequeuing ..." + vehicle.name);
 					//vehicle = vehiclePrefab;					
 					vehicle.transform.position = Paths[pos].GenerationPointPosition;
 					vehicle.transform.rotation = Quaternion.identity;
@@ -300,9 +264,43 @@ public class GameMaster : MonoBehaviour {
 					
 				}
 				
-				
-				
-				
+			}
+			initedCarsNumber ++;
+			if(initedCarsNumber == 15){
+				cancelInvokeFirst15Vehicles = true;
+				//satisfyBar += 2;
+				initedCarsNumber =0;
+			}
+		}
+	}
+	
+	private void GenerateAmbulance(int pos){	
+		
+		if(!CheckAllStreetsFullness()){
+			if(!cancelInvokeFirst15Vehicles){
+				while(Paths[pos].PathStreets[0].VehiclesNumber >= MAX_STREET_VEHICLES_NUMBER){
+					pos = Random.Range(0, Paths.Count);
+				}
+			}
+			if(ambulancePrefab != null){
+				tempCounter ++;
+				//*****************************optimization
+				GameObject vehicle;
+			//	if(existedVehicles.Count == 0){
+					vehicle = Instantiate(ambulancePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
+					Paths[pos].PathStreets[0].VehiclesNumber ++;
+					//vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
+					vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + tempCounter;
+					
+					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
+					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Ambulance, 
+																						25.0f, 
+																						getVehicleLargeSize(vehicle), 
+																						Paths[pos].PathStreets[0].StreetLight.Type, 
+																						Paths[pos].PathStreets[0], 
+																						Paths[pos].PathStreets[1], 
+																						0,
+																						Paths[pos]);
 				
 			}
 			initedCarsNumber ++;
@@ -346,6 +344,11 @@ public class GameMaster : MonoBehaviour {
 	}
 	
 	void OnGUI(){
+		if(gameTime == 128 || gameTime == 118){
+			if(!CheckAllStreetsFullness())
+				GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 , 100, 100), "Ambulance Coming" );
+		}
+		
 		GUI.Label( new Rect(10, 10, 100, 35), "Time: "+ gameTime);
 		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score);
 		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar: ");

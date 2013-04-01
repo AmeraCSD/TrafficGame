@@ -36,6 +36,8 @@ public class VehicleController : MonoBehaviour {
 	private bool enqueued;
 	private bool gameOver;
 	
+	private bool satisfyAdjustedOnTime;
+	
 	private float Offset;
 	private int carsStillInsideNumber;
 	
@@ -58,6 +60,7 @@ public class VehicleController : MonoBehaviour {
 		haveToStop = false;
 		insideOnTriggerEnter = false;
 		passed = false;
+		satisfyAdjustedOnTime = false;
 	}
 	
 	void Start () {
@@ -193,11 +196,14 @@ public class VehicleController : MonoBehaviour {
 	
 	private void SetupColliderSize(){
 		boxColl = GetComponent<BoxCollider>();
-		if(getVehicleLargerAxis(gameObject) == "x"){
-			boxColl.size = new Vector3(.5f  , 1 , transform.localScale.z/2.0f  );
-		}
-		else{
-			boxColl.size = new Vector3(transform.localScale.x/2.0f   , 1 , .5f );
+		if(myVehicle.Type != VehicleType.Ambulance){
+			
+			if(getVehicleLargerAxis(gameObject) == "x"){
+				boxColl.size = new Vector3(.5f  , 1 , transform.localScale.z/2.0f  );
+			}
+			else{
+				boxColl.size = new Vector3(transform.localScale.x/2.0f   , 1 , .5f );
+			}
 		}
 		
 	}
@@ -206,7 +212,9 @@ public class VehicleController : MonoBehaviour {
 		if(CheckMyEndPosition()){
 			//Destroy(gameObject) ;
 			gameObject.SetActive(false);
-			gameMasterScript.existedVehicles.Enqueue(gameObject);
+			if(myVehicle.Type != VehicleType.Ambulance){
+				gameMasterScript.existedVehicles.Enqueue(gameObject);
+			}
 			gameMasterScript.score += 1;
 		}
 		
@@ -298,20 +306,26 @@ public class VehicleController : MonoBehaviour {
 	
 	private void StopMovingOnRed(){
 		if(_light.tLight != null){
-			SetStopOffset();
-			if(_direction == Direction.Right && (_light.Stopped) && transform.position.x > _stopPosition - Offset ){
-				_speed = 0.0f;
+			if(_light.Stopped){
+				if( (_direction == Direction.Right && transform.position.x > _stopPosition - Offset ) ||
+					(_direction == Direction.Left && transform.position.x < _stopPosition + Offset) ||
+					(_direction == Direction.Down && transform.position.z < _stopPosition + Offset) ||
+					(_direction == Direction.Up && transform.position.z > _stopPosition - Offset)  ){
+					
+					_speed = 0.0f;
+					
+					if(!satisfyAdjustedOnTime && myVehicle.Type == VehicleType.Ambulance){
+						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
+						gameMasterScript.satisfyBar += 2;
+						Debug.Log("Ambulance stopped ... not good");
+						satisfyAdjustedOnTime = true;
+					}
+				}
+		
 			}
-			else if(_direction == Direction.Left && (_light.Stopped) && transform.position.x < _stopPosition + Offset ){
-				_speed = 0.0f;
-			}
-			else if(_direction == Direction.Down && (_light.Stopped) && transform.position.z < _stopPosition + Offset ){
-				_speed = 0.0f;
-			}
-			else if(_direction == Direction.Up && (_light.Stopped) && transform.position.z > _stopPosition - Offset ){
-				_speed = 0.0f;
-			}
+				
 		}
+		
 	}
 	
 	
@@ -354,16 +368,42 @@ public class VehicleController : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		//if(other.transform.tag == "vehicle")
 	//	{
+		
+			
+	//	}
+		if(other.GetComponent<VehicleController>().myVehicle.Type == VehicleType.Ambulance){
+			haveToStop = true;
+			_speed = 50.0f;
+		}
+		
+		else if(myVehicle.Type != VehicleType.Ambulance){
 			haveToStop = true;
 			_speed = 0.0f;
-	//	}
+			gameMasterScript.gameOver = true;
+		}
+		
+		else{
+			haveToStop = true;
+			_speed = 30.0f;
+			other.GetComponent<VehicleController>()._speed = other.GetComponent<VehicleController>().myVehicle.Speed;
+		}
 		Debug.Log ("speed " + _speed);
-		gameMasterScript.gameOver = true;
    	}	
 	/*
 	void OnCollisionExit(Collision other){
 	}
 	*/
+	
+	void OnTriggerExit(Collider other) {
+		//if(other.transform.tag == "vehicle")
+	//	{
+		Debug.Log("on trigger exit");
+			haveToStop = false;
+			_speed = myVehicle.Speed;
+	//	}
+		Debug.Log ("speed " + _speed);
+	//	gameMasterScript.gameOver = true;
+   	}
 	
 	private string getVehicleLargerAxis(GameObject v){
 		
