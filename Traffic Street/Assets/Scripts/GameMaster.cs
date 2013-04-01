@@ -351,22 +351,22 @@ public class GameMaster : MonoBehaviour {
 		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar: ");
 		//GUI.Box(new Rect(10, 100, 300, 300), veryHappyIcon);
 		
-		if(satisfyBar == 2){
+		if(satisfyBar <= 2){
 			GUI.Label(new Rect(10, 100, 80, 80), veryHappyIcon);
 		}
-		else if(satisfyBar == 4){
+		else if(satisfyBar <= 4){
 			GUI.Label(new Rect(10, 100, 80, 80), happyIcon);
 		}
 		
-		else if(satisfyBar == 6){
+		else if(satisfyBar <= 6){
 			GUI.Label(new Rect(10, 100, 80, 80), notHappyIcon);
 		}
 		
-		else if(satisfyBar == 8){
+		else if(satisfyBar <= 8){
 			GUI.Label(new Rect(10, 100, 80, 80), sadIcon);
 		}
 		
-		else if(satisfyBar == 10){
+		else if(satisfyBar <= 10){
 			GUI.Label(new Rect(10, 100, 80, 80), verySadIcon);
 		}
 		
