@@ -42,6 +42,8 @@ public class VehicleController : MonoBehaviour {
 	private int carsStillInsideNumber;
 	
 	private GameMaster gameMasterScript;
+	private float stoppingTimerforAnger;
+	private bool stoppingTimerforAngerSet;
 		
 	
 	// Use this for initialization
@@ -61,6 +63,8 @@ public class VehicleController : MonoBehaviour {
 		insideOnTriggerEnter = false;
 		passed = false;
 		satisfyAdjustedOnTime = false;
+		stoppingTimerforAnger = 0;
+		stoppingTimerforAngerSet = false;
 	}
 	
 	void Start () {
@@ -120,7 +124,9 @@ public class VehicleController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		
+		
+		
 		SetupColliderSize();
 		PerformEnqueue();
 		SetStopOffset();
@@ -131,6 +137,27 @@ public class VehicleController : MonoBehaviour {
 		CheckAndDestroyAtEnd();
 		if(!passed)
 			StopMovingOnRed();
+		
+		if(_speed == 0 && GetMyOrderInQueue()== 0){
+				//Debug.Log("hereeeeeeeeeeeeeeeeeeeeeeeee");
+				if(! stoppingTimerforAngerSet){
+					Debug.Log("stoppingTimerforAnger .. " + stoppingTimerforAnger);
+					stoppingTimerforAnger = gameMasterScript.gameTime - 6 ;
+					stoppingTimerforAngerSet = true;
+				}
+		}
+		if(GetMyOrderInQueue()== 0){
+			if(myVehicle.Type != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
+				stoppingTimerforAngerSet = false;
+				Debug.Log("hereeeeeeeeeeeeeeeeeeeeeeeee");
+				GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(1);
+				gameMasterScript.satisfyBar += 1;
+			//	satisfyAdjustedOnTime = true;
+				stoppingTimerforAnger =0;
+				
+			}
+		}
+		Debug.Log(stoppingTimerforAngerSet);
 		
 		
 		
@@ -160,6 +187,12 @@ public class VehicleController : MonoBehaviour {
 					dequeued = true;
 					
 					_street.VehiclesNumber --;
+					if(!satisfyAdjustedOnTime && myVehicle.Type == VehicleType.Ambulance){
+						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
+						gameMasterScript.satisfyBar --;
+						satisfyAdjustedOnTime = true;
+					}
+					
 					//Debug.Log(gameObject.name +" is dequed"  +"  and The queue Size ------------>>> " + _queueSize  );
 					
 				}
@@ -313,6 +346,7 @@ public class VehicleController : MonoBehaviour {
 					(_direction == Direction.Up && transform.position.z > _stopPosition - Offset)  ){
 					
 					_speed = 0.0f;
+					
 					
 					if(!satisfyAdjustedOnTime && myVehicle.Type == VehicleType.Ambulance){
 						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(2);

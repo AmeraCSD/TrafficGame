@@ -135,7 +135,7 @@ public class GameMaster : MonoBehaviour {
 			
 		}
 		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 15){
-			secondsCounterForAnger = 0;
+		//	secondsCounterForAnger = 0;
 			secondsCounterFor30 ++;
 			if(secondsCounterFor30 == 30){	
 				if(satisfyBar >=0){
@@ -147,13 +147,13 @@ public class GameMaster : MonoBehaviour {
 		}
 		else{
 			secondsCounterFor30 = 0;
-			secondsCounterForAnger ++;
-			if(secondsCounterForAnger == 8){	
-				satisfyBar += 2;
-				satisfyBarScript.AddjustSatisfaction(2);
-				secondsCounterForAnger = 0;
+		//	secondsCounterForAnger ++;
+		//	if(secondsCounterForAnger == 8){	
+		//		satisfyBar += 2;
+		//		satisfyBarScript.AddjustSatisfaction(2);
+		//		secondsCounterForAnger = 0;
 				
-			}
+			//}
 		}
 		
 		//here
