@@ -71,7 +71,7 @@ public class LightsGamer : MonoBehaviour {
 	//(called each frame)
 	
 	private void OnMousePressed(){
-		if(Input.GetMouseButtonDown(1)){
+		if(Input.GetMouseButtonDown(0)){
 			Ray ray = (GameObject.FindGameObjectWithTag("MainCamera")).camera.ScreenPointToRay(Input.mousePosition);
     		RaycastHit hit ;
     		if (Physics.Raycast(ray, out hit)){
@@ -103,13 +103,7 @@ public class LightsGamer : MonoBehaviour {
 		if(!str.StreetLight.OnHold){
 			str.StreetLight.OnHold = true;
 			//Debug.Log("Inside Put State On hold");
-			if(str.StreetLight.Stopped){
-				str.StreetLight.YellowAfterRed = true;
-			}
-			if(!str.StreetLight.Stopped){
-				str.StreetLight.YellowAfterGreen = true;
-			}
-				
+			
 			str.StreetLight.tLight.renderer.material.color = Color.yellow;
 			
 			timer += str.MinimumDistanceToOpenTrafficLight / MIN_VEHICLE_SPEED ;
@@ -145,15 +139,15 @@ public class LightsGamer : MonoBehaviour {
 	public void ChangeState(Street str){
 		if(str.StreetLight.Stopped){
 			
-			str.StreetLight.YellowAfterRed = false;
 			str.StreetLight.Stopped = false;
-			str.StreetLight.tLight.renderer.material.color = Color.green;
+			//if(str.StreetLight.tLight.renderer.material.color != Color.green)
+				str.StreetLight.tLight.renderer.material.color = Color.green;
 		}
 		else if(!(str.StreetLight.Stopped)){
 			
-			str.StreetLight.YellowAfterGreen = false;
 			str.StreetLight.Stopped = true;
-			str.StreetLight.tLight.renderer.material.color = Color.red;
+			//if(str.StreetLight.tLight.renderer.material.color != Color.red)
+				str.StreetLight.tLight.renderer.material.color = Color.red;
 		}
 		else{
 			Debug.LogWarning("you can't change the light while it is yellow");

@@ -9,6 +9,7 @@ public class Street {
 	private TrafficLight _myLight;
 	private float _stopPosition;					//this is the maximum position that the cars can stop in when the traffic light is red
 	private float _minDistanceToOpenTrafficLight;	//this is the minimum distance to change the light for preventing (collisions)
+	private int _streetCapacity;
 	
 	//These variables are for the vehicles
 	private Queue _queue;							//this queue would contain the vehicles that are found in this street at the current time
@@ -16,13 +17,15 @@ public class Street {
 	private int _existedVehiclesNumberOnYellow;
 	
 	//constructor
-	public Street(int id, Vector3 startPoint, Vector3 endPoint, TrafficLight trafficLight, float stopPosition, float minDistOpenLight){
+	public Street(int id, Vector3 startPoint, Vector3 endPoint, TrafficLight trafficLight, float stopPosition, float minDistOpenLight, int streetCapacity){
 		_id = id;
 		_startPoint = startPoint;
 		_endPoint = endPoint;
 		_myLight = trafficLight;
 		_stopPosition = stopPosition;
 		_minDistanceToOpenTrafficLight = minDistOpenLight;
+		_streetCapacity = streetCapacity;
+		
 		_queue = new Queue();
 		_vehiclesNumber = 0;
 		_existedVehiclesNumberOnYellow = 0;
@@ -62,6 +65,11 @@ public class Street {
 	public float MinimumDistanceToOpenTrafficLight{
 		get {return _minDistanceToOpenTrafficLight;}
 		set {_minDistanceToOpenTrafficLight = value;}
+	}
+	
+	public int StreetCapacity{
+		get{return _streetCapacity;}
+		set{_streetCapacity = value;}
 	}
 	
 	public Queue StrQueue{

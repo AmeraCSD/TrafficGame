@@ -11,8 +11,6 @@ public class TrafficLight   : MonoBehaviour{
 	private GameObject _light;
 	private bool _stopped;
 	private bool _onHold;
-	private bool _yellowAfterRed;
-	private bool _yellowAfterGreen;
 	
 	
 	public TrafficLight(Direction n, GameObject light, bool stopped){
@@ -20,8 +18,6 @@ public class TrafficLight   : MonoBehaviour{
 		_light = light;
 		_stopped = stopped; 
 		_onHold = false;
-		_yellowAfterRed = false;
-		_yellowAfterGreen = false;
 	}
 	
 	public Direction Type{
@@ -44,21 +40,7 @@ public class TrafficLight   : MonoBehaviour{
 		set{_onHold = value;}
 	}
 	
-	public bool YellowAfterRed{
-		get{return _yellowAfterRed;}
-		set{
-			_yellowAfterRed = value;
-			_stopped = true;
-		}
-	}
 	
-	public bool YellowAfterGreen{
-		get{return _yellowAfterGreen;}
-		set{
-			_yellowAfterGreen = value;
-			_stopped = false;
-		}
-	}
 	
 }
 

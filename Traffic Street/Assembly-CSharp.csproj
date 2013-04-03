@@ -44,15 +44,21 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Ambulance.cs" />
+     <Compile Include="Assets\Scripts\Bus.cs" />
+     <Compile Include="Assets\Scripts\BusStation.cs" />
      <Compile Include="Assets\Scripts\GameMaster.cs" />
      <Compile Include="Assets\Scripts\LightsGamer.cs" />
+     <Compile Include="Assets\Scripts\MathsCalculatios.cs" />
      <Compile Include="Assets\Scripts\Mayor.cs" />
+     <Compile Include="Assets\Scripts\NormalVehicle.cs" />
      <Compile Include="Assets\Scripts\Path.cs" />
      <Compile Include="Assets\Scripts\SatisfyBar.cs" />
      <Compile Include="Assets\Scripts\Street.cs" />
      <Compile Include="Assets\Scripts\StreetsGenerator.cs" />
      <Compile Include="Assets\Scripts\TrafficLight.cs" />
      <Compile Include="Assets\Scripts\Vehicle.cs" />
+     <Compile Include="Assets\Scripts\VehicleBehavior.cs" />
      <Compile Include="Assets\Scripts\VehicleController.cs" />
   </ItemGroup>
   <ItemGroup>

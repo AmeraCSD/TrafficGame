@@ -7,6 +7,7 @@ public class StreetsGenerator : MonoBehaviour {
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
 	private List<Path> Paths;
 	public const float STREET_WIDTH = 23;
+	private const int MAX_STREET_VEHICLES_NUMBER = 4;
 	
 	public GameObject lightPrefab = null;		//this should be initialized in unity with the traffic light
 	
@@ -42,15 +43,19 @@ public class StreetsGenerator : MonoBehaviour {
 	private void GenerateFirstLevelStreets(){
 		
 		//Downs
+		
+		
+		TrafficLight light_0_2 = new TrafficLight(Direction.Down,
+												FindTagObject("lightDown"),
+												true);
 		streetsCounter ++ ;
 		Street s0 = new Street( streetsCounter,
 								new Vector3(-15, 5, 50), 
 								new Vector3(-15, 5, 5),  
-								new TrafficLight(Direction.Down,
-												FindTagObject("lightDown"),
-												true),
+								light_0_2,
 								15.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH);
+								STREET_WIDTH,
+								MAX_STREET_VEHICLES_NUMBER);
 		
 		streetsCounter ++ ;
 		Street s1 = new Street( streetsCounter,
@@ -60,17 +65,17 @@ public class StreetsGenerator : MonoBehaviour {
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH);
+								STREET_WIDTH,
+								MAX_STREET_VEHICLES_NUMBER);
 		
 		streetsCounter ++ ;
 		Street s2 = new Street( streetsCounter,
 								new Vector3(-5, 5, 50), 
 								new Vector3(-5, 5, -5),  
-								new TrafficLight(Direction.Down,
-												FindTagObject("lightDown"),
-												true),
+								light_0_2,
 								15.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH/4);
+								STREET_WIDTH/4,
+								MAX_STREET_VEHICLES_NUMBER);
 		
 		streetsCounter ++ ;
 		Street s3 = new Street( streetsCounter,
@@ -80,27 +85,29 @@ public class StreetsGenerator : MonoBehaviour {
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH);
+								STREET_WIDTH,
+								MAX_STREET_VEHICLES_NUMBER);
 		
 		//Lefts
 		streetsCounter ++ ;
+		TrafficLight light_4_5 = new TrafficLight(Direction.Left,
+												FindTagObject("lightLeft"),
+												true);
 		Street s4 = new Street( streetsCounter,
 								new Vector3(50, 5, 5), 
 								new Vector3(-15, 5, 5),  
-								new TrafficLight(Direction.Left,
-												FindTagObject("lightLeft"),
-												true),
+								light_4_5,
 								5.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH);
+								STREET_WIDTH,
+								MAX_STREET_VEHICLES_NUMBER);
 		streetsCounter ++ ;
 		Street s5 = new Street( streetsCounter,
 								new Vector3(50, 5, -5), 
 								new Vector3(-5, 5, -5),  
-								new TrafficLight(Direction.Left,
-												FindTagObject("lightLeft"),
-												true),
+								light_4_5,
 								5.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH/4);
+								STREET_WIDTH,
+								MAX_STREET_VEHICLES_NUMBER);
 		streetsCounter ++ ;
 		Street s6 = new Street( streetsCounter,
 								new Vector3(-15, 5, 5), 
@@ -109,7 +116,8 @@ public class StreetsGenerator : MonoBehaviour {
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH);
+								STREET_WIDTH,
+								MAX_STREET_VEHICLES_NUMBER);
 		streetsCounter ++ ;
 		Street s7 = new Street( streetsCounter,
 								new Vector3(-5, 5, -5), 
@@ -118,7 +126,8 @@ public class StreetsGenerator : MonoBehaviour {
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
-								STREET_WIDTH);
+								STREET_WIDTH,
+								MAX_STREET_VEHICLES_NUMBER);
 		
 		Streets.Add(s0);
 		Streets.Add(s1);

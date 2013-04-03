@@ -9,6 +9,7 @@ using System.Collections.Generic;
 */
 
 public class Vehicle  {
+	
 	private VehicleType _type;			//the vehicle type
 	private float _speed;				//the vehicle speed
 	private float _size;				//howlong the vehicle is

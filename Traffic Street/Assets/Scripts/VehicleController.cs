@@ -22,19 +22,22 @@ public class VehicleController : MonoBehaviour {
 	private Direction lastDirection;
 	private Direction _direction;
 	private Direction _nextDirection;
-	private float _speed;
+	public float speed;
 	private float _size;
+	public VehicleType vehType;
 	
 	//private CharacterController _charController ;
 	private BoxCollider boxColl;	
 	
-	private bool haveToStop;
+	public bool haveToStop;
 	private bool insideOnTriggerEnter; 
 	
 	private bool passed;
 	private bool dequeued;
 	private bool enqueued;
 	private bool gameOver;
+	
+	public bool thereIsAbus;
 	
 	private bool satisfyAdjustedOnTime;
 	
@@ -65,6 +68,7 @@ public class VehicleController : MonoBehaviour {
 		satisfyAdjustedOnTime = false;
 		stoppingTimerforAnger = 0;
 		stoppingTimerforAngerSet = false;
+		thereIsAbus = false;
 	}
 	
 	void Start () {
@@ -80,8 +84,9 @@ public class VehicleController : MonoBehaviour {
 		
 		_street 		= myVehicle.CurrentStreet;
 		_direction 		= myVehicle.CurrentDirection;
-		_speed 			= myVehicle.Speed;
+		speed 			= myVehicle.Speed;
 		_size 			= myVehicle.Size;
+		vehType		= myVehicle.Type;
 		
 		_light 			= _street.StreetLight;
 		_stopPosition 	= _street.StopPosition;
@@ -120,6 +125,7 @@ public class VehicleController : MonoBehaviour {
 		haveToStop = false;
 		insideOnTriggerEnter = false;
 		passed = false;
+		//thereIsAbus = false;
 	}
 	
 	// Update is called once per frame
@@ -134,22 +140,23 @@ public class VehicleController : MonoBehaviour {
 		CheckPosition_DeqIfPassed();
 		
 		Move();
-		CheckAndDestroyAtEnd();
-		if(!passed)
+		CheckAndDeactivateAtEnd();
+		if(!passed){
+			SetStopOffset();
 			StopMovingOnRed();
+		}
 		
-		if(_speed == 0 && GetMyOrderInQueue()== 0){
+		if(speed == 0 && GetMyOrderInQueue()== 0){
 				//Debug.Log("hereeeeeeeeeeeeeeeeeeeeeeeee");
 				if(! stoppingTimerforAngerSet){
-					Debug.Log("stoppingTimerforAnger .. " + stoppingTimerforAnger);
+					//Debug.Log("stoppingTimerforAnger .. " + stoppingTimerforAnger);
 					stoppingTimerforAnger = gameMasterScript.gameTime - 6 ;
 					stoppingTimerforAngerSet = true;
 				}
 		}
 		if(GetMyOrderInQueue()== 0){
-			if(myVehicle.Type != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
+			if(vehType != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
-				Debug.Log("hereeeeeeeeeeeeeeeeeeeeeeeee");
 				GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(1);
 				gameMasterScript.satisfyBar += 1;
 			//	satisfyAdjustedOnTime = true;
@@ -162,7 +169,7 @@ public class VehicleController : MonoBehaviour {
 		
 		
 		if(!(_light.Stopped) && !haveToStop){
-			_speed = myVehicle.Speed;
+			speed = myVehicle.Speed;
 			
 		}
 		
@@ -172,30 +179,32 @@ public class VehicleController : MonoBehaviour {
 	private void CheckPosition_DeqIfPassed(){
 		//Debug.Log(gameObject.name +" The queue Size ------------> " + _queueSize );
 
-		if( _direction == Direction.Right && transform.position.x > _stopPosition  ||
-			_direction == Direction.Left && transform.position.x < _stopPosition ||
-			_direction == Direction.Down  && transform.position.z < _stopPosition  ||
-			_direction == Direction.Up && transform.position.z > _stopPosition ){
+		if( _direction == Direction.Right && transform.position.x >= _stopPosition    ||
+			_direction == Direction.Left && transform.position.x <= _stopPosition  ||
+			_direction == Direction.Down  && transform.position.z <= _stopPosition  ||
+			_direction == Direction.Up && transform.position.z >= _stopPosition ){
 			
 			
 			passed = true ;
 			
-			if(!dequeued && (!(_light.Stopped)) ){
+			if(!dequeued && (!(_light.Stopped)  || StillInStopRange()) ){
+								
 				if(_myQueue.Count > 0){
 					
 					_myQueue.Dequeue();
 					dequeued = true;
 					
 					_street.VehiclesNumber --;
-					if(!satisfyAdjustedOnTime && myVehicle.Type == VehicleType.Ambulance){
+					if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
 						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
 						gameMasterScript.satisfyBar --;
 						satisfyAdjustedOnTime = true;
 					}
 					
-					//Debug.Log(gameObject.name +" is dequed"  +"  and The queue Size ------------>>> " + _queueSize  );
+				//	Debug.Log(gameObject.name +" is dequed" );
 					
 				}
+				
 			}
 			if(myVehicle.NextStreet != null){
 				TransfereToNextStreet();
@@ -204,6 +213,22 @@ public class VehicleController : MonoBehaviour {
 			
 		}
 		
+	}
+	
+	private bool StillInStopRange(){
+		if(_light.Stopped){
+			if( _direction == Direction.Right && transform.position.x >= _stopPosition  +3  ||
+			_direction == Direction.Left && transform.position.x <= _stopPosition -5 ||
+			_direction == Direction.Down  && transform.position.z <= _stopPosition -5 ||
+			_direction == Direction.Up && transform.position.z >= _stopPosition +3 ){
+			
+				return true;
+				
+			}
+			
+			
+		}
+		return false;
 	}
 	
 	
@@ -218,7 +243,7 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void SetStopOffset(){
-		//Debug.Log("QUEUE SIZEEEEEEE of  " + gameObject.name +"      "+ _queueSize);
+		//Debug.Log(gameObject.name +"      "+ GetMyOrderInQueue());
 		Offset =  (GetMyOrderInQueue()) * (_size + 5);
 	}
 	
@@ -229,7 +254,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private void SetupColliderSize(){
 		boxColl = GetComponent<BoxCollider>();
-		if(myVehicle.Type != VehicleType.Ambulance){
+		if(vehType == VehicleType.Normal){
 			
 			if(getVehicleLargerAxis(gameObject) == "x"){
 				boxColl.size = new Vector3(.5f  , 1 , transform.localScale.z/2.0f  );
@@ -241,11 +266,11 @@ public class VehicleController : MonoBehaviour {
 		
 	}
 	
-	private void CheckAndDestroyAtEnd(){
-		if(CheckMyEndPosition()){
+	private void CheckAndDeactivateAtEnd(){
+		if(MathsCalculatios.CheckMyEndPosition(transform, _direction, _nextDirection, _endPosition)){
 			//Destroy(gameObject) ;
 			gameObject.SetActive(false);
-			if(myVehicle.Type != VehicleType.Ambulance){
+			if(vehType == VehicleType.Normal){
 				gameMasterScript.existedVehicles.Enqueue(gameObject);
 			}
 			gameMasterScript.score += 1;
@@ -253,72 +278,7 @@ public class VehicleController : MonoBehaviour {
 		
 	}
 	
-	private bool CheckMyEndPosition(){
-		//For Lefts
-		if(_direction == Direction.Left && (_nextDirection == null || _nextDirection == Direction.Left)){
-			if(transform.position.x < _endPosition.x)
-				return true;
-		}
-		
-		if(_direction == Direction.Left && _nextDirection == Direction.Down){
-			if(transform.position.x < _endPosition.x && transform.position.z < _endPosition.z)
-				return true;
-		}
-		
-		if(_direction == Direction.Left && _nextDirection == Direction.Up){
-			if(transform.position.x < _endPosition.x && transform.position.z > _endPosition.z)
-				return true;
-		}
-		
-		//For Rights
-		if(_direction == Direction.Right && (_nextDirection == null || _nextDirection == Direction.Right)){
-			if(transform.position.x > _endPosition.x)
-				return true;
-		}
-		
-		if(_direction == Direction.Right &&  _nextDirection == Direction.Down){
-			if(transform.position.x > _endPosition.x && transform.position.z < _endPosition.z)
-				return true;
-		}
-		
-		if(_direction == Direction.Right && _nextDirection == Direction.Up){
-			if(transform.position.x > _endPosition.x && transform.position.z > _endPosition.z)
-				return true;
-		}
-		
-		//For Ups
-		if(_direction == Direction.Up && (_nextDirection == null || _nextDirection == Direction.Up)){
-			if(transform.position.z > _endPosition.z)
-				return true;
-		}
-		
-		if(_direction == Direction.Up && _nextDirection == Direction.Right){
-			if(transform.position.z > _endPosition.z && transform.position.x > _endPosition.x)
-				return true;
-		}
-		
-		if(_direction == Direction.Up && _nextDirection == Direction.Left){
-			if(transform.position.z > _endPosition.z && transform.position.x < _endPosition.x)
-				return true;
-		}
-		
-		//For Downs
-		if(_direction == Direction.Down && (_nextDirection == null || _nextDirection == Direction.Down)){
-			if(transform.position.z < _endPosition.z)
-				return true;
-		}
-		
-		if(_direction == Direction.Down && _nextDirection == Direction.Right ){
-			if(transform.position.z < _endPosition.z && transform.position.x > _endPosition.x)
-				return true;
-		}
-		
-		if(_direction == Direction.Down && _nextDirection == Direction.Left ){
-			if(transform.position.z < _endPosition.z && transform.position.x < _endPosition.x)
-				return true;
-		}
-		return false;
-	}
+	
 	
 	
 	
@@ -338,6 +298,25 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void StopMovingOnRed(){
+		SetStopOffset();
+	/*	if(vehType == VehicleType.Bus){
+			if((gameMasterScript.gameTime == gameMasterScript.busTimeSlots[0] - 3) || (gameMasterScript.gameTime == gameMasterScript.busTimeSlots[0] - 4)){
+				speed = 0.0f;
+				Debug.Log("hona ******************");
+				haveToStop = true;
+			}
+			else if((gameMasterScript.gameTime == gameMasterScript.busTimeSlots[1] - 9) || (gameMasterScript.gameTime == gameMasterScript.busTimeSlots[1] - 10)){
+				speed = 0.0f;
+				Debug.Log("hona ******************");
+				haveToStop = true;
+			}
+			else{
+				speed = myVehicle.Speed;
+				haveToStop = false;
+			}
+		}
+		*/
+		
 		if(_light.tLight != null){
 			if(_light.Stopped){
 				if( (_direction == Direction.Right && transform.position.x > _stopPosition - Offset ) ||
@@ -345,10 +324,10 @@ public class VehicleController : MonoBehaviour {
 					(_direction == Direction.Down && transform.position.z < _stopPosition + Offset) ||
 					(_direction == Direction.Up && transform.position.z > _stopPosition - Offset)  ){
 					
-					_speed = 0.0f;
+					speed = 0.0f;
 					
 					
-					if(!satisfyAdjustedOnTime && myVehicle.Type == VehicleType.Ambulance){
+					if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
 						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
 						gameMasterScript.satisfyBar += 2;
 						Debug.Log("Ambulance stopped ... not good");
@@ -365,63 +344,80 @@ public class VehicleController : MonoBehaviour {
 	
 	private void Move(){
 		SetStopOffset();
-		//Debug.Log(gameObject.name + " ------> " + _direction);
+		
+		
 		if(_direction == Direction.Left){
-		//	ReverseLastDirectionMove();
     		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
-			transform.Translate(transform.TransformDirection(Vector3.left) * _speed * Time.deltaTime, Space.Self);
+			transform.Translate(transform.TransformDirection(Vector3.left) * speed * Time.deltaTime, Space.Self);
+			
+			Ray ray = new Ray(transform.position, Vector3.left);
+			ReduceMeIfHit(ray);
 		}
 		else if(_direction == Direction.Right){
-		//	ReverseLastDirectionMove();
-			
     		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
-			transform.Translate(transform.TransformDirection(Vector3.right) * _speed * Time.deltaTime, Space.Self);
+			transform.Translate(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, Space.Self);
+			
+			Ray ray = new Ray(transform.position, Vector3.right);
+			ReduceMeIfHit(ray);
 		}
 		else if(_direction == Direction.Down){
     		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
-		//	ReverseLastDirectionMove();
-			transform.Translate(transform.TransformDirection(Vector3.forward) * _speed * Time.deltaTime, Space.Self);
+			transform.Translate(transform.TransformDirection(Vector3.forward) * speed * Time.deltaTime, Space.Self);
+			
+			Ray ray = new Ray(transform.position, Vector3.back);
+			ReduceMeIfHit(ray);
 		}
 		else if(_direction == Direction.Up){
     		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
-		//	ReverseLastDirectionMove();
-			transform.Translate(transform.TransformDirection(Vector3.back) * _speed * Time.deltaTime, Space.Self);
-			//haveToStop = false;
+			transform.Translate(transform.TransformDirection(Vector3.back) * speed * Time.deltaTime, Space.Self);
+			
+			Ray ray = new Ray(transform.position, Vector3.forward);
+			ReduceMeIfHit(ray);
 		}
 	}
-		
-	private void ReverseLastDirectionMove(){
-		
-		if((lastDirection == Direction.Down || lastDirection == Direction.Up) && (_direction == Direction.Right || _direction == Direction.Left)){
-			transform.Rotate(transform.TransformDirection(Vector3.up)  * (float)(Time.time/.9));
+	
+	private void ReduceMeIfHit(Ray ray){
+		RaycastHit hit ;
+		if(Physics.Raycast(ray, out hit, 8)){
+			//Debug.Log("I hit something");
+			Debug.DrawLine (ray.origin, hit.point);
+			VehicleController hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
+			if(hitVehicleController.vehType == VehicleType.Bus || hitVehicleController.thereIsAbus){
+				Debug.Log("hit a bussssssssssssssssssssssssssss");
+				speed = hitVehicleController.speed;
+				haveToStop = true;
+				thereIsAbus = true;
+			}
+			else{
+				haveToStop = false;
+				thereIsAbus = false;
+				
+			}
 		}
-		if((_direction == Direction.Down || _direction == Direction.Up) && (lastDirection == Direction.Right || lastDirection == Direction.Left)){
-			transform.Rotate(transform.TransformDirection(Vector3.up)  * (float)(Time.time/.9));
-		}	}
+		else{
+			haveToStop = false;
+		}
+	}
 	
 	void OnTriggerEnter(Collider other) {
-		//if(other.transform.tag == "vehicle")
-	//	{
-		
-			
-	//	}
-		if(other.GetComponent<VehicleController>().myVehicle.Type == VehicleType.Ambulance){
+
+		if(other.GetComponent<VehicleController>().vehType == VehicleType.Ambulance){
 			haveToStop = true;
-			_speed = 50.0f;
+			speed = 50.0f;
 		}
 		
-		else if(myVehicle.Type != VehicleType.Ambulance){
+		else if(vehType != VehicleType.Ambulance){
 			haveToStop = true;
-			_speed = 0.0f;
+			speed = 0.0f;
 			gameMasterScript.gameOver = true;
 		}
 		
 		else{
 			haveToStop = true;
-			_speed = 30.0f;
-			other.GetComponent<VehicleController>()._speed = other.GetComponent<VehicleController>().myVehicle.Speed;
+			speed = 30.0f;
+			other.GetComponent<VehicleController>().speed = other.GetComponent<VehicleController>().myVehicle.Speed;
 		}
-		Debug.Log ("speed " + _speed);
+		Debug.Log ("speed " + speed);
    	}	
 	/*
 	void OnCollisionExit(Collision other){
@@ -433,9 +429,9 @@ public class VehicleController : MonoBehaviour {
 	//	{
 		Debug.Log("on trigger exit");
 			haveToStop = false;
-			_speed = myVehicle.Speed;
+			speed = myVehicle.Speed;
 	//	}
-		Debug.Log ("speed " + _speed);
+		Debug.Log ("speed " + speed);
 	//	gameMasterScript.gameOver = true;
    	}
 	
