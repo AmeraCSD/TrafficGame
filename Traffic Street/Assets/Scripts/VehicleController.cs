@@ -11,7 +11,7 @@ public class VehicleController : MonoBehaviour {
 	public Vehicle myVehicle;
 	//for the street
 	private Street _street;
-	private Path _path;
+	private GamePath _path;
 	private TrafficLight _light;
 	private float _stopPosition;
 	private Vector3 _endPosition;
@@ -29,7 +29,8 @@ public class VehicleController : MonoBehaviour {
 	//private CharacterController _charController ;
 	private BoxCollider boxColl;	
 	
-	public bool haveToStop;
+	
+	
 	private bool insideOnTriggerEnter; 
 	
 	private bool passed;
@@ -38,6 +39,7 @@ public class VehicleController : MonoBehaviour {
 	private bool gameOver;
 	
 	public bool thereIsAbus;
+	public bool haveToReduceMySpeed;
 	
 	private bool satisfyAdjustedOnTime;
 	
@@ -47,6 +49,8 @@ public class VehicleController : MonoBehaviour {
 	private GameMaster gameMasterScript;
 	private float stoppingTimerforAnger;
 	private bool stoppingTimerforAngerSet;
+	
+	public float busStopTimer;
 		
 	
 	// Use this for initialization
@@ -62,13 +66,14 @@ public class VehicleController : MonoBehaviour {
 		Offset = 0;
 		dequeued = false;
 		enqueued = false;
-		haveToStop = false;
 		insideOnTriggerEnter = false;
 		passed = false;
 		satisfyAdjustedOnTime = false;
 		stoppingTimerforAnger = 0;
 		stoppingTimerforAngerSet = false;
 		thereIsAbus = false;
+		haveToReduceMySpeed = false;
+		busStopTimer = 0;
 	}
 	
 	void Start () {
@@ -122,9 +127,9 @@ public class VehicleController : MonoBehaviour {
 		Offset = 0;
 		dequeued = false;
 		enqueued = false;
-		haveToStop = false;
 		insideOnTriggerEnter = false;
 		passed = false;
+		haveToReduceMySpeed = false;
 		//thereIsAbus = false;
 	}
 	
@@ -166,9 +171,12 @@ public class VehicleController : MonoBehaviour {
 		}
 		Debug.Log(stoppingTimerforAngerSet);
 		
+		if(busStopTimer >= gameMasterScript.gameTime){
+			speed = myVehicle.Speed;
+			Debug.Log("haaaaaaaaaaaaaa");
+		}
 		
-		
-		if(!(_light.Stopped) && !haveToStop){
+		if(!(_light.Stopped) && !haveToReduceMySpeed ){ /////////////////////////////////////////////////
 			speed = myVehicle.Speed;
 			
 		}
@@ -257,10 +265,10 @@ public class VehicleController : MonoBehaviour {
 		if(vehType == VehicleType.Normal){
 			
 			if(getVehicleLargerAxis(gameObject) == "x"){
-				boxColl.size = new Vector3(.5f  , 1 , transform.localScale.z/2.0f  );
+				//boxColl.size = new Vector3(.5f  , 1 , transform.localScale.z/2.0f  );
 			}
 			else{
-				boxColl.size = new Vector3(transform.localScale.x/2.0f   , 1 , .5f );
+				//boxColl.size = new Vector3(transform.localScale.x/2.0f   , 1 , .5f );
 			}
 		}
 		
@@ -297,23 +305,14 @@ public class VehicleController : MonoBehaviour {
 		}
 	}
 	
+	public void SetStopTimeForBus(){
+		busStopTimer = gameMasterScript.gameTime - 3;
+	}
+	
 	private void StopMovingOnRed(){
 		SetStopOffset();
 	/*	if(vehType == VehicleType.Bus){
-			if((gameMasterScript.gameTime == gameMasterScript.busTimeSlots[0] - 3) || (gameMasterScript.gameTime == gameMasterScript.busTimeSlots[0] - 4)){
-				speed = 0.0f;
-				Debug.Log("hona ******************");
-				haveToStop = true;
-			}
-			else if((gameMasterScript.gameTime == gameMasterScript.busTimeSlots[1] - 9) || (gameMasterScript.gameTime == gameMasterScript.busTimeSlots[1] - 10)){
-				speed = 0.0f;
-				Debug.Log("hona ******************");
-				haveToStop = true;
-			}
-			else{
-				speed = myVehicle.Speed;
-				haveToStop = false;
-			}
+			
 		}
 		*/
 		
@@ -382,57 +381,46 @@ public class VehicleController : MonoBehaviour {
 			//Debug.Log("I hit something");
 			Debug.DrawLine (ray.origin, hit.point);
 			VehicleController hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
-			if(hitVehicleController.vehType == VehicleType.Bus || hitVehicleController.thereIsAbus){
-				Debug.Log("hit a bussssssssssssssssssssssssssss");
+		
+			
+			if(hitVehicleController.speed < speed || haveToReduceMySpeed ){
+			//	Debug.Log(gameObject.name +  " ... I have to reduce my speed");
 				speed = hitVehicleController.speed;
-				haveToStop = true;
-				thereIsAbus = true;
+				haveToReduceMySpeed = true;
 			}
-			else{
-				haveToStop = false;
-				thereIsAbus = false;
-				
-			}
+			else
+				haveToReduceMySpeed = false;
+			
+			
 		}
-		else{
-			haveToStop = false;
+		else{ 
+			if(vehType != VehicleType.Bus)
+				haveToReduceMySpeed = false;
 		}
+		
+		
+		
 	}
 	
 	void OnTriggerEnter(Collider other) {
-
-		if(other.GetComponent<VehicleController>().vehType == VehicleType.Ambulance){
-			haveToStop = true;
-			speed = 50.0f;
-		}
 		
-		else if(vehType != VehicleType.Ambulance){
-			haveToStop = true;
-			speed = 0.0f;
-			gameMasterScript.gameOver = true;
-		}
+		other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = true;
+		other.gameObject.GetComponent<VehicleController>().speed = 0.0f;
+		gameMasterScript.gameOver = true;
 		
-		else{
-			haveToStop = true;
-			speed = 30.0f;
-			other.GetComponent<VehicleController>().speed = other.GetComponent<VehicleController>().myVehicle.Speed;
-		}
-		Debug.Log ("speed " + speed);
+		
    	}	
-	/*
-	void OnCollisionExit(Collision other){
-	}
-	*/
+	
+	
 	
 	void OnTriggerExit(Collider other) {
-		//if(other.transform.tag == "vehicle")
-	//	{
-		Debug.Log("on trigger exit");
-			haveToStop = false;
-			speed = myVehicle.Speed;
-	//	}
-		Debug.Log ("speed " + speed);
-	//	gameMasterScript.gameOver = true;
+		if(other.transform.tag == "vehicle"){
+			Debug.Log("on trigger exit");
+			other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = false;
+			other.gameObject.GetComponent<VehicleController>().speed = myVehicle.Speed;			//speed = myVehicle.Speed;
+		}
+		//Debug.Log ("speed " + speed);
+	
    	}
 	
 	private string getVehicleLargerAxis(GameObject v){

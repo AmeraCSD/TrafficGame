@@ -2,13 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Path : MonoBehaviour {
+public class GamePath : MonoBehaviour {
 	private List<Street> _pathStreets;
 	private Vector3 _generationPointPosition;
 	private Vector3 _endPosition;			//this is the poisition that the cars leave the street in
 	private bool _hasUniqueGenerationPoint;
 	
-	public Path(List<Street> streetsList, Vector3 generationPointPos, Vector3 endPointPos,bool hasUniqueGenerationPoint){
+	public GamePath(List<Street> streetsList, Vector3 generationPointPos, Vector3 endPointPos,bool hasUniqueGenerationPoint){
 		_pathStreets = streetsList;
 		_generationPointPosition = generationPointPos;
 		_endPosition = endPointPos;

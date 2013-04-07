@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class StreetsGenerator : MonoBehaviour {
 	
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
-	private List<Path> Paths;
+	private List<GamePath> Paths;
 	public const float STREET_WIDTH = 23;
 	private const int MAX_STREET_VEHICLES_NUMBER = 4;
 	
@@ -26,7 +26,7 @@ public class StreetsGenerator : MonoBehaviour {
 		return Streets;
 	}
 	
-	public List<Path> getPaths(){
+	public List<GamePath> getPaths(){
 		return Paths;
 	}
 	
@@ -142,7 +142,7 @@ public class StreetsGenerator : MonoBehaviour {
 	
 	
 	private void InitFirstLevelPaths(){
-		Paths = new List<Path>();
+		Paths = new List<GamePath>();
 		List<Street> tempPath;
 
 		//Path0 (down, down)1
@@ -150,21 +150,21 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[0]);
 		tempPath.Add(Streets[1]);
 		
-		Paths.Add(new Path(tempPath, Streets[0].StartPoint , Streets[1].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[0].StartPoint , Streets[1].EndPoint, false));
 		
 		//Path1 (down, down)2
 		tempPath = new List<Street>() ;
 		tempPath.Add(Streets[2]);
 		tempPath.Add(Streets[3]);
 		
-		Paths.Add(new Path(tempPath, Streets[2].StartPoint, Streets[3].EndPoint, true));
+		Paths.Add(new GamePath(tempPath, Streets[2].StartPoint, Streets[3].EndPoint, true));
 		
 		//Path2 (left, left)1
 		tempPath = new List<Street>() ;
 		tempPath.Add(Streets[4]);
 		tempPath.Add(Streets[6]);
 		
-		Paths.Add(new Path(tempPath, Streets[4].StartPoint, Streets[6].EndPoint, true));
+		Paths.Add(new GamePath(tempPath, Streets[4].StartPoint, Streets[6].EndPoint, true));
 		
 		
 		//Path3 (left, left)2
@@ -172,7 +172,7 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[5]);
 		tempPath.Add(Streets[7]);
 		
-		Paths.Add(new Path(tempPath, Streets[5].StartPoint, Streets[7].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[5].StartPoint, Streets[7].EndPoint, false));
 		
 		
 		//Path4 (left, down)
@@ -181,7 +181,7 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[5]);
 		tempPath.Add(Streets[3]);
 		
-		Paths.Add(new Path(tempPath, Streets[5].StartPoint, Streets[3].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[5].StartPoint, Streets[3].EndPoint, false));
 		
 		//Path5 (down, left)
 		
@@ -189,7 +189,7 @@ public class StreetsGenerator : MonoBehaviour {
 		tempPath.Add(Streets[0]);
 		tempPath.Add(Streets[6]);
 		
-		Paths.Add(new Path(tempPath, Streets[0].StartPoint, Streets[6].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[0].StartPoint, Streets[6].EndPoint, false));
 		
 		
 		

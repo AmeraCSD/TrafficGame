@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Ambulance : MonoBehaviour {
 
-	private const int AMBULANCE_HAPPEN_NUMBER = 2;
+	private const int AMBULANCE_HAPPEN_NUMBER = 1;
 	
 	public static List<int> ambulanceTimeSlots;
 	
@@ -16,9 +16,11 @@ public class Ambulance : MonoBehaviour {
 				
 		int timeValue = 0;
 		for (int i = 0 ; i<AMBULANCE_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(20, 40);				//*********** I should make an enum to each level
+			timeValue = Random.Range(50, 80);				//*********** I should make an enum to each level
 			if(!ambulanceTimeSlots.Contains(timeValue)){
-				ambulanceTimeSlots.Add(timeValue - (i * timeBetweenEvents));
+				ambulanceTimeSlots.Add(timeValue - timeBetweenEvents);
+				GameMaster.eventsWarningTimes.Add(timeValue -  timeBetweenEvents+ 3);
+				GameMaster.eventsWarningNames.Add("a");
 			}	
 		}	
 		
@@ -36,7 +38,7 @@ public class Ambulance : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateAmbulance(int pos, GameObject ambulancePrefab, List<Path> Paths){	
+	public static void GenerateAmbulance(int pos, GameObject ambulancePrefab, List<GamePath> Paths){	
 		
 			
 			if(ambulancePrefab != null){
@@ -49,7 +51,7 @@ public class Ambulance : MonoBehaviour {
 					
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Ambulance, 
-																						25.0f, 
+																						29.0f, 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
 																						Paths[pos].PathStreets[0].StreetLight.Type, 
 																						Paths[pos].PathStreets[0], 

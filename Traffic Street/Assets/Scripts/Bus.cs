@@ -8,6 +8,7 @@ public class Bus : MonoBehaviour {
 
 	public static List<int> busTimeSlots;
 	
+	
 	public static List<int> busStopTimeSlots;
  	
 	public static void InitInstances(){
@@ -19,9 +20,11 @@ public class Bus : MonoBehaviour {
 				
 		int timeValue = 0;
 		for (int i = 0 ; i<BUS_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(130, 143);				//*********** I should make an enum to each level
+			timeValue = Random.Range(100, 140);				//*********** I should make an enum to each level
 			if(!busTimeSlots.Contains(timeValue)){
-				busTimeSlots.Add(timeValue - (i * timeBetweenEvents));
+				busTimeSlots.Add(timeValue - timeBetweenEvents);
+				GameMaster.eventsWarningTimes.Add(timeValue - timeBetweenEvents+ 3);
+				GameMaster.eventsWarningNames.Add("b");
 			}	
 		}	
 		
@@ -41,7 +44,7 @@ public class Bus : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateBus(int pos,GameObject busPrefab, List<Path> Paths){	
+	public static void GenerateBus(int pos,GameObject busPrefab, List<GamePath> Paths){	
 		
 			
 			if(busPrefab != null){
@@ -53,7 +56,7 @@ public class Bus : MonoBehaviour {
 					
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Bus, 
-																						10.0f, 
+																						18.0f, 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
 																						Paths[pos].PathStreets[0].StreetLight.Type, 
 																						Paths[pos].PathStreets[0], 
@@ -65,8 +68,26 @@ public class Bus : MonoBehaviour {
 			
 	}
 	
+	/*public static void stopInBusStation(GameMaster gameMasterScript, float speed){
+		
+		
+		
+		if((gameMasterScript.gameTime == gameMasterScript.busTimeSlots[0] - 3) || (gameMasterScript.gameTime == gameMasterScript.busTimeSlots[0] - 4)){
+				speed = 0.0f;
+				Debug.Log("hona ******************");
+				haveToStop = true;
+			}
+			else if((gameMasterScript.gameTime == gameMasterScript.busTimeSlots[1] - 9) || (gameMasterScript.gameTime == gameMasterScript.busTimeSlots[1] - 10)){
+				speed = 0.0f;
+				Debug.Log("hona ******************");
+				haveToStop = true;
+			}
+			else{
+				speed = myVehicle.Speed;
+				haveToStop = false;
+			}
+	}
 	
-	
-	
+	*/
 	
 }

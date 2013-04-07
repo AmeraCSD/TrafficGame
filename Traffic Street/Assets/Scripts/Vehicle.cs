@@ -20,7 +20,7 @@ public class Vehicle  {
 	private Street _currentStreet;
 	private Street _nextStreet;
 	private int _curStreetNumber;
-	private Path _myPath;
+	private GamePath _myPath;
 	
 	
 	//attributes to specialize the events
@@ -28,7 +28,7 @@ public class Vehicle  {
 	
 	//the constructor
 	
-	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet,int curStrNum, Path path){
+	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet,int curStrNum, GamePath path){
 		_type = type;
 		_speed = speed;
 		_size = size;
@@ -77,7 +77,7 @@ public class Vehicle  {
 		set{_curStreetNumber = value;}
 	}
 	
-	public Path MyPath{
+	public GamePath MyPath{
 		get{return _myPath;}
 		set{_myPath = value;}
 	} 

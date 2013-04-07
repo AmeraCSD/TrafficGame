@@ -5,6 +5,8 @@ Project("{D70B4B17-E35E-8708-8D72-8944886A973A}") = "Traffic Street", "Assembly-
 EndProject
 Project("{D70B4B17-E35E-8708-8D72-8944886A973A}") = "Traffic Street", "Assembly-CSharp-vs.csproj", "{E24ECC77-0840-BFB7-A61F-FD43E6881ED7}"
 EndProject
+Project("{D70B4B17-E35E-8708-8D72-8944886A973A}") = "Traffic Street", "Assembly-CSharp-Editor-vs.csproj", "{A2787037-E436-D9C1-64B5-E32E2677D3EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,11 +21,15 @@ Global
 		{E24ECC77-0840-BFB7-A61F-FD43E6881ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E24ECC77-0840-BFB7-A61F-FD43E6881ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E24ECC77-0840-BFB7-A61F-FD43E6881ED7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2787037-E436-D9C1-64B5-E32E2677D3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2787037-E436-D9C1-64B5-E32E2677D3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2787037-E436-D9C1-64B5-E32E2677D3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2787037-E436-D9C1-64B5-E32E2677D3EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																								GlobalSection(MonoDevelopProperties) = preSolution
+																																																																																																GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

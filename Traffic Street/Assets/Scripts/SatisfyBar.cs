@@ -7,6 +7,9 @@ public class SatisfyBar : MonoBehaviour {
 	
 	public float barLength;
 	
+	GUIStyle style;
+	Texture2D texture;
+	
 	// Use this for initialization
 	void Start () {
 		barLength = 0 ;
@@ -18,7 +21,20 @@ public class SatisfyBar : MonoBehaviour {
 	}
 	
 	void OnGUI(){
-		GUI.Box(new Rect(10, 70, barLength, 20), curValue+ "/" + maxValue);
+		style = new GUIStyle();
+		texture = new Texture2D(128, 128);
+       	for (int y = 0; y < texture.height; ++y){
+            for (int x = 0; x < texture.width; ++x)
+            {
+                texture.SetPixel(x, y, Color.red);
+            }
+        }
+		
+        texture.Apply();
+ 
+        style.normal.background = texture;
+		
+		GUI.Box(new Rect(10, 70, barLength , 15), curValue+ "/" + maxValue, style);
 	}
 	
 	public void AddjustSatisfaction(int adj){
