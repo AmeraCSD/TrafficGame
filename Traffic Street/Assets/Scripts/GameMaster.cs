@@ -24,6 +24,11 @@ public class GameMaster : MonoBehaviour {
 	
 	private const int MIN_TIME_BETWEEN_EVENTS =6;
 	
+	public Texture2D redCar;
+	public Texture2D yellowCar;
+	public Texture2D grayCar;
+	public Texture2D greenCar;
+	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	public GameObject ambulancePrefab;				//this object should be initialized in unity with the AmbulancePrefab
 	public GameObject busPrefab;					//this object should be initialized in unity with the BusPrefab
@@ -49,23 +54,89 @@ public class GameMaster : MonoBehaviour {
 	
 	public static int vehicilesCounter;
 	
-	bool showBox;
+	public bool showBox;
+	
+	
+	public Texture2D accidentImage;
+	
+	/////////////////////////////////// GUI Variables ...
+	
+	
+	public GameObject eventWarningLabelGo;
+	public GameObject closeButtonGo;
+	public GameObject gameTimeLabelGo;
+	public GameObject gameTimeVarLabelGo;
+	public GameObject scoreLabelGo;
+	public GameObject scoreVarLabelGo;
+	public GameObject satisfyBarLabelGo;
+	
+	public UILabel eventWarningLabel;
+	public UIButton closeButton;
+	private UILabel gameTimeLabel;
+	private UILabel gameTimeVarLabel;
+	private UILabel scoreLabel;
+	public UILabel scoreVarLabel;
+	private UILabel satisfyBarLabel;
 	
 	//mayor faces
-	public Texture2D veryHappyIcon;
-	public Texture2D happyIcon;
-	public Texture2D notHappyIcon;
-	public Texture2D sadIcon;
-	public Texture2D verySadIcon;
+	public GameObject mayorFacesSpriteGo;
+	private UISlicedSprite mayorFacesSprite;
+	
+	
+	public GameObject totalScoreLabelGo;
+	public GameObject totalScoreVarLabelGo;
+	
+	private UILabel totalScoreLabel;
+	private UILabel totalScoreVarLabel;
+	
+	public GameObject replayButtonGo;
+	public UIButton replayButton;
+	
+	public GameObject eventsSpriteGo;
+	private UISlicedSprite eventsSprite;
+	
+	public GameObject endGameSpriteGo;
+	private UISlicedSprite endGameSprite;
+	
+	private void InitGUIVariables(){
+		eventWarningLabel = eventWarningLabelGo.GetComponent<UILabel>();
+		closeButton = closeButtonGo.GetComponent<UIButton>();
+		closeButtonGo.SetActive(false);
+		
+		gameTimeLabel = gameTimeLabelGo.GetComponent<UILabel>();
+		gameTimeVarLabel = gameTimeVarLabelGo.GetComponent<UILabel>();
+		scoreLabel = scoreLabelGo.GetComponent<UILabel>();
+		scoreVarLabel = scoreVarLabelGo.GetComponent<UILabel>();
+		satisfyBarLabel = satisfyBarLabelGo.GetComponent<UILabel>();
+		
+		mayorFacesSprite = mayorFacesSpriteGo.GetComponent<UISlicedSprite>();
+		
+		totalScoreLabel = totalScoreLabelGo.GetComponent<UILabel>();
+		totalScoreVarLabel = totalScoreVarLabelGo.GetComponent<UILabel>();
+		totalScoreVarLabelGo.SetActive(false);
+		
+		replayButton = replayButtonGo.GetComponent<UIButton>();
+		replayButtonGo.SetActive(false);
+		
+		eventsSprite = eventsSpriteGo.GetComponent<UISlicedSprite>();
+		eventsSpriteGo.SetActive(false);
+		
+		endGameSprite = endGameSpriteGo.GetComponent<UISlicedSprite>();
+		endGameSpriteGo.SetActive(false);
+	}
+	
 	
 	int index =0 ;
 	void Awake(){
 		
 		initVariables();
+		InitGUIVariables();
 	}
 	
+	
+	
 	private void initVariables(){
-		satisfyBarScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>();		
+		satisfyBarScript = GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>();		
 	
 		existedVehicles = new Queue();
 		showBox = false;
@@ -85,15 +156,16 @@ public class GameMaster : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		
 		initObjects();
 		
 		SetEventsRandomTime();
 		
 		
-		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.25f);
-		InvokeRepeating("CountTimeDown", 4.0f, 1.0f);
+		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.3f);
+		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
 	}
+	
+	
 	
 	private void initObjects(){
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getStreets();
@@ -114,7 +186,8 @@ public class GameMaster : MonoBehaviour {
 			
 		}
 		int pos = Random.Range(0, Paths.Count);
-		NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+		Texture2D tx = GetRandomTexture();
+		NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 		vehicilesCounter++;
 		AdjustEach15Vehicle();
 	}
@@ -136,6 +209,8 @@ public class GameMaster : MonoBehaviour {
 			CancelInvoke("CountTimeDown");
 			
 		}
+	//	gameTimeVarLabel.text = gameTime+"";
+		//gameTimeLabel = gameTimeLabelGo.GetComponent<UILabel>();
 		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 15){
 			secondsCounterFor30 ++;
 			if(secondsCounterFor30 == 30){	
@@ -157,9 +232,14 @@ public class GameMaster : MonoBehaviour {
 			InstantiatVehiclesArroundTime();
 		}
 	}
-	
-	
-	
+	/*
+	private void enableAllVehiclesRays(){
+		GameObject [] array = GameObject.FindGameObjectsWithTag("vehicle");
+		for (int i=0 ; i<array.Length; i++){
+			array[i].GetComponent<VehicleController>().enableRayCast = true;
+		}
+	}
+	*/
 	private void InstantiatVehiclesArroundTime(){
 		if(!CheckAllStreetsFullness()){
 				//this piece of code is for the events
@@ -169,6 +249,7 @@ public class GameMaster : MonoBehaviour {
 			}
 			
 			if(Bus.InsideBusTimeSlotsList(gameTime)){
+			
 				Debug.Log("should be a bus");
 				Bus.GenerateBus(pos1, busPrefab, Paths);
 				vehicilesCounter ++;
@@ -187,7 +268,8 @@ public class GameMaster : MonoBehaviour {
 				AdjustEach15Vehicle();
 			}
 			else {
-				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+				Texture2D tx = GetRandomTexture();
+				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 				vehicilesCounter++;
 				AdjustEach15Vehicle();
 			}
@@ -198,7 +280,8 @@ public class GameMaster : MonoBehaviour {
 					pos2 = Random.Range(0, Paths.Count);
 				}
 				if((Paths[pos1].GenerationPointPosition != Paths[pos2].GenerationPointPosition)){
-					NormalVehicle.GenerateNormalVehicle(pos2, vehiclePrefab, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+					Texture2D tx = GetRandomTexture();
+					NormalVehicle.GenerateNormalVehicle(pos2, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 					vehicilesCounter++;
 					AdjustEach15Vehicle();
 				}
@@ -212,12 +295,31 @@ public class GameMaster : MonoBehaviour {
 				if((Paths[pos1].GenerationPointPosition != Paths[pos3].GenerationPointPosition)
 					&&(Paths[pos2].GenerationPointPosition != Paths[pos3].GenerationPointPosition)){
 							
-					NormalVehicle.GenerateNormalVehicle(pos3, vehiclePrefab, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+					Texture2D tx = GetRandomTexture();
+					
+					NormalVehicle.GenerateNormalVehicle(pos3, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 					vehicilesCounter++;
 					AdjustEach15Vehicle();
 				}
 			}
 		}
+	}
+	
+	private Texture2D GetRandomTexture(){
+		int i = Random.Range(0, 4);
+		if(i == 0){
+			return yellowCar;
+		}
+		else if(i == 1){
+			return redCar;
+		}
+		else if(i == 2){
+			return grayCar;
+		}
+		else{
+			return greenCar;
+		}
+
 	}
 	
 	private void AdjustEach15Vehicle(){
@@ -246,15 +348,13 @@ public class GameMaster : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		
+		DisplayGUIs();
 		
 	}
 	
 	
-	void OnGUI(){
-		for(int i =0; i< eventsWarningNames.Count; i++){
-			Debug.Log("element #" + i + "equals" + eventsWarningNames[i]);
-		}
+	
+	void DisplayGUIs(){
 		
 		
 		if(eventsWarningTimes.Contains(gameTime)){
@@ -262,34 +362,46 @@ public class GameMaster : MonoBehaviour {
 			eventsWarningTimes[index] = -1;
 			if(!CheckAllStreetsFullness()){
 				showBox = true;
-				
-				
-				
 			}
 			
 		}
 		
 		if(showBox){
 			if(eventsWarningNames[index] == "a"){
-				GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Ambulance is Coming" );
-				if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				showBox = !showBox;
+				closeButtonGo.SetActive(true);
+				eventWarningLabel.text = "Ambulance is Coming";
+				eventsSpriteGo.SetActive(true);
+				eventsSprite.spriteName = "ambulance1";
+			//	GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Ambulance is Coming" );
+				
+			//	if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
+			//	showBox = !showBox;
 			}
 			if(eventsWarningNames[index] == "b"){
-				GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Bus is Coming"  );
-				if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				showBox = !showBox;
+				closeButtonGo.SetActive(true);
+				eventWarningLabel.text = "Bus is Coming";
+				eventsSpriteGo.SetActive(true);
+				eventsSprite.spriteName = "bus1";
+				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Bus is Coming"  );
+				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
+				//showBox = !showBox;
 			}
 			
 			if(eventsWarningNames[index] == "t"){
-				GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Thief is Coming" );
-				if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				showBox = !showBox;
+				closeButtonGo.SetActive(true);
+				eventWarningLabel.text = "Thief is Coming";
+				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Thief is Coming" );
+				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
+				//showBox = !showBox;
 			}
 			if(eventsWarningNames[index] == "c"){
-				GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Caravan is Coming" );
-				if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				showBox = !showBox;
+				closeButtonGo.SetActive(true);
+				eventWarningLabel.text = "Caravan is Coming";
+				eventsSpriteGo.SetActive(true);
+				eventsSprite.spriteName = "caravan1";
+				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Caravan is Coming" );
+				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
+				//showBox = !showBox;
 			}
 			
 			
@@ -298,46 +410,40 @@ public class GameMaster : MonoBehaviour {
 			
 		}
 		
-		/*
-		if(Bus.busTimeSlots.Contains((int)(gameTime - WARNING_BEFORE_EVENT_SECONDS)) ){
-			if(!CheckAllStreetsFullness()){
-				if (GUI.Button(new Rect(60, 20, 100, 50), "close")){
-				    showBox = !showBox;
-				}
-				if(showBox)
-					GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 , 100, 100), "a Bus Coming" );
-			}
-		}
-		*/
-		GUI.Label( new Rect(10, 10, 100, 35), "Time: "+ gameTime);
-		GUI.Label(new Rect(10, 30, 100, 25), "Score : "+score);
-		GUI.Label(new Rect(10, 50, 100, 25), "Satisfy Bar: ");
-		//GUI.Box(new Rect(10, 100, 300, 300), veryHappyIcon);
+		
+		
+		gameTimeVarLabel.text = gameTime+"";
+		scoreVarLabel.text = score+"";
+		
+		
 		
 		if(satisfyBar <= 2){
-			GUI.Label(new Rect(10, 100, 80, 80), veryHappyIcon);
+			mayorFacesSprite.spriteName = "veryHappy";
 		}
 		else if(satisfyBar <= 4){
-			GUI.Label(new Rect(10, 100, 80, 80), happyIcon);
+			mayorFacesSprite.spriteName = "happy";
 		}
 		
 		else if(satisfyBar <= 6){
-			GUI.Label(new Rect(10, 100, 80, 80), notHappyIcon);
+			mayorFacesSprite.spriteName = "not happy";
 		}
 		
 		else if(satisfyBar <= 8){
-			GUI.Label(new Rect(10, 100, 80, 80), sadIcon);
+			mayorFacesSprite.spriteName = "sad";
 		}
 		
 		else if(satisfyBar <= 10){
-			GUI.Label(new Rect(10, 100, 80, 80), verySadIcon);
+			mayorFacesSprite.spriteName = "very sad";
 		}
 		
+		
+		
+		
 		if(score >= 200){
-			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
-			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 , 100, 25), "Congratulations! ");
-			string temp = score.ToString();
-			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2+30-12 , 100, 25), "Score : "+ temp);
+			eventWarningLabel.text =  "Congratulations !! ";
+			
+			totalScoreLabel.text = "Total Score:";
+			totalScoreVarLabel.text = score+"";
 			
 			
 			GameObject [] gos = GameObject.FindGameObjectsWithTag("vehicle");
@@ -346,18 +452,20 @@ public class GameMaster : MonoBehaviour {
 			}
 			
 			CancelInvoke("CountTimeDown");
-			if(GUI.Button(new Rect(Screen.width/2 - 40 , Screen.height/2+70-12 , 100, 25), "Replay ")){
-				Application.LoadLevel("Level 1");
-			}
+			replayButtonGo.SetActive(true);
+			closeButtonGo.SetActive(false);
+			totalScoreVarLabelGo.SetActive(true);
+			
 		}
 		
 		
 		else if(satisfyBar >= 10){
 		
-			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
-			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 , 100, 25), "Traffic Jam !!!");
-			string temp = score.ToString();
-			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2+30-12 , 100, 25), "Score : "+ temp);
+			eventWarningLabel.text =  "Traffic Jam !! ";
+			
+			totalScoreLabel.text = "Total Score:";
+			totalScoreVarLabel.text = score+"";
+			
 			
 			GameObject [] gos = GameObject.FindGameObjectsWithTag("vehicle");
 			for(int i = 0; i < gos.Length; i++){
@@ -365,9 +473,9 @@ public class GameMaster : MonoBehaviour {
 			}
 			
 			CancelInvoke("CountTimeDown");
-			if(GUI.Button(new Rect(Screen.width/2 - 40 , Screen.height/2+70-12 , 100, 25), "Replay ")){
-				Application.LoadLevel("Level 1");
-			}
+			replayButtonGo.SetActive(true);
+			closeButtonGo.SetActive(false);
+			totalScoreVarLabelGo.SetActive(true);
 		
 			
 		}
@@ -376,10 +484,11 @@ public class GameMaster : MonoBehaviour {
 		
 		else if(gameOver || gameTime == 0){
 		
-			GUI.Box(new Rect(Screen.width/4, Screen.height/4,  Screen.width/2 , Screen.height/2 ) , " "  );
-			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2 - 12, 100, 25), "LOSER !!");
-			string temp = score.ToString();
-			GUI.Label(new Rect(Screen.width/2 - 20 , Screen.height/2+30-12 , 100, 25), "Score : "+ temp);
+			eventWarningLabel.text =  "Accident !! ";
+			
+			totalScoreLabel.text = "Total Score:";
+			totalScoreVarLabel.text = score+"";
+			
 			
 			GameObject [] gos = GameObject.FindGameObjectsWithTag("vehicle");
 			for(int i = 0; i < gos.Length; i++){
@@ -387,14 +496,14 @@ public class GameMaster : MonoBehaviour {
 			}
 			
 			CancelInvoke("CountTimeDown");
-			if(GUI.Button(new Rect(Screen.width/2 - 40 , Screen.height/2+70-12 , 100, 25), "Replay ")){
-				Application.LoadLevel("Level 1");
-			}
-		//	gameObject.SetActive(false);
-			
-			//Application.Quit();
-			
+			replayButtonGo.SetActive(true);
+			closeButtonGo.SetActive(false);
+			totalScoreVarLabelGo.SetActive(true);
+			endGameSpriteGo.SetActive(true);
+			endGameSprite.spriteName = "car-accident-collision-md";
 		}
+		
+		
 	}
 	
 	

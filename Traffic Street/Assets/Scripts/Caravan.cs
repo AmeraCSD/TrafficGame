@@ -16,7 +16,7 @@ public class Caravan : MonoBehaviour {
 				
 		int timeValue = 0;
 		for (int i = 0 ; i<CARAVAN_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(90, 100);				//*********** I should make an enum to each level
+			timeValue = Random.Range(100, 110);				//*********** I should make an enum to each level
 			if(!caravanTimeSlots.Contains(timeValue)){
 				caravanTimeSlots.Add(timeValue - timeBetweenEvents);
 				GameMaster.eventsWarningTimes.Add(timeValue -  timeBetweenEvents+ 3);
@@ -51,7 +51,7 @@ public class Caravan : MonoBehaviour {
 					
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Caravan, 
-																						10.0f, 
+																						13.0f, 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
 																						Paths[pos].PathStreets[0].StreetLight.Type, 
 																						Paths[pos].PathStreets[0], 

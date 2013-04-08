@@ -19,9 +19,9 @@ public class VehicleController : MonoBehaviour {
 	private int _queueSize;
 	//for the vehicle
 	
-	private Direction lastDirection;
-	private Direction _direction;
-	private Direction _nextDirection;
+	private StreetDirection lastDirection;
+	private StreetDirection _direction;
+	private StreetDirection _nextDirection;
 	public float speed;
 	private float _size;
 	public VehicleType vehType;
@@ -51,6 +51,8 @@ public class VehicleController : MonoBehaviour {
 	private bool stoppingTimerforAngerSet;
 	
 	public float busStopTimer;
+	
+	//public bool enableRayCast;
 		
 	
 	// Use this for initialization
@@ -74,6 +76,7 @@ public class VehicleController : MonoBehaviour {
 		thereIsAbus = false;
 		haveToReduceMySpeed = false;
 		busStopTimer = 0;
+		//enableRayCast = false;
 	}
 	
 	void Start () {
@@ -162,18 +165,18 @@ public class VehicleController : MonoBehaviour {
 		if(GetMyOrderInQueue()== 0){
 			if(vehType != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
-				GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(1);
+				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(1);
 				gameMasterScript.satisfyBar += 1;
 			//	satisfyAdjustedOnTime = true;
 				stoppingTimerforAnger =0;
 				
 			}
 		}
-		Debug.Log(stoppingTimerforAngerSet);
+		//Debug.Log(stoppingTimerforAngerSet);
 		
 		if(busStopTimer >= gameMasterScript.gameTime){
 			speed = myVehicle.Speed;
-			Debug.Log("haaaaaaaaaaaaaa");
+			//Debug.Log("haaaaaaaaaaaaaa");
 		}
 		
 		if(!(_light.Stopped) && !haveToReduceMySpeed ){ /////////////////////////////////////////////////
@@ -187,10 +190,10 @@ public class VehicleController : MonoBehaviour {
 	private void CheckPosition_DeqIfPassed(){
 		//Debug.Log(gameObject.name +" The queue Size ------------> " + _queueSize );
 
-		if( _direction == Direction.Right && transform.position.x >= _stopPosition    ||
-			_direction == Direction.Left && transform.position.x <= _stopPosition  ||
-			_direction == Direction.Down  && transform.position.z <= _stopPosition  ||
-			_direction == Direction.Up && transform.position.z >= _stopPosition ){
+		if( _direction == StreetDirection.Right && transform.position.x >= _stopPosition    ||
+			_direction == StreetDirection.Left && transform.position.x <= _stopPosition  ||
+			_direction == StreetDirection.Down  && transform.position.z <= _stopPosition  ||
+			_direction == StreetDirection.Up && transform.position.z >= _stopPosition ){
 			
 			
 			passed = true ;
@@ -225,10 +228,10 @@ public class VehicleController : MonoBehaviour {
 	
 	private bool StillInStopRange(){
 		if(_light.Stopped){
-			if( _direction == Direction.Right && transform.position.x >= _stopPosition  +3  ||
-			_direction == Direction.Left && transform.position.x <= _stopPosition -5 ||
-			_direction == Direction.Down  && transform.position.z <= _stopPosition -5 ||
-			_direction == Direction.Up && transform.position.z >= _stopPosition +3 ){
+			if( _direction == StreetDirection.Right && transform.position.x >= _stopPosition  +3  ||
+			_direction == StreetDirection.Left && transform.position.x <= _stopPosition -5 ||
+			_direction == StreetDirection.Down  && transform.position.z <= _stopPosition -5 ||
+			_direction == StreetDirection.Up && transform.position.z >= _stopPosition +3 ){
 			
 				return true;
 				
@@ -252,7 +255,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private void SetStopOffset(){
 		//Debug.Log(gameObject.name +"      "+ GetMyOrderInQueue());
-		Offset =  (GetMyOrderInQueue()) * (_size + 5);
+		Offset =  (GetMyOrderInQueue()) * (_size + 10);
 	}
 	
 	private int GetMyOrderInQueue(){
@@ -282,6 +285,7 @@ public class VehicleController : MonoBehaviour {
 				gameMasterScript.existedVehicles.Enqueue(gameObject);
 			}
 			gameMasterScript.score += 1;
+			
 		}
 		
 	}
@@ -291,16 +295,16 @@ public class VehicleController : MonoBehaviour {
 	
 	
 	private void TransfereToNextStreet(){
-		if(_direction == Direction.Left && transform.position.x < _street.EndPoint.x){
+		if(_direction == StreetDirection.Left && transform.position.x < _street.EndPoint.x){
 			ResetVehicleAttributes();
 		}
-		else if(_direction == Direction.Right && transform.position.x > _street.EndPoint.x){
+		else if(_direction == StreetDirection.Right && transform.position.x > _street.EndPoint.x){
 			ResetVehicleAttributes();
 		}
-		else if(_direction == Direction.Down && transform.position.z < _street.EndPoint.z){
+		else if(_direction == StreetDirection.Down && transform.position.z < _street.EndPoint.z){
 			ResetVehicleAttributes();
 		}
-		else if(_direction == Direction.Up && transform.position.z >_street.EndPoint.z){
+		else if(_direction == StreetDirection.Up && transform.position.z >_street.EndPoint.z){
 			ResetVehicleAttributes();
 		}
 	}
@@ -318,16 +322,16 @@ public class VehicleController : MonoBehaviour {
 		
 		if(_light.tLight != null){
 			if(_light.Stopped){
-				if( (_direction == Direction.Right && transform.position.x > _stopPosition - Offset ) ||
-					(_direction == Direction.Left && transform.position.x < _stopPosition + Offset) ||
-					(_direction == Direction.Down && transform.position.z < _stopPosition + Offset) ||
-					(_direction == Direction.Up && transform.position.z > _stopPosition - Offset)  ){
+				if( (_direction == StreetDirection.Right && transform.position.x > _stopPosition - Offset ) ||
+					(_direction == StreetDirection.Left && transform.position.x < _stopPosition + Offset) ||
+					(_direction == StreetDirection.Down && transform.position.z < _stopPosition + Offset) ||
+					(_direction == StreetDirection.Up && transform.position.z > _stopPosition - Offset)  ){
 					
 					speed = 0.0f;
 					
 					
 					if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
-						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
+						GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
 						gameMasterScript.satisfyBar += 2;
 						Debug.Log("Ambulance stopped ... not good");
 						satisfyAdjustedOnTime = true;
@@ -345,28 +349,28 @@ public class VehicleController : MonoBehaviour {
 		SetStopOffset();
 		
 		
-		if(_direction == Direction.Left){
+		if(_direction == StreetDirection.Left){
     		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.left) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.left);
 			ReduceMeIfHit(ray);
 		}
-		else if(_direction == Direction.Right){
+		else if(_direction == StreetDirection.Right){
     		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.right);
 			ReduceMeIfHit(ray);
 		}
-		else if(_direction == Direction.Down){
+		else if(_direction == StreetDirection.Down){
     		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.forward) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.back);
 			ReduceMeIfHit(ray);
 		}
-		else if(_direction == Direction.Up){
+		else if(_direction == StreetDirection.Up){
     		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.back) * speed * Time.deltaTime, Space.Self);
 			
@@ -377,7 +381,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private void ReduceMeIfHit(Ray ray){
 		RaycastHit hit ;
-		if(Physics.Raycast(ray, out hit, 8)){
+		if(Physics.Raycast(ray, out hit, 10)){
 			//Debug.Log("I hit something");
 			Debug.DrawLine (ray.origin, hit.point);
 			VehicleController hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
@@ -403,7 +407,7 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider other) {
-		
+		Debug.Log("on trigger enterrrrr");
 		other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = true;
 		other.gameObject.GetComponent<VehicleController>().speed = 0.0f;
 		gameMasterScript.gameOver = true;

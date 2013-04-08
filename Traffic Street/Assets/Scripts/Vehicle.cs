@@ -16,7 +16,7 @@ public class Vehicle  {
 
 	//***********************************************************Don't forget the collider*******************
 	
-	private Direction _currentDirection;	//the current direction of moving the vehicle
+	private StreetDirection _currentDirection;	//the current direction of moving the vehicle
 	private Street _currentStreet;
 	private Street _nextStreet;
 	private int _curStreetNumber;
@@ -28,7 +28,7 @@ public class Vehicle  {
 	
 	//the constructor
 	
-	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet,int curStrNum, GamePath path){
+	public Vehicle(VehicleType type,float speed,float size, StreetDirection curDir, Street curStreet, Street nextStreet,int curStrNum, GamePath path){
 		_type = type;
 		_speed = speed;
 		_size = size;
@@ -57,7 +57,7 @@ public class Vehicle  {
 		set{_size = value;}
 	}
 	
-	public Direction CurrentDirection{
+	public StreetDirection CurrentDirection{
 		get{return _currentDirection;}
 		set{_currentDirection = value;}
 	}

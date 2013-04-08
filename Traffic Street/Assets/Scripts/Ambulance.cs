@@ -16,7 +16,7 @@ public class Ambulance : MonoBehaviour {
 				
 		int timeValue = 0;
 		for (int i = 0 ; i<AMBULANCE_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(50, 80);				//*********** I should make an enum to each level
+			timeValue = Random.Range(80, 100);				//*********** I should make an enum to each level
 			if(!ambulanceTimeSlots.Contains(timeValue)){
 				ambulanceTimeSlots.Add(timeValue - timeBetweenEvents);
 				GameMaster.eventsWarningTimes.Add(timeValue -  timeBetweenEvents+ 3);

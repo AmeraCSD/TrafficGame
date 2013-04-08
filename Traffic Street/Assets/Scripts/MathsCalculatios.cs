@@ -11,67 +11,67 @@ public class MathsCalculatios  {
 			return v.transform.localScale.z;
 	}
 	
-	public static bool CheckMyEndPosition(Transform transform, Direction direction, Direction nextDirection, Vector3 endPosition){
+	public static bool CheckMyEndPosition(Transform transform, StreetDirection direction, StreetDirection nextDirection, Vector3 endPosition){
 		//For Lefts
-		if(direction == Direction.Left && (nextDirection == null || nextDirection == Direction.Left)){
+		if(direction == StreetDirection.Left && (nextDirection == null || nextDirection == StreetDirection.Left)){
 			if(transform.position.x < endPosition.x)
 				return true;
 		}
 		
-		if(direction == Direction.Left && nextDirection == Direction.Down){
+		if(direction == StreetDirection.Left && nextDirection == StreetDirection.Down){
 			if(transform.position.x < endPosition.x && transform.position.z < endPosition.z)
 				return true;
 		}
 		
-		if(direction == Direction.Left && nextDirection == Direction.Up){
+		if(direction == StreetDirection.Left && nextDirection == StreetDirection.Up){
 			if(transform.position.x < endPosition.x && transform.position.z > endPosition.z)
 				return true;
 		}
 		
 		//For Rights
-		if(direction == Direction.Right && (nextDirection == null || nextDirection == Direction.Right)){
+		if(direction == StreetDirection.Right && (nextDirection == null || nextDirection == StreetDirection.Right)){
 			if(transform.position.x > endPosition.x)
 				return true;
 		}
 		
-		if(direction == Direction.Right &&  nextDirection == Direction.Down){
+		if(direction == StreetDirection.Right &&  nextDirection == StreetDirection.Down){
 			if(transform.position.x > endPosition.x && transform.position.z < endPosition.z)
 				return true;
 		}
 		
-		if(direction == Direction.Right && nextDirection == Direction.Up){
+		if(direction == StreetDirection.Right && nextDirection == StreetDirection.Up){
 			if(transform.position.x > endPosition.x && transform.position.z > endPosition.z)
 				return true;
 		}
 		
 		//For Ups
-		if(direction == Direction.Up && (nextDirection == null || nextDirection == Direction.Up)){
+		if(direction == StreetDirection.Up && (nextDirection == null || nextDirection == StreetDirection.Up)){
 			if(transform.position.z > endPosition.z)
 				return true;
 		}
 		
-		if(direction == Direction.Up && nextDirection == Direction.Right){
+		if(direction == StreetDirection.Up && nextDirection == StreetDirection.Right){
 			if(transform.position.z > endPosition.z && transform.position.x > endPosition.x)
 				return true;
 		}
 		
-		if(direction == Direction.Up && nextDirection == Direction.Left){
+		if(direction == StreetDirection.Up && nextDirection == StreetDirection.Left){
 			if(transform.position.z > endPosition.z && transform.position.x < endPosition.x)
 				return true;
 		}
 		
 		//For Downs
-		if(direction == Direction.Down && (nextDirection == null || nextDirection == Direction.Down)){
+		if(direction == StreetDirection.Down && (nextDirection == null || nextDirection == StreetDirection.Down)){
 			if(transform.position.z < endPosition.z)
 				return true;
 		}
 		
-		if(direction == Direction.Down && nextDirection == Direction.Right ){
+		if(direction == StreetDirection.Down && nextDirection == StreetDirection.Right ){
 			if(transform.position.z < endPosition.z && transform.position.x > endPosition.x)
 				return true;
 		}
 		
-		if(direction == Direction.Down && nextDirection == Direction.Left ){
+		if(direction == StreetDirection.Down && nextDirection == StreetDirection.Left ){
 			if(transform.position.z < endPosition.z && transform.position.x < endPosition.x)
 				return true;
 		}

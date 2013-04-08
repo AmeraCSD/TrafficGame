@@ -45,15 +45,15 @@ public class StreetsGenerator : MonoBehaviour {
 		//Downs
 		
 		
-		TrafficLight light_0_2 = new TrafficLight(Direction.Down,
+		TrafficLight light_0_2 = new TrafficLight(StreetDirection.Down,
 												FindTagObject("lightDown"),
 												true);
 		streetsCounter ++ ;
 		Street s0 = new Street( streetsCounter,
-								new Vector3(-15, 5, 50), 
+								new Vector3(-15, 5, 55), 
 								new Vector3(-15, 5, 5),  
 								light_0_2,
-								15.0f,					//stop position calculation based on the end point of the street
+								14.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
 								MAX_STREET_VEHICLES_NUMBER);
 		
@@ -61,7 +61,7 @@ public class StreetsGenerator : MonoBehaviour {
 		Street s1 = new Street( streetsCounter,
 								new Vector3(-15, 5, 5), 
 								new Vector3(-15, 5, -50),  
-								new TrafficLight(Direction.Down,
+								new TrafficLight(StreetDirection.Down,
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
@@ -70,10 +70,10 @@ public class StreetsGenerator : MonoBehaviour {
 		
 		streetsCounter ++ ;
 		Street s2 = new Street( streetsCounter,
-								new Vector3(-5, 5, 50), 
+								new Vector3(-5, 5, 55), 
 								new Vector3(-5, 5, -5),  
 								light_0_2,
-								15.0f,					//stop position calculation based on the end point of the street
+								14.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH/4,
 								MAX_STREET_VEHICLES_NUMBER);
 		
@@ -81,7 +81,7 @@ public class StreetsGenerator : MonoBehaviour {
 		Street s3 = new Street( streetsCounter,
 								new Vector3(-5, 5, -5), 
 								new Vector3(-5, 5, -50),  
-								new TrafficLight(Direction.Down,
+								new TrafficLight(StreetDirection.Down,
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
@@ -90,14 +90,14 @@ public class StreetsGenerator : MonoBehaviour {
 		
 		//Lefts
 		streetsCounter ++ ;
-		TrafficLight light_4_5 = new TrafficLight(Direction.Left,
+		TrafficLight light_4_5 = new TrafficLight(StreetDirection.Left,
 												FindTagObject("lightLeft"),
 												true);
 		Street s4 = new Street( streetsCounter,
 								new Vector3(50, 5, 5), 
 								new Vector3(-15, 5, 5),  
 								light_4_5,
-								5.0f,					//stop position calculation based on the end point of the street
+								4.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
 								MAX_STREET_VEHICLES_NUMBER);
 		streetsCounter ++ ;
@@ -105,14 +105,14 @@ public class StreetsGenerator : MonoBehaviour {
 								new Vector3(50, 5, -5), 
 								new Vector3(-5, 5, -5),  
 								light_4_5,
-								5.0f,					//stop position calculation based on the end point of the street
+								4.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
 								MAX_STREET_VEHICLES_NUMBER);
 		streetsCounter ++ ;
 		Street s6 = new Street( streetsCounter,
 								new Vector3(-15, 5, 5), 
 								new Vector3(-50, 5, 5),  
-								new TrafficLight(Direction.Left,
+								new TrafficLight(StreetDirection.Left,
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
@@ -122,7 +122,7 @@ public class StreetsGenerator : MonoBehaviour {
 		Street s7 = new Street( streetsCounter,
 								new Vector3(-5, 5, -5), 
 								new Vector3(-50, 5, -5),  
-								new TrafficLight(Direction.Left,
+								new TrafficLight(StreetDirection.Left,
 												null,
 												false),
 								0.0f,					//stop position calculation based on the end point of the street
@@ -664,18 +664,18 @@ public class StreetsGenerator : MonoBehaviour {
 	}
 	
 	//this method takes a string and returns the analogous light position type of type ENUM
-	private Direction ConvertFromStringToLightEnum(string s){
+	private StreetDirection ConvertFromStringToLightEnum(string s){
 		if(s == "l"){
-			return Direction.Left;
+			return StreetDirection.Left;
 		}
 		else if(s == "r"){
-			return Direction.Right;
+			return StreetDirection.Right;
 		}
 		else if(s == "u"){
-			return Direction.Up;
+			return StreetDirection.Up;
 		}
 		else{
-			return Direction.Down;
+			return StreetDirection.Down;
 		}
 	}
 	

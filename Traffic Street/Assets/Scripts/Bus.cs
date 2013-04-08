@@ -19,13 +19,15 @@ public class Bus : MonoBehaviour {
 	public static void SetBusRandomTime(int timeBetweenEvents){
 				
 		int timeValue = 0;
+		int temp = 0;
 		for (int i = 0 ; i<BUS_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(100, 140);				//*********** I should make an enum to each level
+			timeValue = Random.Range(110, 140);				//*********** I should make an enum to each level
 			if(!busTimeSlots.Contains(timeValue)){
-				busTimeSlots.Add(timeValue - timeBetweenEvents);
-				GameMaster.eventsWarningTimes.Add(timeValue - timeBetweenEvents+ 3);
+				busTimeSlots.Add(timeValue - temp%timeBetweenEvents);
+				GameMaster.eventsWarningTimes.Add(timeValue - temp%timeBetweenEvents+ 3);
 				GameMaster.eventsWarningNames.Add("b");
-			}	
+			}
+			temp = timeValue;
 		}	
 		
 	}

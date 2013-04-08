@@ -7,20 +7,20 @@ using System.Collections;
 */
 public class TrafficLight   : MonoBehaviour{
 	
-	private Direction _type;
+	private StreetDirection _type;
 	private GameObject _light;
 	private bool _stopped;
 	private bool _onHold;
 	
 	
-	public TrafficLight(Direction n, GameObject light, bool stopped){
+	public TrafficLight(StreetDirection n, GameObject light, bool stopped){
 		_type = n;
 		_light = light;
 		_stopped = stopped; 
 		_onHold = false;
 	}
 	
-	public Direction Type{
+	public StreetDirection Type{
 		get{return _type;}
 		set{_type = value;}
 	}
@@ -44,7 +44,7 @@ public class TrafficLight   : MonoBehaviour{
 	
 }
 
-public enum Direction{
+public enum StreetDirection{
 	Down,
 	Up,
 	Right,

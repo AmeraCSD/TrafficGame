@@ -7,19 +7,32 @@ public class SatisfyBar : MonoBehaviour {
 	
 	public float barLength;
 	
-	GUIStyle style;
-	Texture2D texture;
+	public GameObject satisfyBarValueGo;
+	public GameObject satisfyBarFillGo;
+	
+	private UIFilledSprite satisfyBarFill;
+	private UILabel satisfyBarValue;
+	
+	
+	//GUIStyle style;
+//	Texture2D texture;
 	
 	// Use this for initialization
 	void Start () {
+		satisfyBarValue = satisfyBarValueGo.GetComponent<UILabel>();
+		satisfyBarFill = satisfyBarFillGo.GetComponent<UIFilledSprite>();
+		
 		barLength = 0 ;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	  AddjustSatisfaction(0);
+		satisfyBarValue.text = curValue+"" + "/" + maxValue+"";
+	  	satisfyBarFill.fillAmount = barLength;
+		AddjustSatisfaction(0);
+		
 	}
-	
+	/*
 	void OnGUI(){
 		style = new GUIStyle();
 		texture = new Texture2D(128, 128);
@@ -36,6 +49,8 @@ public class SatisfyBar : MonoBehaviour {
 		
 		GUI.Box(new Rect(10, 70, barLength , 15), curValue+ "/" + maxValue, style);
 	}
+	*/
+	
 	
 	public void AddjustSatisfaction(int adj){
 		curValue += adj;
@@ -45,6 +60,6 @@ public class SatisfyBar : MonoBehaviour {
 			curValue = maxValue;
 		if(maxValue < 1)
 			maxValue = 1;
-		barLength = (Screen.width/4)* (curValue/(float)maxValue);
+		barLength = (curValue/(float)maxValue);
 	}
 }
