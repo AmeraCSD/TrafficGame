@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Bus : MonoBehaviour {
 
-	private const int BUS_HAPPEN_NUMBER = 3;
+	private const int BUS_HAPPEN_NUMBER = 1;
 
 	public static List<int> busTimeSlots;
 	
@@ -21,7 +21,7 @@ public class Bus : MonoBehaviour {
 		int timeValue = 0;
 		int temp = 0;
 		for (int i = 0 ; i<BUS_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(110, 140);				//*********** I should make an enum to each level
+			timeValue = Random.Range(100, 110 );				//*********** I should make an enum to each level
 			if(!busTimeSlots.Contains(timeValue)){
 				busTimeSlots.Add(timeValue - temp%timeBetweenEvents);
 				GameMaster.eventsWarningTimes.Add(timeValue - temp%timeBetweenEvents+ 3);
@@ -37,7 +37,7 @@ public class Bus : MonoBehaviour {
 	public static bool InsideBusTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		Debug.Log("bustimeSlots.count "+ busTimeSlots.Count);
+		//Debug.Log("bustimeSlots.count "+ busTimeSlots.Count);
 		while(!found && i < busTimeSlots.Count){
 			if(busTimeSlots [i] == gameTime)
 				found = true;

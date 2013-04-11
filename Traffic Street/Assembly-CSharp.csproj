@@ -171,8 +171,10 @@
      <Compile Include="Assets\Scripts\NormalVehicle.cs" />
      <Compile Include="Assets\Scripts\ReplayButton.cs" />
      <Compile Include="Assets\Scripts\SatisfyBar.cs" />
+     <Compile Include="Assets\Scripts\ServiceCar.cs" />
      <Compile Include="Assets\Scripts\Street.cs" />
      <Compile Include="Assets\Scripts\StreetsGenerator.cs" />
+     <Compile Include="Assets\Scripts\Thief.cs" />
      <Compile Include="Assets\Scripts\TrafficLight.cs" />
      <Compile Include="Assets\Scripts\Vehicle.cs" />
      <Compile Include="Assets\Scripts\VehicleBehavior.cs" />

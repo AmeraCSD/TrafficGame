@@ -29,7 +29,7 @@ public class Caravan : MonoBehaviour {
 	public static bool InsideCaravanTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		Debug.Log("timeSlots.count "+ caravanTimeSlots.Count);
+		//Debug.Log("timeSlots.count "+ caravanTimeSlots.Count);
 		while(!found && i < caravanTimeSlots.Count){
 			if(caravanTimeSlots [i] == gameTime)
 				found = true;

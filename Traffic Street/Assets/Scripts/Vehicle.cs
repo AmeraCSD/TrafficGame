@@ -96,5 +96,6 @@ public enum VehicleType{
 	Bus,
 	Ambulance,
 	Caravan,
+	ServiceCar,
 	Thief
 }

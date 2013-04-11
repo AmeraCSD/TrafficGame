@@ -24,16 +24,16 @@ public class GameMaster : MonoBehaviour {
 	
 	private const int MIN_TIME_BETWEEN_EVENTS =6;
 	
-	public Texture2D redCar;
-	public Texture2D yellowCar;
-	public Texture2D grayCar;
-	public Texture2D greenCar;
+	public List<Texture2D> vehiclesTextures;
+	
 	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	public GameObject ambulancePrefab;				//this object should be initialized in unity with the AmbulancePrefab
 	public GameObject busPrefab;					//this object should be initialized in unity with the BusPrefab
 	public GameObject caravanPrefab;
-	
+	public GameObject serviceCarPrefab;
+	public GameObject thiefPrefab;
+
 	private List<GamePath> Paths;
 	private List<Street> Streets;
 	
@@ -177,6 +177,9 @@ public class GameMaster : MonoBehaviour {
 		Bus.InitInstances();
 		Ambulance.InitInstances();
 		Caravan.InitInstances();
+		ServiceCar.InitInstances();
+		Thief.InitInstances();
+		
 	}
 	
 	private void generateFirst15Cars(){
@@ -186,7 +189,7 @@ public class GameMaster : MonoBehaviour {
 			
 		}
 		int pos = Random.Range(0, Paths.Count);
-		Texture2D tx = GetRandomTexture();
+		Texture2D tx = GetRandomTexture(0, 4);
 		NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 		vehicilesCounter++;
 		AdjustEach15Vehicle();
@@ -197,6 +200,8 @@ public class GameMaster : MonoBehaviour {
 		Bus.SetBusRandomTime(MIN_TIME_BETWEEN_EVENTS);
 		Ambulance.SetAmbulanceRandomTime(MIN_TIME_BETWEEN_EVENTS);
 		Caravan.SetCaravanRandomTime(MIN_TIME_BETWEEN_EVENTS);
+		ServiceCar.SetServiceCarRandomTime(MIN_TIME_BETWEEN_EVENTS);
+		Thief.SetThiefRandomTime(MIN_TIME_BETWEEN_EVENTS);
 	}
 	
 
@@ -267,8 +272,23 @@ public class GameMaster : MonoBehaviour {
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
 			}
+			else if(ServiceCar.InsideServiceCarTimeSlotsList(gameTime)) {
+				Debug.Log("should be a service car");
+				Texture2D tx = GetRandomTexture(4, 7);
+				ServiceCar.GenerateServiceCar(pos1, serviceCarPrefab, tx, Paths);
+				vehicilesCounter ++;
+				AdjustEach15Vehicle();
+			}
+			else if(Thief.InsideThiefTimeSlotsList(gameTime)) {
+				if(CheckAllStreetsEmptiness()){
+					Debug.Log("should be a thief");
+					Thief.GenerateThief(pos1, thiefPrefab, Paths);
+					vehicilesCounter ++;
+					AdjustEach15Vehicle();
+				}
+			}
 			else {
-				Texture2D tx = GetRandomTexture();
+				Texture2D tx = GetRandomTexture(0, 4);
 				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 				vehicilesCounter++;
 				AdjustEach15Vehicle();
@@ -280,7 +300,7 @@ public class GameMaster : MonoBehaviour {
 					pos2 = Random.Range(0, Paths.Count);
 				}
 				if((Paths[pos1].GenerationPointPosition != Paths[pos2].GenerationPointPosition)){
-					Texture2D tx = GetRandomTexture();
+					Texture2D tx = GetRandomTexture(0, 4);
 					NormalVehicle.GenerateNormalVehicle(pos2, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 					vehicilesCounter++;
 					AdjustEach15Vehicle();
@@ -295,7 +315,7 @@ public class GameMaster : MonoBehaviour {
 				if((Paths[pos1].GenerationPointPosition != Paths[pos3].GenerationPointPosition)
 					&&(Paths[pos2].GenerationPointPosition != Paths[pos3].GenerationPointPosition)){
 							
-					Texture2D tx = GetRandomTexture();
+					Texture2D tx = GetRandomTexture(0, 4);
 					
 					NormalVehicle.GenerateNormalVehicle(pos3, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 					vehicilesCounter++;
@@ -305,20 +325,12 @@ public class GameMaster : MonoBehaviour {
 		}
 	}
 	
-	private Texture2D GetRandomTexture(){
-		int i = Random.Range(0, 4);
-		if(i == 0){
-			return yellowCar;
+	private Texture2D GetRandomTexture(int rangeFrom, int rangeTo){
+		if(vehiclesTextures.Count == 0){
+			Debug.LogError("vehiclesTextures is not initialized");
 		}
-		else if(i == 1){
-			return redCar;
-		}
-		else if(i == 2){
-			return grayCar;
-		}
-		else{
-			return greenCar;
-		}
+		int i = Random.Range(rangeFrom, rangeTo);
+		return vehiclesTextures[i];
 
 	}
 	
@@ -343,7 +355,17 @@ public class GameMaster : MonoBehaviour {
 			return false;
 	}
 	
-	
+	private bool CheckAllStreetsEmptiness(){
+		int counter = 0;
+		for(int i= 0 ; i < Paths.Count ; i++){
+			if(Paths[i].PathStreets[0].VehiclesNumber >= 1)
+				counter ++ ;
+		}
+		if(counter == Paths.Count)
+			return false;
+		else
+			return true;
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -387,9 +409,21 @@ public class GameMaster : MonoBehaviour {
 				//showBox = !showBox;
 			}
 			
+			if(eventsWarningNames[index] == "s"){
+				closeButtonGo.SetActive(true);
+				eventWarningLabel.text = "Service Car is Coming";
+				eventsSpriteGo.SetActive(true);
+				eventsSprite.spriteName = "ice";
+				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Thief is Coming" );
+				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
+				//showBox = !showBox;
+			}
+			
 			if(eventsWarningNames[index] == "t"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Thief is Coming";
+				eventsSpriteGo.SetActive(true);
+				eventsSprite.spriteName = "kolu-bike";
 				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Thief is Coming" );
 				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
 				//showBox = !showBox;
@@ -406,7 +440,7 @@ public class GameMaster : MonoBehaviour {
 			
 			
 			
-		
+			Time.timeScale = 0;
 			
 		}
 		

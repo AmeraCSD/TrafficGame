@@ -29,7 +29,7 @@ public class Ambulance : MonoBehaviour {
 	public static bool InsideAmbulanceTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		Debug.Log("timeSlots.count "+ ambulanceTimeSlots.Count);
+		//Debug.Log("timeSlots.count "+ ambulanceTimeSlots.Count);
 		while(!found && i < ambulanceTimeSlots.Count){
 			if(ambulanceTimeSlots [i] == gameTime)
 				found = true;

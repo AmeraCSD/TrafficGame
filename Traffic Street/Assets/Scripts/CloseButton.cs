@@ -16,6 +16,7 @@ public class CloseButton : MonoBehaviour {
 		gameMasterScript.showBox = !gameMasterScript.showBox;
 		gameMasterScript.eventWarningLabel.text = "";
 		gameMasterScript.eventsSpriteGo.SetActive(false);
+		Time.timeScale = 1;
 	}
 
 }
