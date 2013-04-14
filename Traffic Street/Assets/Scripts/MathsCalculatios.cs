@@ -11,68 +11,77 @@ public class MathsCalculatios  {
 			return v.transform.localScale.z;
 	}
 	
-	public static bool CheckMyEndPosition(Transform transform, StreetDirection direction, StreetDirection nextDirection, Vector3 endPosition){
+	public static bool CheckMyEndPosition(Transform transform, StreetDirection direction, StreetDirection nextDirection, Vector3 endPosition, Street nextStreet){
 		//For Lefts
-		if(direction == StreetDirection.Left && (nextDirection == null || nextDirection == StreetDirection.Left)){
-			if(transform.position.x < endPosition.x)
+		if(direction == StreetDirection.Left && (nextStreet == null || nextDirection == StreetDirection.Left)){
+			if(transform.position.x < endPosition.x - 3){
+				Debug.Log("left left");
 				return true;
+			}
 		}
 		
 		if(direction == StreetDirection.Left && nextDirection == StreetDirection.Down){
-			if(transform.position.x < endPosition.x && transform.position.z < endPosition.z)
+			if(transform.position.x < endPosition.x - 3 && transform.position.z < endPosition.z - 3)
 				return true;
 		}
 		
 		if(direction == StreetDirection.Left && nextDirection == StreetDirection.Up){
-			if(transform.position.x < endPosition.x && transform.position.z > endPosition.z)
+			if(transform.position.x < endPosition.x - 3 && transform.position.z > endPosition.z + 3){
+				Debug.Log("left up");
 				return true;
+			}
 		}
 		
 		//For Rights
-		if(direction == StreetDirection.Right && (nextDirection == null || nextDirection == StreetDirection.Right)){
-			if(transform.position.x > endPosition.x)
+		if(direction == StreetDirection.Right && (nextStreet == null || nextDirection == StreetDirection.Right)){
+			if(transform.position.x > endPosition.x + 3)
 				return true;
 		}
 		
 		if(direction == StreetDirection.Right &&  nextDirection == StreetDirection.Down){
-			if(transform.position.x > endPosition.x && transform.position.z < endPosition.z)
+			if(transform.position.x > endPosition.x + 3 && transform.position.z < endPosition.z - 3)
 				return true;
 		}
 		
 		if(direction == StreetDirection.Right && nextDirection == StreetDirection.Up){
-			if(transform.position.x > endPosition.x && transform.position.z > endPosition.z)
+			if(transform.position.x > endPosition.x + 3 && transform.position.z > endPosition.z + 3)
 				return true;
 		}
 		
 		//For Ups
-		if(direction == StreetDirection.Up && (nextDirection == null || nextDirection == StreetDirection.Up)){
-			if(transform.position.z > endPosition.z)
+		if(direction == StreetDirection.Up && (nextStreet == null || nextDirection == StreetDirection.Up)){
+			Debug.Log(nextDirection);
+			if(transform.position.z > endPosition.z + 3){
+				Debug.Log("up up");
 				return true;
+			}
 		}
 		
 		if(direction == StreetDirection.Up && nextDirection == StreetDirection.Right){
-			if(transform.position.z > endPosition.z && transform.position.x > endPosition.x)
+			if(transform.position.z > endPosition.z + 3 && transform.position.x > endPosition.x + 3)
 				return true;
 		}
 		
 		if(direction == StreetDirection.Up && nextDirection == StreetDirection.Left){
-			if(transform.position.z > endPosition.z && transform.position.x < endPosition.x)
+			if(transform.position.z > endPosition.z + 3 && transform.position.x < endPosition.x - 3){
+				Debug.Log("up left");
 				return true;
+			}
 		}
 		
 		//For Downs
-		if(direction == StreetDirection.Down && (nextDirection == null || nextDirection == StreetDirection.Down)){
-			if(transform.position.z < endPosition.z)
+		if(direction == StreetDirection.Down && (nextStreet == null || nextDirection == StreetDirection.Down)){
+			if(transform.position.z < endPosition.z - 3)
 				return true;
 		}
 		
 		if(direction == StreetDirection.Down && nextDirection == StreetDirection.Right ){
-			if(transform.position.z < endPosition.z && transform.position.x > endPosition.x)
+			if(transform.position.z < endPosition.z - 3 && transform.position.x > endPosition.x + 3)
 				return true;
 		}
 		
 		if(direction == StreetDirection.Down && nextDirection == StreetDirection.Left ){
-			if(transform.position.z < endPosition.z && transform.position.x < endPosition.x)
+			if(transform.position.z < endPosition.z - 3 && transform.position.x < endPosition.x - 3)
 				return true;
 		}
 		return false;

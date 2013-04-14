@@ -116,23 +116,35 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void ResetVehicleAttributes(){
-		lastDirection = _direction;
+		//lastDirection = _direction;
 		myVehicle.CurrentStreet = myVehicle.NextStreet;
+		myVehicle.CurrentDirection = myVehicle.CurrentStreet.StreetLight.Type;
 		myVehicle.CurrentStreetNumber ++;
-		if(myVehicle.CurrentStreetNumber+1 != _path.PathStreets.Count )
+		
+		if(myVehicle.CurrentStreetNumber != _path.PathStreets.Count ){
 			myVehicle.NextStreet =_path.PathStreets[myVehicle.CurrentStreetNumber];
-		else
+			_nextDirection = myVehicle.NextStreet.StreetLight.Type;
+			Debug.Log("next direction isss   " + myVehicle.NextStreet.StreetLight.Type);
+		}
+		else{
 			myVehicle.NextStreet = null;
+//			_nextDirection = null;
+			Debug.Log("next street is null " );
+		}
 		
 		_street = myVehicle.CurrentStreet; 
 		
-		myVehicle.CurrentDirection = _street.StreetLight.Type;
+		//myVehicle.CurrentDirection = _street.StreetLight.Type;
 		_direction 		= myVehicle.CurrentDirection;
+		
 		//Debug.Log(gameObject.name + " direction" + _direction);
+		
+		
 		
 		_street.VehiclesNumber++;
 		_light 			= _street.StreetLight;
 		_stopPosition 	= _street.StopPosition;
+		_endPosition 	= _street.EndPoint;
 		_myQueue 		= _street.StrQueue;
 		_queueSize 		= _street.StrQueue.Count;
 		
@@ -220,8 +232,8 @@ public class VehicleController : MonoBehaviour {
 		if(GetMyOrderInQueue()== 0){
 			if(vehType != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
-				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(1);
-				gameMasterScript.satisfyBar += 1;
+				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(0.5f);
+				gameMasterScript.satisfyBar += 0.5f;
 			//	satisfyAdjustedOnTime = true;
 				stoppingTimerforAnger =0;
 				
@@ -260,6 +272,7 @@ public class VehicleController : MonoBehaviour {
 				}
 				
 			}
+			
 			if(myVehicle.NextStreet != null){
 				TransfereToNextStreet();
 				boxColl.isTrigger = true;
@@ -321,7 +334,7 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void CheckAndDeactivateAtEnd(){
-		if(MathsCalculatios.CheckMyEndPosition(transform, _direction, _nextDirection, _endPosition)){
+		if(MathsCalculatios.CheckMyEndPosition(transform, _direction, _nextDirection, _endPosition, myVehicle.NextStreet)){
 			//Destroy(gameObject) ;
 			gameObject.SetActive(false);
 			if(vehType == VehicleType.Normal){
@@ -338,17 +351,22 @@ public class VehicleController : MonoBehaviour {
 	
 	
 	private void TransfereToNextStreet(){
-		if(_direction == StreetDirection.Left && transform.position.x < _street.EndPoint.x){
+		if(_direction == StreetDirection.Left && transform.position.x <= _street.EndPoint.x){
+			ResetVehicleAttributes();
+			Debug.Log("resetting attributes ... " + gameObject.name);
+		}
+		else if(_direction == StreetDirection.Right && transform.position.x >= _street.EndPoint.x){
+			ResetVehicleAttributes();
+			Debug.Log("resetting attributes");
+		}
+		else if(_direction == StreetDirection.Down && transform.position.z <= _street.EndPoint.z){
+			Debug.Log("resetting attributes");
 			ResetVehicleAttributes();
 		}
-		else if(_direction == StreetDirection.Right && transform.position.x > _street.EndPoint.x){
+		else if(_direction == StreetDirection.Up && transform.position.z >=_street.EndPoint.z){
+			
 			ResetVehicleAttributes();
-		}
-		else if(_direction == StreetDirection.Down && transform.position.z < _street.EndPoint.z){
-			ResetVehicleAttributes();
-		}
-		else if(_direction == StreetDirection.Up && transform.position.z >_street.EndPoint.z){
-			ResetVehicleAttributes();
+			Debug.Log("resetting attributes ... " + gameObject.name);
 		}
 	}
 	
@@ -414,7 +432,7 @@ public class VehicleController : MonoBehaviour {
 			ReduceMeIfHit(ray);
 		}
 		else if(_direction == StreetDirection.Up){
-    		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
+    		transform.localRotation = Quaternion.AngleAxis(270, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.back) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.forward);

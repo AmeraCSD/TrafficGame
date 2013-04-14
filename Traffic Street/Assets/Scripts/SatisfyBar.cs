@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class SatisfyBar : MonoBehaviour {
-	public int maxValue = 10;
-	public int curValue = 0;
+	public float maxValue = 10;
+	public float curValue = 0;
 	
 	public float barLength;
 	
@@ -52,7 +52,7 @@ public class SatisfyBar : MonoBehaviour {
 	*/
 	
 	
-	public void AddjustSatisfaction(int adj){
+	public void AddjustSatisfaction(float adj){
 		curValue += adj;
 		if(curValue < 0)
 			curValue = 0;
@@ -60,6 +60,6 @@ public class SatisfyBar : MonoBehaviour {
 			curValue = maxValue;
 		if(maxValue < 1)
 			maxValue = 1;
-		barLength = (curValue/(float)maxValue);
+		barLength = (float)(curValue/(float)maxValue);
 	}
 }

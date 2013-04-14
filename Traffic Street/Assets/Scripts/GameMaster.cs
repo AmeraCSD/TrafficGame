@@ -16,7 +16,7 @@ public class GameMaster : MonoBehaviour {
 	//HUDs variables 
 	public int score;
 	public float gameTime;
-	public int satisfyBar;
+	public float satisfyBar;
 	public bool gameOver;
 	
 	private const float GAME_TIME = 150;			//should equal to 5 minutes
@@ -253,7 +253,7 @@ public class GameMaster : MonoBehaviour {
 					pos1 = Random.Range(0, Paths.Count);
 			}
 			
-			if(Bus.InsideBusTimeSlotsList(gameTime)){
+			/*if(Bus.InsideBusTimeSlotsList(gameTime)){
 			
 				Debug.Log("should be a bus");
 				Bus.GenerateBus(pos1, busPrefab, Paths);
@@ -287,13 +287,14 @@ public class GameMaster : MonoBehaviour {
 					AdjustEach15Vehicle();
 				}
 			}
+			
 			else {
 				Texture2D tx = GetRandomTexture(0, 4);
 				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 				vehicilesCounter++;
 				AdjustEach15Vehicle();
 			}
-				
+		*/		
 			int pos2 = Random.Range(0, Paths.Count);
 			if(!CheckAllStreetsFullness()){
 				while(Paths[pos2].PathStreets[0].VehiclesNumber >= Paths[pos2].PathStreets[0].StreetCapacity){
@@ -387,7 +388,7 @@ public class GameMaster : MonoBehaviour {
 			}
 			
 		}
-		
+		/*
 		if(showBox){
 			if(eventsWarningNames[index] == "a"){
 				closeButtonGo.SetActive(true);
@@ -444,7 +445,7 @@ public class GameMaster : MonoBehaviour {
 			
 		}
 		
-		
+		*/
 		
 		gameTimeVarLabel.text = gameTime+"";
 		scoreVarLabel.text = score+"";
@@ -491,7 +492,6 @@ public class GameMaster : MonoBehaviour {
 			totalScoreVarLabelGo.SetActive(true);
 			
 		}
-		
 		
 		else if(satisfyBar >= 10){
 		

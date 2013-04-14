@@ -84,14 +84,24 @@ public class LightsGamer : MonoBehaviour {
 	//this method changes each level
 	private void PutOnHoldOnMouseHit(RaycastHit hit){
 		
-		if(hit.collider.gameObject.tag == "lightDown"){
+		if(hit.collider.gameObject.tag == "lightLeft"){
 			PutStateOnHold(Streets[0]);
-			PutStateOnHold(Streets[2]);
+			PutStateOnHold(Streets[1]);
 		}
 		
-		if(hit.collider.gameObject.tag == "lightLeft"){
+		if(hit.collider.gameObject.tag == "lightLeft1"){
 			PutStateOnHold(Streets[4]);
 			PutStateOnHold(Streets[5]);
+		}
+		
+		if(hit.collider.gameObject.tag == "lightUp"){
+			PutStateOnHold(Streets[8]);
+			PutStateOnHold(Streets[9]);
+		}
+		
+		if(hit.collider.gameObject.tag == "lightUp1"){
+			PutStateOnHold(Streets[12]);
+			PutStateOnHold(Streets[13]);
 		}
 		
 	}

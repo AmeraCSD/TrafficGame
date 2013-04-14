@@ -12,7 +12,7 @@ public class ReplayButton : MonoBehaviour {
 	
 	void OnClick()
 	{
-		Application.LoadLevel("Level 1");
+		Application.LoadLevel("Level 2");
 		//gameObject.active = false;
 		//gameMasterScript.eventWarningLabel.text = "";
 		
