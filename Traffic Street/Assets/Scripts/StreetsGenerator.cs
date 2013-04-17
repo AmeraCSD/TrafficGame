@@ -80,9 +80,9 @@ public class StreetsGenerator : MonoBehaviour {
 								new TrafficLight(StreetDirection.Left,
 												null,
 												false),
-								0.0f,					//stop position calculation based on the end point of the street
+								-15.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
-								MAX_STREET_VEHICLES_NUMBER);
+								3);
 		
 		streetsCounter ++ ;
 		Street s3 = new Street( streetsCounter,
@@ -91,7 +91,7 @@ public class StreetsGenerator : MonoBehaviour {
 								new TrafficLight(StreetDirection.Left,
 												null,
 												false),
-								0.0f,					//stop position calculation based on the end point of the street
+								-5.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
 								MAX_STREET_VEHICLES_NUMBER);
 		
@@ -115,7 +115,7 @@ public class StreetsGenerator : MonoBehaviour {
 								light_4_5,
 								-4.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
-								MAX_STREET_VEHICLES_NUMBER);
+								3);
 		
 		streetsCounter ++ ;
 		Street s6 = new Street( streetsCounter,
@@ -173,7 +173,7 @@ public class StreetsGenerator : MonoBehaviour {
 								new TrafficLight(StreetDirection.Up,
 												null,
 												false),
-								0.0f,					//stop position calculation based on the end point of the street
+								15.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
 								MAX_STREET_VEHICLES_NUMBER);
 		
@@ -184,9 +184,9 @@ public class StreetsGenerator : MonoBehaviour {
 								new TrafficLight(StreetDirection.Up,
 												null,
 												false),
-								0.0f,					//stop position calculation based on the end point of the street
+								5.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
-								MAX_STREET_VEHICLES_NUMBER);
+								3);
 		
 		TrafficLight light_12_13 = new TrafficLight(StreetDirection.Up,
 												FindTagObject("lightUp1"),
@@ -199,7 +199,7 @@ public class StreetsGenerator : MonoBehaviour {
 								light_12_13,
 								4.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
-								MAX_STREET_VEHICLES_NUMBER);
+								3);
 		
 		streetsCounter ++ ;
 		Street s13 = new Street( streetsCounter,

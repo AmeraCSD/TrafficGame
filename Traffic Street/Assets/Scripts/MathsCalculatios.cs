@@ -11,7 +11,7 @@ public class MathsCalculatios  {
 			return v.transform.localScale.z;
 	}
 	
-	public static bool CheckMyEndPosition(Transform transform, StreetDirection direction, StreetDirection nextDirection, Vector3 endPosition, Street nextStreet){
+	public static bool IsLeavingTheStreet2(Transform transform, StreetDirection direction, StreetDirection nextDirection, Vector3 endPosition, Street nextStreet){
 		//For Lefts
 		if(direction == StreetDirection.Left && (nextStreet == null || nextDirection == StreetDirection.Left)){
 			if(transform.position.x < endPosition.x - 3){
@@ -83,6 +83,70 @@ public class MathsCalculatios  {
 		if(direction == StreetDirection.Down && nextDirection == StreetDirection.Left ){
 			if(transform.position.z < endPosition.z - 3 && transform.position.x < endPosition.x - 3)
 				return true;
+		}
+		return false;
+	}
+	
+	public static bool CheckMyEndPosition(Transform transform, StreetDirection direction, Vector3 endPosition){
+		
+		if(direction == StreetDirection.Left){
+			if(transform.position.x < endPosition.x - 3){
+				return true;
+			}
+		}
+		if(direction == StreetDirection.Right){
+			if(transform.position.x > endPosition.x + 3)
+				return true;
+		}
+		if(direction == StreetDirection.Up ){
+			if(transform.position.z > endPosition.z + 3){
+				return true;
+			}
+		}
+		if(direction == StreetDirection.Down ){
+			if(transform.position.z < endPosition.z - 3)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public static bool IsLeavingTheStreet(Transform transform, StreetDirection direction,Vector3 endPosition, Street street){
+		
+		if(direction == StreetDirection.Left){
+			
+		//	if(transform.position.x < endPosition.x + 1 && transform.position.x > endPosition.x ){
+			if(transform.position.x < endPosition.x  ){
+				Debug.Log("it is leaving the street " + street.ID);
+				return true;
+				
+			}
+		}
+		
+	
+		if(direction == StreetDirection.Right){
+		//	if(transform.position.x > endPosition.x - 1 && transform.position.x < endPosition.x){
+			if(transform.position.x > endPosition.x ){
+				Debug.Log("it is leaving the street " + street.ID);
+				return true;
+			}
+		}
+		
+		
+		if(direction == StreetDirection.Up){
+			if(transform.position.z > endPosition.z ){
+		//	if(transform.position.z > endPosition.z - 1 && transform.position.z < endPosition.z){
+				Debug.Log("it is leaving the street " + street.ID);
+				return true;
+			}
+		}
+		
+		if(direction == StreetDirection.Down){
+		//	if(transform.position.z < endPosition.z + 1 && transform.position.z > endPosition.z){
+			if(transform.position.z < endPosition.z ){
+				Debug.Log("it is leaving the street " + street.ID);
+				return true;
+			}
 		}
 		return false;
 	}

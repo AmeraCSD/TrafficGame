@@ -8,11 +8,11 @@ public class NormalVehicle : MonoBehaviour {
 	public static void GenerateNormalVehicle(int pos,GameObject vehiclePrefab, Texture2D tx, List<GamePath> Paths, bool cancelInvokeFirst15Vehicles, Queue existedVehicles){	
 		
 			if(!cancelInvokeFirst15Vehicles){
-				while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
+	//			while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
 					pos = Random.Range(0, Paths.Count);
-				}
+	//			}
 			}
-		
+			//pos = 0;
 			if(vehiclePrefab != null){
 				//*****************************optimization
 				GameObject vehicle;

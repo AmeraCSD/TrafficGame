@@ -50,7 +50,7 @@ public class GameMaster : MonoBehaviour {
 	private int currentCarsNumber;
 	private int secondsCounterFor30;
 	private int secondsCounterForAnger;
-	
+	private bool instantiatThisTime;
 	
 	public static int vehicilesCounter;
 	
@@ -140,6 +140,7 @@ public class GameMaster : MonoBehaviour {
 	
 		existedVehicles = new Queue();
 		showBox = false;
+		instantiatThisTime = false;
 		vehicilesCounter = 0;
 		secondsCounterFor30 = 0;		//this variable to decrement the satify
 		secondsCounterForAnger = 0;
@@ -246,6 +247,7 @@ public class GameMaster : MonoBehaviour {
 	}
 	*/
 	private void InstantiatVehiclesArroundTime(){
+		instantiatThisTime = !instantiatThisTime;
 		if(!CheckAllStreetsFullness()){
 				//this piece of code is for the events
 			int pos1 = Random.Range(0, Paths.Count);
@@ -287,27 +289,33 @@ public class GameMaster : MonoBehaviour {
 					AdjustEach15Vehicle();
 				}
 			}
-			
-			else {
-				Texture2D tx = GetRandomTexture(0, 4);
-				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+		*/	
+		//	else {
+				Texture2D tx1 = GetRandomTexture(0, 4);
+				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, tx1, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 				vehicilesCounter++;
 				AdjustEach15Vehicle();
-			}
-		*/		
-			int pos2 = Random.Range(0, Paths.Count);
-			if(!CheckAllStreetsFullness()){
-				while(Paths[pos2].PathStreets[0].VehiclesNumber >= Paths[pos2].PathStreets[0].StreetCapacity){
-					pos2 = Random.Range(0, Paths.Count);
-				}
-				if((Paths[pos1].GenerationPointPosition != Paths[pos2].GenerationPointPosition)){
-					Texture2D tx = GetRandomTexture(0, 4);
-					NormalVehicle.GenerateNormalVehicle(pos2, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
-					vehicilesCounter++;
-					AdjustEach15Vehicle();
+		//	}
+			
+			
+			if(instantiatThisTime){
+				int pos2 = Random.Range(0, Paths.Count);
+				if(!CheckAllStreetsFullness()){
+					while(Paths[pos2].PathStreets[0].VehiclesNumber >= Paths[pos2].PathStreets[0].StreetCapacity){
+						pos2 = Random.Range(0, Paths.Count);
+					}
+					if((Paths[pos1].GenerationPointPosition != Paths[pos2].GenerationPointPosition)){
+						Texture2D tx = GetRandomTexture(0, 4);
+						NormalVehicle.GenerateNormalVehicle(pos2, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+						vehicilesCounter++;
+						AdjustEach15Vehicle();
+					}
 				}
 			}
 			
+			
+			
+			/*
 			int pos3 = Random.Range(0, Paths.Count);
 			if(!CheckAllStreetsFullness()){
 				while(Paths[pos3].PathStreets[0].VehiclesNumber >= Paths[pos3].PathStreets[0].StreetCapacity){
@@ -323,6 +331,8 @@ public class GameMaster : MonoBehaviour {
 					AdjustEach15Vehicle();
 				}
 			}
+			*/
+			
 		}
 	}
 	
@@ -492,7 +502,7 @@ public class GameMaster : MonoBehaviour {
 			totalScoreVarLabelGo.SetActive(true);
 			
 		}
-		
+		/*
 		else if(satisfyBar >= 10){
 		
 			eventWarningLabel.text =  "Traffic Jam !! ";
@@ -514,7 +524,7 @@ public class GameMaster : MonoBehaviour {
 			
 		}
 		
-		
+		*/
 		
 		else if(gameOver || gameTime == 0){
 		
