@@ -9,39 +9,35 @@ public class VehicleController : MonoBehaviour {
 	private int curScore;
  
 	public Vehicle myVehicle;
+	
 	//for the street
 	private Street _street;
 	private GamePath _path;
 	private TrafficLight _light;
 	private float _stopPosition;
 	private Vector3 _endPosition;
-	private Queue _myQueue;
+	public Queue _myQueue;
 	private int _queueSize;
+	
 	//for the vehicle
 	
-	private StreetDirection lastDirection;
 	private StreetDirection _direction;
 	private StreetDirection _nextDirection;
+	
 	public float speed;
 	private float _size;
 	public VehicleType vehType;
 	
-	//private CharacterController _charController ;
 	private BoxCollider boxColl;	
-	
-	
-	
-	private bool insideOnTriggerEnter; 
+	private GameObject triggeredObject;
 	
 	private bool passed;
 	private bool dequeued;
 	private bool enqueued;
 	private bool gameOver;
-	
-	public bool thereIsAbus;
-	public bool haveToReduceMySpeed;
-	
 	private bool satisfyAdjustedOnTime;
+	
+	public bool haveToReduceMySpeed;
 	
 	private float Offset;
 	private int carsStillInsideNumber;
@@ -54,13 +50,6 @@ public class VehicleController : MonoBehaviour {
 	
 	public float busStopTimer;
 	private float serviceCarStopTimer;
-	
-	private bool transfered;
-	private bool onIncrease;
-	
-	private Vector3 mainColliderSize;
-	
-	//public bool enableRayCast;
 		
 	
 	// Use this for initialization
@@ -74,24 +63,17 @@ public class VehicleController : MonoBehaviour {
 	public void initInstancesAtFirst(){
 		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
 		boxColl = GetComponent<BoxCollider>();
-		
-		mainColliderSize = boxColl.size;
-		
+			
 		Offset = 0;
 		dequeued = false;
 		enqueued = false;
-		insideOnTriggerEnter = false;
 		passed = false;
 		satisfyAdjustedOnTime = false;
 		stoppingTimerforAnger = 0;
 		stoppingTimerforAngerSet = false;
-		thereIsAbus = false;
 		haveToReduceMySpeed = false;
 		busStopTimer = 0;
 		serviceCarStopTimer = 0;
-		transfered = false;
-		onIncrease = false;
-		
 	}
 	
 	void Start () {
@@ -126,21 +108,12 @@ public class VehicleController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		//SetupColliderSize();
-		
 		PerformEnqueue();
 		SetStopOffset();
 		CheckPosition_DeqIfPassed();
 		
 		Move();
 		
-		if(speed == 0){
-			if(CheckIfColliderIsOriginal()){
-				//ChangeColliderSize();
-			}
-		}
-		
-		Debug.LogWarning("myVehicle.NextStreet == " + myVehicle.NextStreet);
 		if(myVehicle.NextStreet!=null && MathsCalculatios.IsLeavingTheStreet(transform, _direction, _endPosition, _street)){
 			TransfereToNextStreet();
 		}
@@ -152,14 +125,12 @@ public class VehicleController : MonoBehaviour {
 		CheckServiceCarStops();
 		CheckMyAnger();
 		
-	//	ChangeColliderSize();
 		
 		if(busStopTimer >= gameMasterScript.gameTime){
 			speed = myVehicle.Speed;
-			//Debug.Log("haaaaaaaaaaaaaa");
 		}
 		
-		if(!(_light.Stopped) && !haveToReduceMySpeed){ /////////////////////////////////////////////////
+		if(!(_light.Stopped) && !haveToReduceMySpeed){
 			speed = myVehicle.Speed;
 			
 		}
@@ -169,11 +140,8 @@ public class VehicleController : MonoBehaviour {
 	
 	private void PerformEnqueue(){
 		if(!enqueued ){
-			
-			_myQueue.Enqueue(gameObject);
-			
+			_myQueue.Enqueue(gameObject);	
 			enqueued = true;
-			//Debug.Log(gameObject.name +" is enqueued"  +"  and The queue Size ------------> " + _queueSize  );
 		}
 	}
 	
@@ -182,22 +150,16 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void CheckPosition_DeqIfPassed(){
-		//Debug.Log(gameObject.name +" The queue Size ------------> " + _queueSize );
-
 		if( _direction == StreetDirection.Right && transform.position.x >= _stopPosition    ||
 			_direction == StreetDirection.Left && transform.position.x <= _stopPosition  ||
 			_direction == StreetDirection.Down  && transform.position.z <= _stopPosition  ||
 			_direction == StreetDirection.Up && transform.position.z >= _stopPosition ){
 			
-			
 			passed = true ;
-			if(!dequeued && (!(_light.Stopped)  || StillInStopRange()) ){
-								
+			if(!dequeued && (!(_light.Stopped) || StillInStopRange() ) ){				
 				if(_myQueue.Count > 0){
-					
 					_myQueue.Dequeue();
 					dequeued = true;
-					
 					_street.VehiclesNumber --;
 					if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
 						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
@@ -220,39 +182,17 @@ public class VehicleController : MonoBehaviour {
 				return true;
 				
 			}
-			
-			
 		}
 		return false;
 	}
 	
 	private void TransfereToNextStreet(){
 		ResetVehicleAttributes();
-		/*
-		if(_direction == StreetDirection.Left && transform.position.x <= _street.EndPoint.x){
-			ResetVehicleAttributes();
-			//Debug.Log("resetting attributes ... " + gameObject.name);
-		}
-		else if(_direction == StreetDirection.Right && transform.position.x >= _street.EndPoint.x){
-			ResetVehicleAttributes();
-			//Debug.Log("resetting attributes");
-		}
-		else if(_direction == StreetDirection.Down && transform.position.z <= _street.EndPoint.z){
-			//Debug.Log("resetting attributes");
-			ResetVehicleAttributes();
-		}
-		else if(_direction == StreetDirection.Up && transform.position.z >=_street.EndPoint.z){
-			
-			ResetVehicleAttributes();
-			//Debug.Log("resetting attributes ... " + gameObject.name);
-		}
-		*/
 	}
 	
 	private void ResetVehicleAttributes(){
-			if(myVehicle.NextStreet != null){
+		if(myVehicle.NextStreet != null){
 			myVehicle.CurrentStreet = myVehicle.NextStreet;
-			Debug.Log("transfering to the street ... " + myVehicle.CurrentStreet.ID);
 			myVehicle.CurrentDirection = myVehicle.CurrentStreet.StreetLight.Type;
 			myVehicle.CurrentStreetNumber ++;
 			
@@ -269,18 +209,7 @@ public class VehicleController : MonoBehaviour {
 			_direction 		= myVehicle.CurrentDirection;			
 			
 			_street.VehiclesNumber++;
-			/*
-			if(_street.StreetLight.tLight == null){
-				if(_street.VehiclesNumber == _street.StreetCapacity){
-					
-					_path.PathStreets[myVehicle.CurrentStreetNumber-1].StreetLight.Stopped = true;
-				}
-				else{
-					Debug.Log("StreetLight.Stopped = false");
-					_path.PathStreets[myVehicle.CurrentStreetNumber-1].StreetLight.Stopped = false;
-				}
-			}
-			*/
+			
 			_light 			= _street.StreetLight;
 			_stopPosition 	= _street.StopPosition;
 			_endPosition 	= _street.EndPoint;
@@ -290,9 +219,8 @@ public class VehicleController : MonoBehaviour {
 			Offset = 0;
 			dequeued = false;
 			enqueued = false;
-			insideOnTriggerEnter = false;
 			passed = false;
-			haveToReduceMySpeed = false;
+			//haveToReduceMySpeed = false;
 		}
 	}
 	
@@ -312,44 +240,34 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void StopMovingOnRed(){
-		SetStopOffset();
-	/*	if(vehType == VehicleType.Bus){
-			
-		}
-		*/
-		
-		//if(_light.tLight != null){
-			if(_light.Stopped){
-				if( (_direction == StreetDirection.Right && transform.position.x > _stopPosition - Offset ) ||
-					(_direction == StreetDirection.Left && transform.position.x < _stopPosition + Offset) ||
-					(_direction == StreetDirection.Down && transform.position.z < _stopPosition + Offset) ||
-					(_direction == StreetDirection.Up && transform.position.z > _stopPosition - Offset)  ){
-					
-					speed = 0.0f;
-					
-					
-					if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
-						GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
-						gameMasterScript.satisfyBar += 2;
-						Debug.Log("Ambulance stopped ... not good");
-						satisfyAdjustedOnTime = true;
+		if(_light.Stopped){
+			if( (_direction == StreetDirection.Right && transform.position.x > _stopPosition - Offset ) ||
+				(_direction == StreetDirection.Left && transform.position.x < _stopPosition + Offset) ||
+				(_direction == StreetDirection.Down && transform.position.z < _stopPosition + Offset) ||
+				(_direction == StreetDirection.Up && transform.position.z > _stopPosition - Offset)  ){
+				
+				speed = 0.0f;
+				
+				if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
+					GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
+					gameMasterScript.satisfyBar += 2;
+					Debug.Log("Ambulance stopped ... not good");
+					satisfyAdjustedOnTime = true;
+				}
+			}
+			else{
+				if(!haveToReduceMySpeed)
+					speed = myVehicle.Speed;
+				if(triggeredObject != null && triggeredObject.tag == "intersection"){
+					if(triggeredObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1){
+						haveToReduceMySpeed = false;
+						speed = myVehicle.Speed;
 					}
 				}
-		
-			}
 				
-		//}
-		
-	}
-	
-	private bool CheckIfColliderIsOriginal(){
-		if(boxColl.size.Equals(mainColliderSize)){
-			return true;
+			}	
 		}
-		return false;
 	}
-	
-	
 	
 	private void CheckServiceCarStops(){
 		if(vehType == VehicleType.ServiceCar){
@@ -396,7 +314,6 @@ public class VehicleController : MonoBehaviour {
 				
 			}
 		}
-		//Debug.Log(stoppingTimerforAngerSet);
 	}
 	
 	
@@ -413,10 +330,6 @@ public class VehicleController : MonoBehaviour {
 	
 	
 	private void Move(){
-	
-		if(!CheckIfColliderIsOriginal()){
-			boxColl.size = mainColliderSize;
-		}
 		
 		if(_direction == StreetDirection.Left){
     		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
@@ -450,33 +363,35 @@ public class VehicleController : MonoBehaviour {
 	
 	private void ReduceMeIfHit(Ray ray){
 		RaycastHit hit ;
-		if(Physics.Raycast(ray, out hit, 6)){
-			//Debug.Log("I hit something");
+		if(Physics.Raycast(ray, out hit, 8) ){
 			Debug.DrawLine (ray.origin, hit.point);
 			VehicleController hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
-		
-			
-			if((hitVehicleController.speed < speed || haveToReduceMySpeed)  ){
-			//	Debug.Log(gameObject.name +  " ... I have to reduce my speed");
+			if(hitVehicleController !=null && (hitVehicleController.speed < speed || haveToReduceMySpeed)  ){
 				speed = hitVehicleController.speed;
 				haveToReduceMySpeed = true;
 			}
 			else{
-				
-				haveToReduceMySpeed = false;
-				if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus)
-					speed = myVehicle.Speed;
-				
+				if(hit.collider.tag == "intersection"){
+					if(hit.collider.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1){
+						haveToReduceMySpeed = false;
+						if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus)
+							speed = myVehicle.Speed;
+					}
+				}
+				else
+					haveToReduceMySpeed = false;
 			}
 		}
 		else{ 
 			if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar) && (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus))
 				haveToReduceMySpeed = false;
 		}
-		
 	}
 	
 	void OnTriggerEnter(Collider other) {
+		
+		triggeredObject = other.gameObject;
+		
 		Debug.Log("on trigger enterrrrr");
 	//	if(vehType == VehicleType.Thief || other.gameObject.GetComponent<VehicleController>().vehType == VehicleType.Thief){
 			if(vehType == VehicleType.Thief){
@@ -489,19 +404,32 @@ public class VehicleController : MonoBehaviour {
 			
 	//	}
 		
-		else {
+		if(other.tag == "vehicle"){
 			other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = true;
 			other.gameObject.GetComponent<VehicleController>().speed = 0.0f;
 			gameMasterScript.gameOver = true;
+		}
+		else if(other.tag == "intersection"){
+			if(other.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count >= 1){
+				speed = 0;
+				haveToReduceMySpeed = true;
+			}
+			else{
+				haveToReduceMySpeed = false;
+				speed = myVehicle.Speed;
+			}
+			if(_light.Stopped){
+				haveToReduceMySpeed = false;
+				speed = myVehicle.Speed;
+			}
 		}
 		
 		
 		
    	}	
 	
-	
-	
 	void OnTriggerExit(Collider other) {
+		triggeredObject = null;
 		if(other.transform.tag == "vehicle"){
 			Debug.Log("on trigger exit");
 			other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = false;
@@ -518,54 +446,5 @@ public class VehicleController : MonoBehaviour {
 		else
 			return "z";
 	}
-	
-	
-	
-	private void ChangeColliderSize(){
-		
-	//	if(vehType == VehicleType.Normal){
-		if(speed == 0){
-			onIncrease = true;
-			if(getVehicleLargerAxis(gameObject) == "x"){
-				boxColl.size = new Vector3(mainColliderSize.x+4  , mainColliderSize.y , mainColliderSize.z );
-			}
-			else{
-				boxColl.size = new Vector3(mainColliderSize.x   , mainColliderSize.y , mainColliderSize.z+4 );
-			}
-		}
-		else{
-			onIncrease = false;
-		}
-	//	}
-		
-	}
-	
-	
-	
-	/*
-	private void CheckNextStreetEmptiness(){
-		if( _direction == StreetDirection.Right && transform.position.x >= _endPosition.x - 10   ||
-			_direction == StreetDirection.Left && transform.position.x <= _endPosition.x + 10  ||
-			_direction == StreetDirection.Down && transform.position.z <= _endPosition.z +10 ||
-			_direction == StreetDirection.Up && transform.position.z >= _endPosition.z - 10){
-		
-			Debug.Log("and the next street direction " + _nextDirection + "of vehicle .." + gameObject.name);
-			
-			if(myVehicle.NextStreet != null){
-				Debug.Log("inside check emptinesssssssss .." + (_endPosition.z - 10));			
-				if(myVehicle.NextStreet.VehiclesNumber == myVehicle.NextStreet.StreetCapacity){
-					Debug.Log("it is full capacityyyyy " + gameObject.name ); 
-		//			nextStreetIsEmpty = false;
-					speed = 0;
-				}
-				else{
-//					nextStreetIsEmpty = true;
-					
-				}
-			}
-		}
-			
-	}
-	*/
 	
 }

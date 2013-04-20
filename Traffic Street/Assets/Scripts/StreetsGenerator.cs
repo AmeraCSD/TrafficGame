@@ -6,6 +6,7 @@ public class StreetsGenerator : MonoBehaviour {
 	
 	private List<Street>  Streets;				//this is a list of the all of the streets in the game (should be used in GameMaster and LightsGamer)
 	private List<GamePath> Paths;
+	private List<Vector3> Intersections;
 	public const float STREET_WIDTH = 23;
 	private const int MAX_STREET_VEHICLES_NUMBER = 4;
 	
@@ -30,9 +31,14 @@ public class StreetsGenerator : MonoBehaviour {
 		return Paths;
 	}
 	
+	public List<Vector3> getIntersections(){
+		return Intersections;
+	}
+	
 	void Awake(){
 		streetsCounter = -1;
 		Streets = new List<Street>();
+		Intersections = new List<Vector3>();
 	//	GenerateTempStreetsLevel1(); 					//for temp test
 	//	GenerateFirstLevelStreets(); 					//for temp test
 		
@@ -41,6 +47,7 @@ public class StreetsGenerator : MonoBehaviour {
 	//	InitFirstLevelPaths();
 		
 		InitSecondLevelPaths();
+		InitStreetsIntersections();
 		//Debug.Log("we henaaa el Paths count === "+ Paths.Count);
 	}
 	
@@ -56,7 +63,7 @@ public class StreetsGenerator : MonoBehaviour {
 								new Vector3(80, 5, -15), 
 								new Vector3(25, 5, -15),  
 								light_0_1,
-								31.0f,					//stop position calculation based on the end point of the street
+								33.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
 								MAX_STREET_VEHICLES_NUMBER);
 		
@@ -67,7 +74,7 @@ public class StreetsGenerator : MonoBehaviour {
 								new Vector3(80, 5, -25), 
 								new Vector3(15, 5, -25),  
 								light_0_1,
-								31.0f,					//stop position calculation based on the end point of the street
+								33.0f,					//stop position calculation based on the end point of the street
 								STREET_WIDTH,
 								MAX_STREET_VEHICLES_NUMBER);
 		
@@ -258,7 +265,7 @@ public class StreetsGenerator : MonoBehaviour {
 		List<Street> tempPath;
 
 		//Path0 (left, up, left, up)1
-		tempPath = new List<Street>() ;
+		tempPath = new List<Street>();
 		tempPath.Add(Streets[0]);
 		tempPath.Add(Streets[10]);
 		tempPath.Add(Streets[4]);
@@ -351,6 +358,18 @@ public class StreetsGenerator : MonoBehaviour {
 		
 		
 		
+	}
+	
+	private void InitStreetsIntersections(){
+		Intersections.Add(Streets[0].EndPoint);
+		Intersections.Add(Streets[1].EndPoint);
+		Intersections.Add(new Vector3(25, 5, -25));
+		Intersections.Add(Streets[2].EndPoint);
+		Intersections.Add(Streets[3].EndPoint);
+		Intersections.Add(Streets[10].EndPoint);
+		Intersections.Add(Streets[11].EndPoint);
+		Intersections.Add(Streets[12].EndPoint);
+		Intersections.Add(Streets[13].EndPoint);
 	}
 	
 	private void GenerateFirstLevelStreets(){

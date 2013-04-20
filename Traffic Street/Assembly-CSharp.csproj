@@ -165,6 +165,7 @@
      <Compile Include="Assets\Scripts\CloseButton.cs" />
      <Compile Include="Assets\Scripts\GameMaster.cs" />
      <Compile Include="Assets\Scripts\GamePath.cs" />
+     <Compile Include="Assets\Scripts\IntersectionArea.cs" />
      <Compile Include="Assets\Scripts\LightsGamer.cs" />
      <Compile Include="Assets\Scripts\MathsCalculatios.cs" />
      <Compile Include="Assets\Scripts\Mayor.cs" />

@@ -36,6 +36,9 @@ public class GameMaster : MonoBehaviour {
 
 	private List<GamePath> Paths;
 	private List<Street> Streets;
+	private List<Vector3> Intersections;
+	
+	public GameObject intersectionPrefab;
 	
 	public static List<float> eventsWarningTimes;
 	public static List<string> eventsWarningNames;
@@ -160,7 +163,7 @@ public class GameMaster : MonoBehaviour {
 		initObjects();
 		
 		SetEventsRandomTime();
-		
+		InstantiateIntersections();
 		
 		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.3f);
 		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
@@ -171,6 +174,7 @@ public class GameMaster : MonoBehaviour {
 	private void initObjects(){
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getStreets();
 		Paths = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getPaths();
+		Intersections = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getIntersections();
 		
 		eventsWarningTimes = new List<float>();
 		eventsWarningNames = new List<string>();
@@ -180,6 +184,14 @@ public class GameMaster : MonoBehaviour {
 		Caravan.InitInstances();
 		ServiceCar.InitInstances();
 		Thief.InitInstances();
+		
+	}
+	
+	private void InstantiateIntersections(){
+		
+		for(int i = 0; i<Intersections.Count ; i++){
+			Instantiate(intersectionPrefab, Intersections[i] ,Quaternion.identity);
+		}
 		
 	}
 	
@@ -298,7 +310,7 @@ public class GameMaster : MonoBehaviour {
 		//	}
 			
 			
-			if(instantiatThisTime){
+			//if(instantiatThisTime){
 				int pos2 = Random.Range(0, Paths.Count);
 				if(!CheckAllStreetsFullness()){
 					while(Paths[pos2].PathStreets[0].VehiclesNumber >= Paths[pos2].PathStreets[0].StreetCapacity){
@@ -311,7 +323,7 @@ public class GameMaster : MonoBehaviour {
 						AdjustEach15Vehicle();
 					}
 				}
-			}
+			//}
 			
 			
 			
@@ -526,7 +538,7 @@ public class GameMaster : MonoBehaviour {
 		
 		*/
 		
-		else if(gameOver || gameTime == 0){
+		else if(gameOver){
 		
 			eventWarningLabel.text =  "Accident !! ";
 			
@@ -545,6 +557,25 @@ public class GameMaster : MonoBehaviour {
 			totalScoreVarLabelGo.SetActive(true);
 			endGameSpriteGo.SetActive(true);
 			endGameSprite.spriteName = "car-accident-collision-md";
+		}
+		
+		else if(gameTime == 0){
+		
+			eventWarningLabel.text =  "Game Over !! ";
+			
+			totalScoreLabel.text = "Total Score:";
+			totalScoreVarLabel.text = score+"";
+			
+			
+			GameObject [] gos = GameObject.FindGameObjectsWithTag("vehicle");
+			for(int i = 0; i < gos.Length; i++){
+				gos[i].SetActive(false);
+			}
+			
+			CancelInvoke("CountTimeDown");
+			replayButtonGo.SetActive(true);
+			closeButtonGo.SetActive(false);
+			totalScoreVarLabelGo.SetActive(true);
 		}
 		
 		

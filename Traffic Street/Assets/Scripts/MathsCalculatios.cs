@@ -117,7 +117,7 @@ public class MathsCalculatios  {
 			
 		//	if(transform.position.x < endPosition.x + 1 && transform.position.x > endPosition.x ){
 			if(transform.position.x < endPosition.x  ){
-				Debug.Log("it is leaving the street " + street.ID);
+				//Debug.Log("it is leaving the street " + street.ID);
 				return true;
 				
 			}
@@ -127,7 +127,7 @@ public class MathsCalculatios  {
 		if(direction == StreetDirection.Right){
 		//	if(transform.position.x > endPosition.x - 1 && transform.position.x < endPosition.x){
 			if(transform.position.x > endPosition.x ){
-				Debug.Log("it is leaving the street " + street.ID);
+				//Debug.Log("it is leaving the street " + street.ID);
 				return true;
 			}
 		}
@@ -136,7 +136,7 @@ public class MathsCalculatios  {
 		if(direction == StreetDirection.Up){
 			if(transform.position.z > endPosition.z ){
 		//	if(transform.position.z > endPosition.z - 1 && transform.position.z < endPosition.z){
-				Debug.Log("it is leaving the street " + street.ID);
+				//Debug.Log("it is leaving the street " + street.ID);
 				return true;
 			}
 		}
@@ -144,7 +144,7 @@ public class MathsCalculatios  {
 		if(direction == StreetDirection.Down){
 		//	if(transform.position.z < endPosition.z + 1 && transform.position.z > endPosition.z){
 			if(transform.position.z < endPosition.z ){
-				Debug.Log("it is leaving the street " + street.ID);
+				//Debug.Log("it is leaving the street " + street.ID);
 				return true;
 			}
 		}

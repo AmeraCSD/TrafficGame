@@ -8,9 +8,9 @@ public class NormalVehicle : MonoBehaviour {
 	public static void GenerateNormalVehicle(int pos,GameObject vehiclePrefab, Texture2D tx, List<GamePath> Paths, bool cancelInvokeFirst15Vehicles, Queue existedVehicles){	
 		
 			if(!cancelInvokeFirst15Vehicles){
-	//			while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
+				while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
 					pos = Random.Range(0, Paths.Count);
-	//			}
+				}
 			}
 			//pos = 0;
 			if(vehiclePrefab != null){
@@ -23,7 +23,7 @@ public class NormalVehicle : MonoBehaviour {
 					vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																						25.0f, 
+																						28.0f, 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
 																						Paths[pos].PathStreets[0].StreetLight.Type, 
 																						Paths[pos].PathStreets[0], 
