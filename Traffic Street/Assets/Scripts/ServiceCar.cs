@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ServiceCar : MonoBehaviour {
 
-	private const int SERVICE_CAR_HAPPEN_NUMBER = 2;
+	private const int SERVICE_CAR_HAPPEN_NUMBER = 1;
 	
 	public static List<int> serviceCarTimeSlots;
 	

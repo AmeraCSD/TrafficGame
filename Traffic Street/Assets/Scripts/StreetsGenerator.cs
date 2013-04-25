@@ -60,7 +60,7 @@ public class StreetsGenerator : MonoBehaviour {
 												true);
 		streetsCounter ++ ;
 		Street s0 = new Street( streetsCounter,
-								new Vector3(80, 5, -15), 
+								new Vector3(85, 5, -15), 
 								new Vector3(25, 5, -15),  
 								light_0_1,
 								33.0f,					//stop position calculation based on the end point of the street
@@ -71,7 +71,7 @@ public class StreetsGenerator : MonoBehaviour {
 		
 		streetsCounter ++ ;
 		Street s1 = new Street( streetsCounter,
-								new Vector3(80, 5, -25), 
+								new Vector3(85, 5, -25), 
 								new Vector3(15, 5, -25),  
 								light_0_1,
 								33.0f,					//stop position calculation based on the end point of the street
@@ -127,7 +127,7 @@ public class StreetsGenerator : MonoBehaviour {
 		streetsCounter ++ ;
 		Street s6 = new Street( streetsCounter,
 								new Vector3(-15, 5, 25), 
-								new Vector3(-80, 5, 25),  
+								new Vector3(-85, 5, 25),  
 								new TrafficLight(StreetDirection.Left,
 												null,
 												false),
@@ -138,7 +138,7 @@ public class StreetsGenerator : MonoBehaviour {
 		streetsCounter ++ ;
 		Street s7 = new Street( streetsCounter,
 								new Vector3(-25, 5, 15), 
-								new Vector3(-80, 5, 15),  
+								new Vector3(-85, 5, 15),  
 								new TrafficLight(StreetDirection.Left,
 												null,
 												false),
@@ -153,7 +153,7 @@ public class StreetsGenerator : MonoBehaviour {
 		
 		streetsCounter ++ ;
 		Street s8 = new Street( streetsCounter,
-								new Vector3(25, 5, -80), 
+								new Vector3(25, 5, -85), 
 								new Vector3(25, 5, -15),  
 								light_8_9,
 								-36.0f,					//stop position calculation based on the end point of the street
@@ -165,7 +165,7 @@ public class StreetsGenerator : MonoBehaviour {
 		
 		streetsCounter ++ ;
 		Street s9 = new Street( streetsCounter,
-								new Vector3(15, 5, -80),
+								new Vector3(15, 5, -85),
 								new Vector3(15, 5, -25),  
 								light_8_9,
 								-36.0f,					//stop position calculation based on the end point of the street
@@ -220,7 +220,7 @@ public class StreetsGenerator : MonoBehaviour {
 		streetsCounter ++ ;
 		Street s14 = new Street( streetsCounter,
 								new Vector3(-15, 5, 25),
-								new Vector3(-15, 5, 80),  
+								new Vector3(-15, 5, 85),  
 								new TrafficLight(StreetDirection.Up,
 												null,
 												false),
@@ -231,7 +231,7 @@ public class StreetsGenerator : MonoBehaviour {
 		streetsCounter ++ ;
 		Street s15 = new Street( streetsCounter,
 								new Vector3(-25, 5, 15),
-								new Vector3(-25, 5, 80),  
+								new Vector3(-25, 5, 85),  
 								new TrafficLight(StreetDirection.Up,
 												null,
 												false),

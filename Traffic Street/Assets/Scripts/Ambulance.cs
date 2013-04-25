@@ -15,13 +15,19 @@ public class Ambulance : MonoBehaviour {
 	public  static void SetAmbulanceRandomTime(int timeBetweenEvents){
 				
 		int timeValue = 0;
+		timeValue = Random.Range(60, 70 );
+		
 		for (int i = 0 ; i<AMBULANCE_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(80, 100);				//*********** I should make an enum to each level
+							//*********** I should make an enum to each level
+			timeValue -= timeBetweenEvents;
+			if(timeValue >= 70){
+				timeValue -= 5;
+			}
 			if(!ambulanceTimeSlots.Contains(timeValue)){
-				ambulanceTimeSlots.Add(timeValue - timeBetweenEvents);
-				GameMaster.eventsWarningTimes.Add(timeValue -  timeBetweenEvents+ 3);
+				ambulanceTimeSlots.Add(timeValue);
+				GameMaster.eventsWarningTimes.Add(timeValue);
 				GameMaster.eventsWarningNames.Add("a");
-			}	
+			}
 		}	
 		
 	}

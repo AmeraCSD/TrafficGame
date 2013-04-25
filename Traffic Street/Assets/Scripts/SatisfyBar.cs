@@ -27,7 +27,7 @@ public class SatisfyBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		satisfyBarValue.text = curValue+"" + "/" + maxValue+"";
+		satisfyBarValue.text = (int)curValue+"" + "/" + maxValue+"";
 	  	satisfyBarFill.fillAmount = barLength;
 		AddjustSatisfaction(0);
 		

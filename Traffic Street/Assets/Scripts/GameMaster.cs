@@ -14,10 +14,11 @@ public class GameMaster : MonoBehaviour {
 	
 	
 	//HUDs variables 
-	public int score;
+	public static int score;
 	public float gameTime;
 	public float satisfyBar;
 	public bool gameOver;
+	public int trullyPassedEventsNum;
 	
 	private const float GAME_TIME = 150;			//should equal to 5 minutes
 	private const int WARNING_BEFORE_EVENT_SECONDS = 3;
@@ -100,6 +101,13 @@ public class GameMaster : MonoBehaviour {
 	
 	public GameObject endGameSpriteGo;
 	private UISlicedSprite endGameSprite;
+
+
+
+
+	public GameObject winMenu;
+	public GameObject loseMenu;
+	
 	
 	private void InitGUIVariables(){
 		eventWarningLabel = eventWarningLabelGo.GetComponent<UILabel>();
@@ -124,8 +132,8 @@ public class GameMaster : MonoBehaviour {
 		eventsSprite = eventsSpriteGo.GetComponent<UISlicedSprite>();
 		eventsSpriteGo.SetActive(false);
 		
-		endGameSprite = endGameSpriteGo.GetComponent<UISlicedSprite>();
-		endGameSpriteGo.SetActive(false);
+		//endGameSprite = endGameSpriteGo.GetComponent<UISlicedSprite>();
+		//endGameSpriteGo.SetActive(false);
 	}
 	
 	
@@ -142,6 +150,7 @@ public class GameMaster : MonoBehaviour {
 		satisfyBarScript = GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>();		
 	
 		existedVehicles = new Queue();
+		trullyPassedEventsNum = 0;
 		showBox = false;
 		instantiatThisTime = false;
 		vehicilesCounter = 0;
@@ -183,7 +192,7 @@ public class GameMaster : MonoBehaviour {
 		Ambulance.InitInstances();
 		Caravan.InitInstances();
 		ServiceCar.InitInstances();
-		Thief.InitInstances();
+		//Thief.InitInstances();
 		
 	}
 	
@@ -210,11 +219,11 @@ public class GameMaster : MonoBehaviour {
 	
 	private void SetEventsRandomTime(){
 		
-		Bus.SetBusRandomTime(MIN_TIME_BETWEEN_EVENTS);
-		Ambulance.SetAmbulanceRandomTime(MIN_TIME_BETWEEN_EVENTS);
-		Caravan.SetCaravanRandomTime(MIN_TIME_BETWEEN_EVENTS);
+	//	Bus.SetBusRandomTime(MIN_TIME_BETWEEN_EVENTS);
+	//	Ambulance.SetAmbulanceRandomTime(MIN_TIME_BETWEEN_EVENTS);
+	//	Caravan.SetCaravanRandomTime(MIN_TIME_BETWEEN_EVENTS);
 		ServiceCar.SetServiceCarRandomTime(MIN_TIME_BETWEEN_EVENTS);
-		Thief.SetThiefRandomTime(MIN_TIME_BETWEEN_EVENTS);
+		//Thief.SetThiefRandomTime(MIN_TIME_BETWEEN_EVENTS);
 	}
 	
 
@@ -250,14 +259,7 @@ public class GameMaster : MonoBehaviour {
 			InstantiatVehiclesArroundTime();
 		}
 	}
-	/*
-	private void enableAllVehiclesRays(){
-		GameObject [] array = GameObject.FindGameObjectsWithTag("vehicle");
-		for (int i=0 ; i<array.Length; i++){
-			array[i].GetComponent<VehicleController>().enableRayCast = true;
-		}
-	}
-	*/
+	
 	private void InstantiatVehiclesArroundTime(){
 		instantiatThisTime = !instantiatThisTime;
 		if(!CheckAllStreetsFullness()){
@@ -266,33 +268,38 @@ public class GameMaster : MonoBehaviour {
 			while(Paths[pos1].PathStreets[0].VehiclesNumber >= Paths[pos1].PathStreets[0].StreetCapacity){
 					pos1 = Random.Range(0, Paths.Count);
 			}
-			
-			/*if(Bus.InsideBusTimeSlotsList(gameTime)){
+			/*
+			if(Bus.InsideBusTimeSlotsList(gameTime)){
 			
 				Debug.Log("should be a bus");
 				Bus.GenerateBus(pos1, busPrefab, Paths);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
 			}
+			
+			
 			else if(Ambulance.InsideAmbulanceTimeSlotsList(gameTime)) {
 				Debug.Log("should be ambulance");
 				Ambulance.GenerateAmbulance(pos1, ambulancePrefab, Paths);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
 			}
+			/*
 			else if(Caravan.InsideCaravanTimeSlotsList(gameTime)) {
 				Debug.Log("should be caravan");
 				Caravan.GenerateCaravan(pos1, caravanPrefab, Paths);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
 			}
-			else if(ServiceCar.InsideServiceCarTimeSlotsList(gameTime)) {
+			
+			else*/ if(ServiceCar.InsideServiceCarTimeSlotsList(gameTime)) {
 				Debug.Log("should be a service car");
 				Texture2D tx = GetRandomTexture(4, 7);
 				ServiceCar.GenerateServiceCar(pos1, serviceCarPrefab, tx, Paths);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
 			}
+			/*
 			else if(Thief.InsideThiefTimeSlotsList(gameTime)) {
 				if(CheckAllStreetsEmptiness()){
 					Debug.Log("should be a thief");
@@ -301,13 +308,14 @@ public class GameMaster : MonoBehaviour {
 					AdjustEach15Vehicle();
 				}
 			}
-		*/	
-		//	else {
+			*/
+			
+			else {
 				Texture2D tx1 = GetRandomTexture(0, 4);
 				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, tx1, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 				vehicilesCounter++;
 				AdjustEach15Vehicle();
-		//	}
+			}
 			
 			
 			//if(instantiatThisTime){
@@ -410,64 +418,51 @@ public class GameMaster : MonoBehaviour {
 			}
 			
 		}
-		/*
+		
 		if(showBox){
 			if(eventsWarningNames[index] == "a"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Ambulance is Coming";
 				eventsSpriteGo.SetActive(true);
 				eventsSprite.spriteName = "ambulance1";
-			//	GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Ambulance is Coming" );
-				
-			//	if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-			//	showBox = !showBox;
 			}
+			/*
 			if(eventsWarningNames[index] == "b"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Bus is Coming";
 				eventsSpriteGo.SetActive(true);
 				eventsSprite.spriteName = "bus1";
-				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Bus is Coming"  );
-				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				//showBox = !showBox;
 			}
-			
+			*/
 			if(eventsWarningNames[index] == "s"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Service Car is Coming";
 				eventsSpriteGo.SetActive(true);
 				eventsSprite.spriteName = "ice";
-				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Thief is Coming" );
-				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				//showBox = !showBox;
 			}
-			
+			/*
 			if(eventsWarningNames[index] == "t"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Thief is Coming";
 				eventsSpriteGo.SetActive(true);
 				eventsSprite.spriteName = "kolu-bike";
-				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Thief is Coming" );
-				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				//showBox = !showBox;
 			}
+			*/
+			/*
 			if(eventsWarningNames[index] == "c"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Caravan is Coming";
 				eventsSpriteGo.SetActive(true);
 				eventsSprite.spriteName = "caravan1";
-				//GUI.Box(new Rect(Screen.width/2 - 20 , Screen.height/2 ,150, 100), "Caravan is Coming" );
-				//if (GUI.Button(new Rect(Screen.width/2  , Screen.height/2 +50 , 50, 20), "close"))
-				//showBox = !showBox;
 			}
 			
-			
+			*/
 			
 			Time.timeScale = 0;
 			
 		}
 		
-		*/
+		
 		
 		gameTimeVarLabel.text = gameTime+"";
 		scoreVarLabel.text = score+"";
@@ -508,13 +503,28 @@ public class GameMaster : MonoBehaviour {
 				gos[i].SetActive(false);
 			}
 			
+			GameObject [] obs = GameObject.FindGameObjectsWithTag("Finish");
+			for(int i = 0; i < obs.Length; i++){
+				obs[i].SetActive(false);
+			}
+			if(GameObject.FindGameObjectWithTag("MainCamera")!=null)
+				GameObject.FindGameObjectWithTag("MainCamera").SetActive(false);
+			
+			if(GameObject.FindGameObjectWithTag("menu") == null){
+				Instantiate(winMenu, new Vector3(0,0,0) ,Quaternion.identity);
+			}
+			//mainMenu.SetActiveRecursively(true);
+			ScoreCounting.score = score*10;
+			EventsCounter.eventsCompleted = trullyPassedEventsNum;
+			
+			
 			CancelInvoke("CountTimeDown");
-			replayButtonGo.SetActive(true);
-			closeButtonGo.SetActive(false);
-			totalScoreVarLabelGo.SetActive(true);
+			//replayButtonGo.SetActive(true);
+			//closeButtonGo.SetActive(false);
+			//totalScoreVarLabelGo.SetActive(true);
 			
 		}
-		/*
+		
 		else if(satisfyBar >= 10){
 		
 			eventWarningLabel.text =  "Traffic Jam !! ";
@@ -528,15 +538,25 @@ public class GameMaster : MonoBehaviour {
 				gos[i].SetActive(false);
 			}
 			
+			GameObject [] obs = GameObject.FindGameObjectsWithTag("Finish");
+			for(int i = 0; i < obs.Length; i++){
+				obs[i].SetActive(false);
+			}
+			if(GameObject.FindGameObjectWithTag("MainCamera")!=null)
+				GameObject.FindGameObjectWithTag("MainCamera").SetActive(false);
+			
+			if(GameObject.FindGameObjectWithTag("menu") == null){
+				Instantiate(loseMenu, new Vector3(0,0,0) ,Quaternion.identity);
+			}
+			//mainMenu.SetActiveRecursively(true);
+			ScoreCounting.score = score*10;
+			//EventsCounter.eventsCompleted = trullyPassedEventsNum;
+			
 			CancelInvoke("CountTimeDown");
-			replayButtonGo.SetActive(true);
-			closeButtonGo.SetActive(false);
-			totalScoreVarLabelGo.SetActive(true);
-		
 			
 		}
 		
-		*/
+		
 		
 		else if(gameOver){
 		
@@ -551,12 +571,21 @@ public class GameMaster : MonoBehaviour {
 				gos[i].SetActive(false);
 			}
 			
+			GameObject [] obs = GameObject.FindGameObjectsWithTag("Finish");
+			for(int i = 0; i < obs.Length; i++){
+				obs[i].SetActive(false);
+			}
+			if(GameObject.FindGameObjectWithTag("MainCamera")!=null)
+				GameObject.FindGameObjectWithTag("MainCamera").SetActive(false);
+			
+			if(GameObject.FindGameObjectWithTag("menu") == null){
+				Instantiate(loseMenu, new Vector3(0,0,0) ,Quaternion.identity);
+			}
+			//mainMenu.SetActiveRecursively(true);
+			ScoreCounting.score = score*10;
+			//EventsCounter.eventsCompleted = trullyPassedEventsNum;
+			
 			CancelInvoke("CountTimeDown");
-			replayButtonGo.SetActive(true);
-			closeButtonGo.SetActive(false);
-			totalScoreVarLabelGo.SetActive(true);
-			endGameSpriteGo.SetActive(true);
-			endGameSprite.spriteName = "car-accident-collision-md";
 		}
 		
 		else if(gameTime == 0){
@@ -572,10 +601,21 @@ public class GameMaster : MonoBehaviour {
 				gos[i].SetActive(false);
 			}
 			
+			GameObject [] obs = GameObject.FindGameObjectsWithTag("Finish");
+			for(int i = 0; i < obs.Length; i++){
+				obs[i].SetActive(false);
+			}
+			if(GameObject.FindGameObjectWithTag("MainCamera")!=null)
+				GameObject.FindGameObjectWithTag("MainCamera").SetActive(false);
+			
+			if(GameObject.FindGameObjectWithTag("menu") == null){
+				Instantiate(loseMenu, new Vector3(0,0,0) ,Quaternion.identity);
+			}
+			//mainMenu.SetActiveRecursively(true);
+			ScoreCounting.score = score*10;
+			//EventsCounter.eventsCompleted = trullyPassedEventsNum;
+			
 			CancelInvoke("CountTimeDown");
-			replayButtonGo.SetActive(true);
-			closeButtonGo.SetActive(false);
-			totalScoreVarLabelGo.SetActive(true);
 		}
 		
 		

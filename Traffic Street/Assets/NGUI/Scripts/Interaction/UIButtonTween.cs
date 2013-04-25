@@ -119,6 +119,7 @@ public class UIButtonTween : MonoBehaviour
 		if (enabled && trigger == Trigger.OnClick)
 		{
 			Play(true);
+			
 		}
 	}
 

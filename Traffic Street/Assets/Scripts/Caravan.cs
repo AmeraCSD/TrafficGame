@@ -15,13 +15,19 @@ public class Caravan : MonoBehaviour {
 	public  static void SetCaravanRandomTime(int timeBetweenEvents){
 				
 		int timeValue = 0;
+		timeValue = Random.Range(40, 50 );
+		
 		for (int i = 0 ; i<CARAVAN_HAPPEN_NUMBER; i++){
-			timeValue = Random.Range(100, 110);				//*********** I should make an enum to each level
+							//*********** I should make an enum to each level
+			timeValue -= timeBetweenEvents;
+			if(timeValue >= 50){
+				timeValue -= 5;
+			}
 			if(!caravanTimeSlots.Contains(timeValue)){
-				caravanTimeSlots.Add(timeValue - timeBetweenEvents);
-				GameMaster.eventsWarningTimes.Add(timeValue -  timeBetweenEvents+ 3);
+				caravanTimeSlots.Add(timeValue);
+				GameMaster.eventsWarningTimes.Add(timeValue);
 				GameMaster.eventsWarningNames.Add("c");
-			}	
+			}
 		}	
 		
 	}

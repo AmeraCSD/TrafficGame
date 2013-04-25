@@ -21,7 +21,7 @@ public class VehicleController : MonoBehaviour {
 	
 	//for the vehicle
 	
-	private StreetDirection _direction;
+	public  StreetDirection _direction;
 	private StreetDirection _nextDirection;
 	
 	public float speed;
@@ -98,7 +98,7 @@ public class VehicleController : MonoBehaviour {
 		_nextDirection = myVehicle.NextStreet.StreetLight.Type;
 		
 		if(vehType == VehicleType.ServiceCar){
-			serviceCarStops = ServiceCar.SetGetServiceCarRandomStops(gameMasterScript.gameTime -6, gameMasterScript.gameTime-9);
+			serviceCarStops = ServiceCar.SetGetServiceCarRandomStops(gameMasterScript.gameTime -9, gameMasterScript.gameTime-15);
 		}
 		
 	}
@@ -162,7 +162,7 @@ public class VehicleController : MonoBehaviour {
 					dequeued = true;
 					_street.VehiclesNumber --;
 					if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
-						GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
+						GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
 						gameMasterScript.satisfyBar --;
 						satisfyAdjustedOnTime = true;
 					}					
@@ -227,14 +227,18 @@ public class VehicleController : MonoBehaviour {
 	private void CheckAndDeactivateAtEnd(){
 		if(myVehicle.NextStreet == null){
 			
-		if(MathsCalculatios.CheckMyEndPosition(transform, _direction, _endPosition)){
-			gameObject.SetActive(false);
-			if(vehType == VehicleType.Normal){
-				gameMasterScript.existedVehicles.Enqueue(gameObject);
+			if(MathsCalculatios.CheckMyEndPosition(transform, _direction, _endPosition)){
+				gameObject.SetActive(false);
+				if(vehType == VehicleType.Normal){
+					gameMasterScript.existedVehicles.Enqueue(gameObject);
+				}
+				else{
+					//if(vehType != VehicleType.Ambulance)
+						gameMasterScript.trullyPassedEventsNum ++;
+				}
+				GameMaster.score += 1;
+				
 			}
-			gameMasterScript.score += 1;
-			
-		}
 		}
 		
 	}
@@ -273,7 +277,7 @@ public class VehicleController : MonoBehaviour {
 		if(vehType == VehicleType.ServiceCar){
 			if(ServiceCar.InsideServiceCarStops(serviceCarStops , gameMasterScript.gameTime)){
 				if(serviceCarStopTimer ==0){
-					serviceCarStopTimer = gameMasterScript.gameTime-3;
+					serviceCarStopTimer = gameMasterScript.gameTime-2;
 					//stop
 					//Debug.Log("Stopping the service car" + gameMasterScript.gameTime );
 					speed = 0;
@@ -307,8 +311,8 @@ public class VehicleController : MonoBehaviour {
 		if(GetMyOrderInQueue()== 0){
 			if(vehType != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
-				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(0.5f);
-				gameMasterScript.satisfyBar += 0.5f;
+				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(0.25f);
+				gameMasterScript.satisfyBar += 0.1f;
 			//	satisfyAdjustedOnTime = true;
 				stoppingTimerforAnger =0;
 				
@@ -374,8 +378,7 @@ public class VehicleController : MonoBehaviour {
 				if(hit.collider.tag == "intersection"){
 					if(hit.collider.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1){
 						haveToReduceMySpeed = false;
-						if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus)
-							speed = myVehicle.Speed;
+						
 					}
 				}
 				else
@@ -383,9 +386,12 @@ public class VehicleController : MonoBehaviour {
 			}
 		}
 		else{ 
-			if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar) && (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus))
+			if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus)
+					speed = myVehicle.Speed;
+			if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar) &&(vehType != VehicleType.Caravan)&& (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus))
 				haveToReduceMySpeed = false;
 		}
+
 	}
 	
 	void OnTriggerEnter(Collider other) {
@@ -396,11 +402,9 @@ public class VehicleController : MonoBehaviour {
 	//	if(vehType == VehicleType.Thief || other.gameObject.GetComponent<VehicleController>().vehType == VehicleType.Thief){
 			if(vehType == VehicleType.Thief){
 				GameObject.Destroy(gameObject);
-				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(1);
-				gameMasterScript.satisfyBar += 1;
+				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
+				gameMasterScript.satisfyBar -= 1;
 			}
-			
-			
 			
 	//	}
 		
@@ -422,6 +426,7 @@ public class VehicleController : MonoBehaviour {
 				haveToReduceMySpeed = false;
 				speed = myVehicle.Speed;
 			}
+			
 		}
 		
 		
