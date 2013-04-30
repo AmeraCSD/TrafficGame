@@ -23,7 +23,7 @@ public class GameMaster : MonoBehaviour {
 	private const float GAME_TIME = 150;			//should equal to 5 minutes
 	private const int WARNING_BEFORE_EVENT_SECONDS = 3;
 	
-	private const int MIN_TIME_BETWEEN_EVENTS =6;
+	private const int MIN_TIME_BETWEEN_EVENTS = 6;
 	
 	public List<Texture2D> vehiclesTextures;
 	
@@ -107,6 +107,8 @@ public class GameMaster : MonoBehaviour {
 
 	public GameObject winMenu;
 	public GameObject loseMenu;
+	
+	public bool vibrationMade = false;
 	
 	
 	private void InitGUIVariables(){
@@ -412,7 +414,7 @@ public class GameMaster : MonoBehaviour {
 		
 		if(eventsWarningTimes.Contains(gameTime)){
 			index = eventsWarningTimes.IndexOf(gameTime);
-			eventsWarningTimes[index] = -1;
+			eventsWarningTimes[index] = -1; //out of game time
 			if(!CheckAllStreetsFullness()){
 				showBox = true;
 			}
@@ -559,7 +561,12 @@ public class GameMaster : MonoBehaviour {
 		
 		
 		else if(gameOver){
-		
+			
+			if(!vibrationMade && Globals.vibrationEnabled == true){
+				Handheld.Vibrate();
+				vibrationMade = true;
+			}
+			
 			eventWarningLabel.text =  "Accident !! ";
 			
 			totalScoreLabel.text = "Total Score:";

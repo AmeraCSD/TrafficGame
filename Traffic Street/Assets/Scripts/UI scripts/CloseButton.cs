@@ -12,11 +12,13 @@ public class CloseButton : MonoBehaviour {
 	
 	void OnClick()
 	{
-		gameObject.active = false;
-		gameMasterScript.showBox = !gameMasterScript.showBox;
-		gameMasterScript.eventWarningLabel.text = "";
-		gameMasterScript.eventsSpriteGo.SetActive(false);
-		Time.timeScale = 1;
+		if(Input.touchCount <=1){
+			gameObject.active = false;
+			gameMasterScript.showBox = !gameMasterScript.showBox;
+			gameMasterScript.eventWarningLabel.text = "";
+			gameMasterScript.eventsSpriteGo.SetActive(false);
+			Time.timeScale = 1;
+		}
 	}
 
 }

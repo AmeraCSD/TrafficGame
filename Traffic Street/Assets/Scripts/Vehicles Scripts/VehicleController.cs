@@ -411,7 +411,7 @@ public class VehicleController : MonoBehaviour {
 		if(other.tag == "vehicle"){
 			other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = true;
 			other.gameObject.GetComponent<VehicleController>().speed = 0.0f;
-			gameMasterScript.gameOver = true;
+			//gameMasterScript.gameOver = true;
 		}
 		else if(other.tag == "intersection"){
 			if(other.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count >= 1){

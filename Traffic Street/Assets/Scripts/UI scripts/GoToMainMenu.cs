@@ -13,8 +13,11 @@ public class GoToMainMenu : MonoBehaviour {
 	
 	}
 	void OnClick(){
-		Time.timeScale = 1;
-		Application.LoadLevel("Main Menu");
+		
+		if(Input.touchCount <=1){
+			Time.timeScale = 1;
+			Application.LoadLevel("Main Menu");
+		}
 	
 	}
 	

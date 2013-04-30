@@ -4,7 +4,9 @@ using System.Collections;
 public class BackToMainMenuButton : MonoBehaviour {
 
 	void OnClick(){
-		Application.LoadLevel("Main Menu");	
+		if(Input.touchCount <=1){
+			Application.LoadLevel("Main Menu");
+		}
 	}
 	
 	

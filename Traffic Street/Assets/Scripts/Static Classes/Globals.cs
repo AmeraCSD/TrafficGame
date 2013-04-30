@@ -1,21 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
-public class ExitButton : MonoBehaviour {
-
+public class Globals : MonoBehaviour {
+	public static bool vibrationEnabled;
+	
+	
 	// Use this for initialization
 	void Start () {
-	
+		//vibrationEnabled = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		Debug.Log(vibrationEnabled);
 	}
-	
-	void OnClick(){
-		Debug.Log("should quit the application");
-		Application.Quit();
-	}
-	
 }

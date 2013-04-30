@@ -116,9 +116,11 @@ public class UIButtonPlayAnimation : MonoBehaviour
 
 	void OnClick ()
 	{
-		if (enabled && trigger == Trigger.OnClick)
-		{
-			Play(true);
+		if(Input.touchCount <=1){
+			if (enabled && trigger == Trigger.OnClick)
+			{
+				Play(true);
+			}
 		}
 	}
 

@@ -20,7 +20,7 @@ public class IntersectionArea : MonoBehaviour {
 			if( checkFaceToFaceVehicles(vehiclesOnMe[0].GetComponent<VehicleController>(), vehiclesOnMe[1].GetComponent<VehicleController>()) ||
 				checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
 		
-				GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().gameOver = true;
+				//GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().gameOver = true;
 			}
 			//Debug.Log(transform.position +" ---->  " +Vector3.Angle(vehiclesOnMe[0].transform.forward, vehiclesOnMe[1].transform.forward));
 		}
