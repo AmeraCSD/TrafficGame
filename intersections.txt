@@ -1,0 +1,117 @@
+intersectionsList.Add((-65.0, 5.0, -45.0));
+
+intersectionsList.Add((-55.0, 5.0, -45.0));
+
+intersectionsList.Add((-45.0, 5.0, -45.0));
+
+intersectionsList.Add((-35.0, 5.0, -45.0));
+
+intersectionsList.Add((35.0, 5.0, -45.0));
+
+intersectionsList.Add((45.0, 5.0, -45.0));
+
+intersectionsList.Add((55.0, 5.0, -45.0));
+
+intersectionsList.Add((65.0, 5.0, -45.0));
+
+intersectionsList.Add((65.0, 5.0, -25.0));
+
+intersectionsList.Add((55.0, 5.0, -25.0));
+
+intersectionsList.Add((45.0, 5.0, -25.0));
+
+intersectionsList.Add((35.0, 5.0, -25.0));
+
+intersectionsList.Add((-35.0, 5.0, -25.0));
+
+intersectionsList.Add((-45.0, 5.0, -25.0));
+
+intersectionsList.Add((-55.0, 5.0, -25.0));
+
+intersectionsList.Add((-65.0, 5.0, -35.0));
+
+intersectionsList.Add((-55.0, 5.0, -35.0));
+
+intersectionsList.Add((-45.0, 5.0, -35.0));
+
+intersectionsList.Add((-35.0, 5.0, -35.0));
+
+intersectionsList.Add((35.0, 5.0, -35.0));
+
+intersectionsList.Add((45.0, 5.0, -35.0));
+
+intersectionsList.Add((55.0, 5.0, -35.0));
+
+intersectionsList.Add((-55.0, 5.0, -15.0));
+
+intersectionsList.Add((-45.0, 5.0, -15.0));
+
+intersectionsList.Add((-35.0, 5.0, -15.0));
+
+intersectionsList.Add((35.0, 5.0, -15.0));
+
+intersectionsList.Add((45.0, 5.0, -15.0));
+
+intersectionsList.Add((55.0, 5.0, -15.0));
+
+intersectionsList.Add((65.0, 5.0, -15.0));
+
+intersectionsList.Add((55.0, 5.0, 15.0));
+
+intersectionsList.Add((45.0, 5.0, 15.0));
+
+intersectionsList.Add((35.0, 5.0, 15.0));
+
+intersectionsList.Add((-35.0, 5.0, 15.0));
+
+intersectionsList.Add((-45.0, 5.0, 15.0));
+
+intersectionsList.Add((-55.0, 5.0, 15.0));
+
+intersectionsList.Add((-65.0, 5.0, 15.0));
+
+intersectionsList.Add((-65.0, 5.0, 25.0));
+
+intersectionsList.Add((-55.0, 5.0, 25.0));
+
+intersectionsList.Add((-45.0, 5.0, 25.0));
+
+intersectionsList.Add((-35.0, 5.0, 25.0));
+
+intersectionsList.Add((35.0, 5.0, 25.0));
+
+intersectionsList.Add((45.0, 5.0, 25.0));
+
+intersectionsList.Add((55.0, 5.0, 25.0));
+
+intersectionsList.Add((65.0, 5.0, 35.0));
+
+intersectionsList.Add((55.0, 5.0, 35.0));
+
+intersectionsList.Add((45.0, 5.0, 35.0));
+
+intersectionsList.Add((35.0, 5.0, 35.0));
+
+intersectionsList.Add((-35.0, 5.0, 35.0));
+
+intersectionsList.Add((-45.0, 5.0, 35.0));
+
+intersectionsList.Add((-55.0, 5.0, 35.0));
+
+intersectionsList.Add((-65.0, 5.0, 45.0));
+
+intersectionsList.Add((-55.0, 5.0, 45.0));
+
+intersectionsList.Add((-45.0, 5.0, 45.0));
+
+intersectionsList.Add((-35.0, 5.0, 45.0));
+
+intersectionsList.Add((35.0, 5.0, 45.0));
+
+intersectionsList.Add((45.0, 5.0, 45.0));
+
+intersectionsList.Add((55.0, 5.0, 45.0));
+
+intersectionsList.Add((65.0, 5.0, 45.0));
+
+intersectionsList.Add((85.0, 5.0, -85.0));

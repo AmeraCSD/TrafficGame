@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class VehicleController : MonoBehaviour {
 	
+	public bool ImTheOneToMove;
 	private int curScore;
  
 	public Vehicle myVehicle;
@@ -74,6 +75,8 @@ public class VehicleController : MonoBehaviour {
 		haveToReduceMySpeed = false;
 		busStopTimer = 0;
 		serviceCarStopTimer = 0;
+		
+		ImTheOneToMove = false;
 	}
 	
 	void Start () {
@@ -312,7 +315,7 @@ public class VehicleController : MonoBehaviour {
 			if(vehType != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(0.25f);
-				gameMasterScript.satisfyBar += 0.1f;
+				gameMasterScript.satisfyBar += 0.25f;
 			//	satisfyAdjustedOnTime = true;
 				stoppingTimerforAnger =0;
 				
@@ -343,7 +346,7 @@ public class VehicleController : MonoBehaviour {
 			ReduceMeIfHit(ray);
 		}
 		else if(_direction == StreetDirection.Right){
-    		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
+    		transform.localRotation = Quaternion.AngleAxis(0, Vector3.up);
 			transform.Translate(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.right);
@@ -409,8 +412,13 @@ public class VehicleController : MonoBehaviour {
 	//	}
 		
 		if(other.tag == "vehicle"){
-			other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = true;
-			other.gameObject.GetComponent<VehicleController>().speed = 0.0f;
+			if(other.gameObject.GetComponent<VehicleController>().ImTheOneToMove){
+				other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = true;
+				other.gameObject.GetComponent<VehicleController>().speed = 0.0f;
+			}
+			else{
+				ImTheOneToMove = true;
+			}
 			//gameMasterScript.gameOver = true;
 		}
 		else if(other.tag == "intersection"){
@@ -439,8 +447,10 @@ public class VehicleController : MonoBehaviour {
 			Debug.Log("on trigger exit");
 			other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = false;
 			other.gameObject.GetComponent<VehicleController>().speed = myVehicle.Speed;			//speed = myVehicle.Speed;
+			ImTheOneToMove = false;
 		}
 		//Debug.Log ("speed " + speed);
+		
 	
    	}
 	

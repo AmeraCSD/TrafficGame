@@ -2,7 +2,24 @@ using UnityEngine;
 using System.Collections;
 
 public class MathsCalculatios  {
-
+	
+	public static Vector3 GetApproximatedPosition(Vector3 position){
+		int xPos  ;
+		xPos = Mathf.Abs((((int)(position.x * .1)) * 10))+5;
+		if(position.x < 0){
+			xPos *= -1;
+		}
+		
+		int zPos  ;
+		zPos = Mathf.Abs((((int)(position.z * .1)) * 10))+5;
+		if(position.z < 0){
+			zPos *= -1;
+		}
+		
+		return new Vector3((float)xPos, 5, (float)zPos );
+		
+	}
+	
 	public static float getVehicleLargeSize(GameObject v){
 		
 		if(v.transform.localScale.x > v.transform.localScale.z)

@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Globals : MonoBehaviour {
 	public static bool vibrationEnabled;
+	public static float STREET_WIDTH = 23;
+	
+	
 	
 	
 	// Use this for initialization

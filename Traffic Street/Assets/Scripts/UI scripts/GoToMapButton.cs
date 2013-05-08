@@ -4,6 +4,6 @@ using System.Collections;
 public class GoToMapButton : MonoBehaviour {
 
 	void OnClick(){
-		Application.LoadLevel("Level 2");	
+		Application.LoadLevel("Map 1");	
 	}
 }

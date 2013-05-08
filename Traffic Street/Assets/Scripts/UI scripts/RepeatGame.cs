@@ -14,7 +14,7 @@ public class RepeatGame : MonoBehaviour {
 	}
 	void OnClick(){
 		Time.timeScale =1;
-		Application.LoadLevel("Level 2");
+		Application.LoadLevel(Application.loadedLevelName);
 	
 	}
 }

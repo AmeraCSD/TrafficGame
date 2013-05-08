@@ -34,7 +34,7 @@ public class LightsGamer : MonoBehaviour {
 		 
 		initVariablesAtStart();
 
-		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<StreetsGenerator>().getStreets(); //To get the streets in the whole game here in one list
+		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<MapGenerator>().getStreets(); //To get the streets in the whole game here in one list
 
 		InitLightsColors();		
 		
@@ -84,24 +84,44 @@ public class LightsGamer : MonoBehaviour {
 	//this method changes each level
 	private void PutOnHoldOnMouseHit(RaycastHit hit){
 		
-		if(hit.collider.gameObject.tag == "lightLeft"){
+		if(hit.collider.gameObject.tag == "lightRight"){
 			PutStateOnHold(Streets[0]);
 			PutStateOnHold(Streets[1]);
 		}
 		
+		if(hit.collider.gameObject.tag == "lightRight1"){
+			PutStateOnHold(Streets[24]);
+			PutStateOnHold(Streets[25]);
+		}
+		
+		if(hit.collider.gameObject.tag == "lightLeft"){
+			PutStateOnHold(Streets[12]);
+			PutStateOnHold(Streets[13]);
+		}
+		
 		if(hit.collider.gameObject.tag == "lightLeft1"){
+			PutStateOnHold(Streets[30]);
+			PutStateOnHold(Streets[31]);
+		}
+		
+		if(hit.collider.gameObject.tag == "lightUp1"){
 			PutStateOnHold(Streets[4]);
 			PutStateOnHold(Streets[5]);
 		}
 		
 		if(hit.collider.gameObject.tag == "lightUp"){
-			PutStateOnHold(Streets[8]);
-			PutStateOnHold(Streets[9]);
+			PutStateOnHold(Streets[10]);
+			PutStateOnHold(Streets[11]);
 		}
 		
-		if(hit.collider.gameObject.tag == "lightUp1"){
-			PutStateOnHold(Streets[12]);
-			PutStateOnHold(Streets[13]);
+		if(hit.collider.gameObject.tag == "lightDown1"){
+			PutStateOnHold(Streets[32]);
+			PutStateOnHold(Streets[33]);
+		}
+		
+		if(hit.collider.gameObject.tag == "lightDown"){
+			PutStateOnHold(Streets[36]);
+			PutStateOnHold(Streets[37]);
 		}
 		
 	}
