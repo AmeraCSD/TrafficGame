@@ -326,6 +326,16 @@ public class MapsData : MonoBehaviour {
 		tempPath.Add(Streets[38]);
 		
 		Paths.Add(new GamePath(tempPath, Streets[25].StartPoint , Streets[38].EndPoint, false));
+		
+		//path 19
+		tempPath = new List<Street>();
+		tempPath.Add(Streets[24]);
+		tempPath.Add(Streets[16]);
+		tempPath.Add(Streets[2]);
+		
+		Paths.Add(new GamePath(tempPath, Streets[24].StartPoint , Streets[2].EndPoint, false));
+		
+		
 			
 		
 		return Paths;

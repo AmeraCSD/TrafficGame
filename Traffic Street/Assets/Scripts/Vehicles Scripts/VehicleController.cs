@@ -10,7 +10,7 @@ public class VehicleController : MonoBehaviour {
 	private int curScore;
  
 	public Vehicle myVehicle;
-	
+	private float angerMount;
 	//for the street
 	private Street _street;
 	private GamePath _path;
@@ -55,7 +55,7 @@ public class VehicleController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Awake(){
-		 
+		angerMount = .25f;
 		initInstancesAtFirst();
 		
 		
@@ -305,24 +305,53 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void CheckMyAnger(){
-		if(speed == 0 && GetMyOrderInQueue()== 0){
+		if(speed == 0 && GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped){
+			SetLightTimer();
 				if(! stoppingTimerforAngerSet){
-					stoppingTimerforAnger = gameMasterScript.gameTime - 13 ;
+					stoppingTimerforAnger = gameMasterScript.gameTime - 15 ;
 					stoppingTimerforAngerSet = true;
 				}
 		}
-		if(GetMyOrderInQueue()== 0){
+		if(GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped ){
 			if(vehType != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
-				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(0.25f);
-				gameMasterScript.satisfyBar += 0.25f;
+				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(angerMount);
+				gameMasterScript.satisfyBar += angerMount;
 			//	satisfyAdjustedOnTime = true;
 				stoppingTimerforAnger =0;
-				
+				angerMount *= 2;
 			}
 		}
 	}
 	
+	public void SetLightTimer(){
+		if(_street.StreetLight.tLight!= null ){
+			if(_street.StreetLight.tLight.tag == "lightLeft"){
+				GameObject.FindGameObjectWithTag("timerLightLeft").GetComponent<LightTimerManager>().startTimer = true;
+			}
+			else if(_street.StreetLight.tLight.tag == "lightLeft1"){
+				GameObject.FindGameObjectWithTag("timerLightLeft1").GetComponent<LightTimerManager>().startTimer = true;
+			}
+			else if(_street.StreetLight.tLight.tag == "lightRight"){
+				GameObject.FindGameObjectWithTag("timerLightRight").GetComponent<LightTimerManager>().startTimer = true;
+			}
+			else if(_street.StreetLight.tLight.tag == "lightRight1"){
+				GameObject.FindGameObjectWithTag("timerLightRight1").GetComponent<LightTimerManager>().startTimer = true;
+			}
+			else if(_street.StreetLight.tLight.tag == "lightUp"){
+				GameObject.FindGameObjectWithTag("timerLightUp").GetComponent<LightTimerManager>().startTimer = true;
+			}
+			else if(_street.StreetLight.tLight.tag == "lightUp1"){
+				GameObject.FindGameObjectWithTag("timerLightUp1").GetComponent<LightTimerManager>().startTimer = true;
+			}
+			else if(_street.StreetLight.tLight.tag == "lightDown"){
+				GameObject.FindGameObjectWithTag("timerLightDown").GetComponent<LightTimerManager>().startTimer = true;
+			}
+			else if(_street.StreetLight.tLight.tag == "lightDown1"){
+				GameObject.FindGameObjectWithTag("timerLightDown1").GetComponent<LightTimerManager>().startTimer = true;
+			}
+		}
+	}
 	
 	private int GetMyOrderInQueue(){
 		object [] array  = _myQueue.ToArray();

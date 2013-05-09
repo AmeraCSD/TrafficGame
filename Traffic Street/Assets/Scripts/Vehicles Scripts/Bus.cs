@@ -19,17 +19,17 @@ public class Bus : MonoBehaviour {
 	public static void SetBusRandomTime(int timeBetweenEvents){
 			
 		int timeValue = 0;
-		timeValue = Random.Range(90, 100 );
+		timeValue = Random.Range(130, 140);
 		
 		for (int i = 0 ; i<BUS_HAPPEN_NUMBER; i++){
 							//*********** I should make an enum to each level
 			timeValue -= timeBetweenEvents;
-			if(timeValue >= 100){
+			if(timeValue >= 140){
 				timeValue -= 5;
 			}
 			if(!busTimeSlots.Contains(timeValue)){
 				busTimeSlots.Add(timeValue);
-				GameMaster.eventsWarningTimes.Add(timeValue);
+				GameMaster.eventsWarningTimes.Add(timeValue+5);
 				GameMaster.eventsWarningNames.Add("b");
 			}
 		}	
@@ -61,7 +61,7 @@ public class Bus : MonoBehaviour {
 					
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Bus, 
-																						18.0f, 
+																						12.0f, 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
 																						Paths[pos].PathStreets[0].StreetLight.Type, 
 																						Paths[pos].PathStreets[0], 

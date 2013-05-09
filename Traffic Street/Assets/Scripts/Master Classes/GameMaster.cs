@@ -67,7 +67,7 @@ public class GameMaster : MonoBehaviour {
 	
 	
 	public GameObject eventWarningLabelGo;
-	public GameObject closeButtonGo;
+//	public GameObject closeButtonGo;
 	public GameObject gameTimeLabelGo;
 	public GameObject gameTimeVarLabelGo;
 	public GameObject scoreLabelGo;
@@ -75,7 +75,7 @@ public class GameMaster : MonoBehaviour {
 	public GameObject satisfyBarLabelGo;
 	
 	public UILabel eventWarningLabel;
-	public UIButton closeButton;
+	//public UIButton closeButton;
 	private UILabel gameTimeLabel;
 	private UILabel gameTimeVarLabel;
 	private UILabel scoreLabel;
@@ -96,8 +96,8 @@ public class GameMaster : MonoBehaviour {
 	public GameObject replayButtonGo;
 	public UIButton replayButton;
 	
-	public GameObject eventsSpriteGo;
-	private UISlicedSprite eventsSprite;
+	//public GameObject eventsSpriteGo;
+	//private UISlicedSprite eventsSprite;
 	
 	public GameObject endGameSpriteGo;
 	private UISlicedSprite endGameSprite;
@@ -113,8 +113,8 @@ public class GameMaster : MonoBehaviour {
 	
 	private void InitGUIVariables(){
 		eventWarningLabel = eventWarningLabelGo.GetComponent<UILabel>();
-		closeButton = closeButtonGo.GetComponent<UIButton>();
-		closeButtonGo.SetActive(false);
+//		closeButton = closeButtonGo.GetComponent<UIButton>();
+//		closeButtonGo.SetActive(false);
 		
 		gameTimeLabel = gameTimeLabelGo.GetComponent<UILabel>();
 		gameTimeVarLabel = gameTimeVarLabelGo.GetComponent<UILabel>();
@@ -131,8 +131,8 @@ public class GameMaster : MonoBehaviour {
 		replayButton = replayButtonGo.GetComponent<UIButton>();
 		replayButtonGo.SetActive(false);
 		
-		eventsSprite = eventsSpriteGo.GetComponent<UISlicedSprite>();
-		eventsSpriteGo.SetActive(false);
+		//eventsSprite = eventsSpriteGo.GetComponent<UISlicedSprite>();
+		//eventsSpriteGo.SetActive(false);
 		
 		//endGameSprite = endGameSpriteGo.GetComponent<UISlicedSprite>();
 		//endGameSpriteGo.SetActive(false);
@@ -221,10 +221,10 @@ public class GameMaster : MonoBehaviour {
 	
 	private void SetEventsRandomTime(){
 		
-	//	Bus.SetBusRandomTime(MIN_TIME_BETWEEN_EVENTS);
-	//	Ambulance.SetAmbulanceRandomTime(MIN_TIME_BETWEEN_EVENTS);
+		Bus.SetBusRandomTime(MIN_TIME_BETWEEN_EVENTS);
+		Ambulance.SetAmbulanceRandomTime(MIN_TIME_BETWEEN_EVENTS);
 	//	Caravan.SetCaravanRandomTime(MIN_TIME_BETWEEN_EVENTS);
-		ServiceCar.SetServiceCarRandomTime(MIN_TIME_BETWEEN_EVENTS);
+	//	ServiceCar.SetServiceCarRandomTime(MIN_TIME_BETWEEN_EVENTS);
 		//Thief.SetThiefRandomTime(MIN_TIME_BETWEEN_EVENTS);
 	}
 	
@@ -272,17 +272,25 @@ public class GameMaster : MonoBehaviour {
 					pos1 = Random.Range(0, Paths.Count);
 			}
 			randomsList.Add(pos1);
-			/*
-			if(Bus.InsideBusTimeSlotsList(gameTime)){
 			
+			if(Bus.InsideBusTimeSlotsList(gameTime)){
+				vibrationMade = false;
+				showBox = false;
+				eventWarningLabelGo.SetActive(false);
+				//eventWarningLabel.text = "";
 				Debug.Log("should be a bus");
 				Bus.GenerateBus(pos1, busPrefab, Paths);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
+				
 			}
 			
 			
 			else if(Ambulance.InsideAmbulanceTimeSlotsList(gameTime)) {
+				vibrationMade = false;
+				showBox = false;
+				eventWarningLabelGo.SetActive(false);
+				eventWarningLabel.text = "";
 				Debug.Log("should be ambulance");
 				Ambulance.GenerateAmbulance(pos1, ambulancePrefab, Paths);
 				vehicilesCounter ++;
@@ -296,13 +304,14 @@ public class GameMaster : MonoBehaviour {
 				AdjustEach15Vehicle();
 			}
 			
-			else*/ if(ServiceCar.InsideServiceCarTimeSlotsList(gameTime)) {
+			else if(ServiceCar.InsideServiceCarTimeSlotsList(gameTime)) {
 				Debug.Log("should be a service car");
 				Texture2D tx = GetRandomTexture(4, 7);
 				ServiceCar.GenerateServiceCar(pos1, serviceCarPrefab, tx, Paths);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
 			}
+			*/
 			/*
 			else if(Thief.InsideThiefTimeSlotsList(gameTime)) {
 				if(CheckAllStreetsEmptiness()){
@@ -379,6 +388,7 @@ public class GameMaster : MonoBehaviour {
 					AdjustEach15Vehicle();
 				}
 			}
+			
 			/*
 			int pos5 = Random.Range(0, Paths.Count);
 			if(!CheckAllStreetsFullness()){
@@ -416,8 +426,8 @@ public class GameMaster : MonoBehaviour {
 					AdjustEach15Vehicle();
 				}
 			}
-			*/
 			
+			*/
 		}
 	}
 	
@@ -516,26 +526,40 @@ public class GameMaster : MonoBehaviour {
 		
 		if(showBox){
 			if(eventsWarningNames[index] == "a"){
-				closeButtonGo.SetActive(true);
-				eventWarningLabel.text = "Ambulance is Coming";
-				eventsSpriteGo.SetActive(true);
-				eventsSprite.spriteName = "ambulance1";
+				//closeButtonGo.SetActive(true);
+				
+				eventWarningLabelGo.SetActive(true);
+			//	vibrationMade = false;
+				if(!vibrationMade && Globals.vibrationEnabled == true){
+					Handheld.Vibrate();
+					vibrationMade = true;
+				}
+				eventWarningLabel.text = "Ambulance is Coming from the West";
+				//eventsSpriteGo.SetActive(true);
+				//eventsSprite.spriteName = "ambulance1";
 			}
-			/*
+			
 			if(eventsWarningNames[index] == "b"){
-				closeButtonGo.SetActive(true);
+			//	vibrationMade = false;
+				if(!vibrationMade && Globals.vibrationEnabled == true){
+					Handheld.Vibrate();
+					vibrationMade = true;
+				}
+				//closeButtonGo.SetActive(true);
+				eventWarningLabelGo.SetActive(true);
 				eventWarningLabel.text = "Bus is Coming";
-				eventsSpriteGo.SetActive(true);
-				eventsSprite.spriteName = "bus1";
+				//eventsSpriteGo.SetActive(true);
+				//eventsSprite.spriteName = "bus1";
 			}
-			*/
+			
+			/*
 			if(eventsWarningNames[index] == "s"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Service Car is Coming";
 				eventsSpriteGo.SetActive(true);
 				eventsSprite.spriteName = "ice";
 			}
-			/*
+			
 			if(eventsWarningNames[index] == "t"){
 				closeButtonGo.SetActive(true);
 				eventWarningLabel.text = "Thief is Coming";
@@ -553,7 +577,7 @@ public class GameMaster : MonoBehaviour {
 			
 			*/
 			
-			Time.timeScale = 0;
+			//Time.timeScale = 0;
 			
 		}
 		
@@ -652,7 +676,7 @@ public class GameMaster : MonoBehaviour {
 		}
 		
 		
-		
+	/*	
 		else if(gameOver){
 			
 			if(!vibrationMade && Globals.vibrationEnabled == true){
@@ -660,7 +684,6 @@ public class GameMaster : MonoBehaviour {
 				vibrationMade = true;
 			}
 			
-			eventWarningLabel.text =  "Accident !! ";
 			
 			totalScoreLabel.text = "Total Score:";
 			totalScoreVarLabel.text = score+"";
@@ -681,16 +704,14 @@ public class GameMaster : MonoBehaviour {
 			if(GameObject.FindGameObjectWithTag("menu") == null){
 				Instantiate(loseMenu, new Vector3(0,0,0) ,Quaternion.identity);
 			}
-			//mainMenu.SetActiveRecursively(true);
 			ScoreCounting.score = score*10;
 			//EventsCounter.eventsCompleted = trullyPassedEventsNum;
 			
 			CancelInvoke("CountTimeDown");
 		}
-		
+		*/
 		else if(gameTime == 0){
 		
-			eventWarningLabel.text =  "Game Over !! ";
 			
 			totalScoreLabel.text = "Total Score:";
 			totalScoreVarLabel.text = score+"";

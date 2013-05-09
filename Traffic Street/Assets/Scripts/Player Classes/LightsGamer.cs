@@ -16,6 +16,8 @@ public class LightsGamer : MonoBehaviour {
 	private TrafficLight _left;
 	private TrafficLight _right;
 	
+	private const int MAX_OPENED_LIGHTS = 4;
+	
 	
 	public const float MIN_VEHICLE_SPEED = 23.0f;		//this should be in the global class 
 	
@@ -25,13 +27,20 @@ public class LightsGamer : MonoBehaviour {
 	private float timer;
 	private float checkedTimer;
 	
+	public List<GameObject> currentlyOpenedLights;
+	
+	public GameObject youCantOpenLightLabelGo;
+	//private UILabel youCantOpenLightLabel;
+	
 	void Awake(){
+		youCantOpenLightLabelGo.SetActive(false);
+	//	youCantOpenLightLabel = youCantOpenLightLabelGo.GetComponent<UILabel>();
 	}
 	
 	
 	// Use this for initialization
 	void Start () {
-		 
+		currentlyOpenedLights = new List<GameObject>();
 		initVariablesAtStart();
 
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<MapGenerator>().getStreets(); //To get the streets in the whole game here in one list
@@ -75,9 +84,27 @@ public class LightsGamer : MonoBehaviour {
 			Ray ray = (GameObject.FindGameObjectWithTag("MainCamera")).camera.ScreenPointToRay(Input.mousePosition);
     		RaycastHit hit ;
     		if (Physics.Raycast(ray, out hit)){
-				timer = Time.time ;
-				PutOnHoldOnMouseHit(hit);
-   			 }	
+				if(hit.collider.gameObject.renderer.material.color == Color.red){
+					if(currentlyOpenedLights.Count < MAX_OPENED_LIGHTS){
+						currentlyOpenedLights.Add(hit.collider.gameObject);
+						timer = Time.time ;
+						PutOnHoldOnMouseHit(hit);
+					}
+					else{
+						Debug.Log("you cannot do thisssss");
+						youCantOpenLightLabelGo.SetActive(true);
+					}
+					
+				}
+				else if(hit.collider.gameObject.renderer.material.color == Color.green){
+					youCantOpenLightLabelGo.SetActive(false);
+					if(currentlyOpenedLights.Contains(hit.collider.gameObject)){
+						currentlyOpenedLights.Remove(hit.collider.gameObject);
+					}
+					timer = Time.time ;
+					PutOnHoldOnMouseHit(hit);
+				}
+   			}	
 		}
 	}
 	

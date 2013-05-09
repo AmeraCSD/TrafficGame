@@ -9,7 +9,7 @@ public class CloseButton : MonoBehaviour {
 		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
 		//gameObject.active = false;
 	}
-	
+	/*
 	void OnClick()
 	{
 		if(Input.touchCount <=1){
@@ -20,5 +20,6 @@ public class CloseButton : MonoBehaviour {
 			Time.timeScale = 1;
 		}
 	}
+	*/
 
 }

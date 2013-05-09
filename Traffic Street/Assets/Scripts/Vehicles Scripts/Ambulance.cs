@@ -15,17 +15,16 @@ public class Ambulance : MonoBehaviour {
 	public  static void SetAmbulanceRandomTime(int timeBetweenEvents){
 				
 		int timeValue = 0;
-		timeValue = Random.Range(60, 70 );
+		timeValue = Random.Range(120, 130 );
 		
 		for (int i = 0 ; i<AMBULANCE_HAPPEN_NUMBER; i++){
-							//*********** I should make an enum to each level
 			timeValue -= timeBetweenEvents;
-			if(timeValue >= 70){
+			if(timeValue >= 130){
 				timeValue -= 5;
 			}
 			if(!ambulanceTimeSlots.Contains(timeValue)){
 				ambulanceTimeSlots.Add(timeValue);
-				GameMaster.eventsWarningTimes.Add(timeValue);
+				GameMaster.eventsWarningTimes.Add(timeValue+5);
 				GameMaster.eventsWarningNames.Add("a");
 			}
 		}	
@@ -50,20 +49,20 @@ public class Ambulance : MonoBehaviour {
 			if(ambulancePrefab != null){
 				
 				GameObject vehicle;
-					vehicle = Instantiate(ambulancePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
-					Paths[pos].PathStreets[0].VehiclesNumber ++;
+					vehicle = Instantiate(ambulancePrefab, Paths[Paths.Count-1].GenerationPointPosition ,Quaternion.identity) as GameObject;
+					Paths[Paths.Count-1].PathStreets[0].VehiclesNumber ++;
 					//vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
-					vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
+					vehicle.name = "Street # "+Paths[Paths.Count-1].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 					
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Ambulance, 
 																						29.0f, 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
-																						Paths[pos].PathStreets[0].StreetLight.Type, 
-																						Paths[pos].PathStreets[0], 
-																						Paths[pos].PathStreets[1], 
+																						Paths[Paths.Count-1].PathStreets[0].StreetLight.Type, 
+																						Paths[Paths.Count-1].PathStreets[0], 
+																						Paths[Paths.Count-1].PathStreets[1], 
 																						0,
-																						Paths[pos]);
+																						Paths[Paths.Count-1]);
 				
 			}
 			

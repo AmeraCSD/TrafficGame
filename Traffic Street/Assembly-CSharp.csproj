@@ -169,6 +169,7 @@
      <Compile Include="Assets\Scripts\Map Objects Classes\BusStation.cs" />
      <Compile Include="Assets\Scripts\Map Objects Classes\IntersectionArea.cs" />
      <Compile Include="Assets\Scripts\Map Objects Classes\IntersectionsProducer.cs" />
+     <Compile Include="Assets\Scripts\Map Objects Classes\LightTimerManager.cs" />
      <Compile Include="Assets\Scripts\Map Objects Classes\MapProducer.cs" />
      <Compile Include="Assets\Scripts\Master Classes\GameMaster.cs" />
      <Compile Include="Assets\Scripts\Master Classes\MapGenerator.cs" />
