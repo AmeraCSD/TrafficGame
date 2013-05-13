@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 /*
  This class is the base class for the 4 traffic lights
 
@@ -11,6 +11,7 @@ public class TrafficLight   : MonoBehaviour{
 	private GameObject _light;
 	private bool _stopped;
 	private bool _onHold;
+	private List<Street> _attachedStreets;
 	
 	
 	public TrafficLight(StreetDirection n, GameObject light, bool stopped){
@@ -40,7 +41,10 @@ public class TrafficLight   : MonoBehaviour{
 		set{_onHold = value;}
 	}
 	
-	
+	public List<Street> AttachedStreets{
+		get{return _attachedStreets;}
+		set{_attachedStreets = value;}
+	}
 	
 }
 

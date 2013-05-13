@@ -7,16 +7,18 @@ public class Level : MonoBehaviour {
 	private int _id;
 	private Map _map;
 	private float _normalVehicleSpeed;
+	private int _instantiationRate;
 	private int _minScore;
 	private float _gameTime;
 	private List<VehicleType> _levelEvents;
 	private List<int> _eventsNumbers;
 	private EventRanges _eventsRangsObject;
 	
-	public Level(int anId, Map aMap, float theNormalVehicleSpeed, int theMinScore, float theGameTime, List<VehicleType> theLevelEvents, List<int> theEventsNumbers, EventRanges theEventsRangsObject){
+	public Level(int anId, Map aMap, float theNormalVehicleSpeed,int theInstantiationRate, int theMinScore, float theGameTime, List<VehicleType> theLevelEvents, List<int> theEventsNumbers, EventRanges theEventsRangsObject){
 		_id = anId;
 		_map = aMap;
 		_normalVehicleSpeed = theNormalVehicleSpeed;
+		_instantiationRate = theInstantiationRate;
 		_minScore = theMinScore;
 		_gameTime = theGameTime;
 		_levelEvents = theLevelEvents;
@@ -37,6 +39,11 @@ public class Level : MonoBehaviour {
 	public float NormalVehicleMap{
 		get{return _normalVehicleSpeed;}
 		set{_normalVehicleSpeed = value;}
+	}
+	
+	public int InstatiationRate{
+		get{return _instantiationRate;}
+		set{_instantiationRate = value;}
 	}
 	
 	public int MinScore{

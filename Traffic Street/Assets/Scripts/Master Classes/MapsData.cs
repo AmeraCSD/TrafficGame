@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 public class MapsData : MonoBehaviour {
 	
-	private List<TrafficLight> lights;
+	private List<TrafficLight> Map1Lights;
 	private List<Street> Streets;
 	
 	
@@ -58,7 +58,7 @@ public class MapsData : MonoBehaviour {
 	
 	
 	public List<Street> GetMap1Streets(){
-		lights = new List<TrafficLight>();
+		Map1Lights = new List<TrafficLight>();
 		Streets = new List<Street>();
 		
 		string [] lines = SplitStringOnLines(Map1FileString);
@@ -87,6 +87,7 @@ public class MapsData : MonoBehaviour {
 									
 		}
 		
+		Map1AttachStreetsToLights();
 		return Streets;
 	}
 	
@@ -152,11 +153,13 @@ public class MapsData : MonoBehaviour {
 		intersectionsList.Add(new Vector3(45.0f, 5.0f, 45.0f));
 		intersectionsList.Add(new Vector3(55.0f, 5.0f, 45.0f));
 		intersectionsList.Add(new Vector3(65.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(85.0f, 5.0f, -85.0f));
+		intersectionsList.Add(new Vector3(85.0f, 5.0f, -85.0f));	
 
 		
 		return intersectionsList;
 	}
+	
+	
 	
 	public List<GamePath> GetMap1Paths(){
 		
@@ -341,14 +344,6 @@ public class MapsData : MonoBehaviour {
 		return Paths;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	private string [] SplitStringOnLines(string str){
 		char[] delimiters = new char[] { '\n' };
 		string[] lines = str.Split(delimiters);
@@ -394,10 +389,10 @@ public class MapsData : MonoBehaviour {
 			int index = ContainsLight(go);
 			if(index == -1){
 				light = new TrafficLight(direction, go, stopped);
-				lights.Add(light);
+				Map1Lights.Add(light);
 			}
 			else{
-				light = lights[index];
+				light = Map1Lights[index];
 			}
 		}
 		
@@ -405,33 +400,79 @@ public class MapsData : MonoBehaviour {
 	}
 	
 	private int ContainsLight(GameObject go){
-		//if(go == null){
-		//	return -1;	
-		//}
-		for(int i=0; i<lights.Count; i++){
-		//	if(lights[i].tLight == null){
-		//		return -1;
-		//	}
-			if(lights[i].tLight.Equals(go)){
+		for(int i=0; i<Map1Lights.Count; i++){
+			if(Map1Lights[i].tLight.Equals(go)){
 				return i;
 			}
 		}
 		return -1;
 	}
 	
-//	private string[] GetString(){
-		
 	//}
 	// Use this for initialization
+	
+	public List<TrafficLight> GetMap1Lights(){
+		Map1AttachStreetsToLights();
+		//Debug.Log("hereeeeeeeeeeeeeeeeeeeeeeee    "+Map1Lights.Count);
+		return Map1Lights;
+	}
+	
+	
+	private void Map1AttachStreetsToLights(){
+		List<Street> temp;
+		for(int i= 0; i<Map1Lights.Count; i++){
+			temp = new List<Street>();
+			if(Map1Lights[i].tLight.tag == "lightRight"){
+				temp.Add(Streets[0]);
+				temp.Add(Streets[1]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+			else if(Map1Lights[i].tLight.tag == "lightRight1"){
+				temp.Add(Streets[24]);
+				temp.Add(Streets[25]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+			else if(Map1Lights[i].tLight.tag == "lightLeft"){
+				temp.Add(Streets[12]);
+				temp.Add(Streets[13]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+			else if(Map1Lights[i].tLight.tag == "lightLeft1"){
+				temp.Add(Streets[30]);
+				temp.Add(Streets[31]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+			else if(Map1Lights[i].tLight.tag == "lightUp1"){
+				temp.Add(Streets[4]);
+				temp.Add(Streets[5]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+			else if(Map1Lights[i].tLight.tag == "lightUp"){
+				temp.Add(Streets[10]);
+				temp.Add(Streets[11]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+			else if(Map1Lights[i].tLight.tag == "lightDown1"){
+				temp.Add(Streets[32]);
+				temp.Add(Streets[33]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+			else if(Map1Lights[i].tLight.tag == "lightDown"){
+				temp.Add(Streets[36]);
+				temp.Add(Streets[37]);
+				Map1Lights[i].AttachedStreets = temp;
+			}
+		}
+	}
+	
 	void Start () {
 		
-		lights = new List<TrafficLight>();
+		
 		
 		char[] delimiters = new char[]{','};
 		Debug.Log(float.Parse("-45.0)".Substring(0, "-45.0)".IndexOf(')')-1)));
 		Debug.Log("(-125.0, 5.0, -45.0)".Split(delimiters)[1]);
 		Debug.Log("(-125.0, 5.0, -45.0)".Split(delimiters)[2]);
-		
 	}
 	
 	// Update is called once per frame

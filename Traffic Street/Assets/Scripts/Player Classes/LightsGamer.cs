@@ -16,6 +16,8 @@ public class LightsGamer : MonoBehaviour {
 	private TrafficLight _left;
 	private TrafficLight _right;
 	
+	public List<TrafficLight> lights;
+	
 	private const int MAX_OPENED_LIGHTS = 4;
 	
 	
@@ -43,9 +45,10 @@ public class LightsGamer : MonoBehaviour {
 		currentlyOpenedLights = new List<GameObject>();
 		initVariablesAtStart();
 
-		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<MapGenerator>().getStreets(); //To get the streets in the whole game here in one list
-
-		InitLightsColors();		
+		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().Streets; //To get the streets in the whole game here in one list
+		lights = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().Lights;
+		Debug.Log("come onnnnn hereeeeeeeeeeeeeeee " + lights.Count);
+		InitLightsColors();	
 		
 	}
 	
@@ -81,6 +84,7 @@ public class LightsGamer : MonoBehaviour {
 	
 	private void OnMousePressed(){
 		if(Input.GetMouseButtonDown(0)){
+			
 			Ray ray = (GameObject.FindGameObjectWithTag("MainCamera")).camera.ScreenPointToRay(Input.mousePosition);
     		RaycastHit hit ;
     		if (Physics.Raycast(ray, out hit)){
@@ -111,6 +115,14 @@ public class LightsGamer : MonoBehaviour {
 	//this method changes each level
 	private void PutOnHoldOnMouseHit(RaycastHit hit){
 		
+		int index = ContainsLight(hit.collider.gameObject);
+		Debug.Log("the index is "+ index);
+		if(index != -1){
+			for(int i=0; i<lights[index].AttachedStreets.Count; i++){
+				PutStateOnHold(lights[index].AttachedStreets[i]);
+			}
+		}
+		/*
 		if(hit.collider.gameObject.tag == "lightRight"){
 			PutStateOnHold(Streets[0]);
 			PutStateOnHold(Streets[1]);
@@ -150,9 +162,18 @@ public class LightsGamer : MonoBehaviour {
 			PutStateOnHold(Streets[36]);
 			PutStateOnHold(Streets[37]);
 		}
+		*/
 		
 	}
 	
+	private int ContainsLight(GameObject go){
+		for(int i=0; i<lights.Count; i++){
+			if(lights[i].tLight.Equals(go)){
+				return i;
+			}
+		}
+		return -1;
+	}
 	
 	//this method called when we hold on a state .. it enqueues the holded light street and the current time + the time it has to change the state in 
 	//(the calculations of the timer are based on street width and the minimum speed of the slowest vehicle)
