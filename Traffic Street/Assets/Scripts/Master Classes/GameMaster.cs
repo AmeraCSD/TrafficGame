@@ -28,8 +28,6 @@ public class GameMaster : MonoBehaviour {
 	private const float GAME_TIME = 150;			//should equal to 5 minutes
 	private const int WARNING_BEFORE_EVENT_SECONDS = 3;
 	
-	private const int MIN_TIME_BETWEEN_EVENTS = 6;
-	
 	public List<Texture2D> vehiclesTextures;
 	
 	
@@ -152,6 +150,7 @@ public class GameMaster : MonoBehaviour {
 		
 		if(Application.loadedLevelName == "Map 1"){
 			Map map = new Map(data.GetMap1Streets(), data.GetMap1Paths(), data.GetMap1Intersections(), data.GetMap1Lights());
+			/*
 			List<VehicleType> events = new List<VehicleType>();
 			events.Add(VehicleType.Ambulance);
 			events.Add(VehicleType.Bus);
@@ -162,24 +161,28 @@ public class GameMaster : MonoBehaviour {
 			ranges.Add(new Range(120, 130));
 			ranges.Add(new Range(130, 140));
 			EventRanges eventRangesObject = new EventRanges(ranges);
-			currentLevel = new Level(1, map, 27.0f, 5, 200, 150, events, eventsNumbers, eventRangesObject);
+			*/
+			currentLevel = new Level(1, map, 27.0f, 4, 200, 150, null, null, null, null);
 		}
-		/*
-		else if(Application.loadedLevel == "Map 2"){
-			Map map = new Map(data.GetMap1Streets(), data.GetMap1Paths(), data.GetMap1Intersections());
+		
+		else if(Application.loadedLevelName == "Map 2"){
+			Map map = new Map(data.GetMap2Streets(), data.GetMap2Paths(), data.GetMap2Intersections(), data.GetMap2Lights());
+			/*
 			List<VehicleType> events = new List<VehicleType>();
-			events.Add(VehicleType.Ambulance);
 			events.Add(VehicleType.Bus);
+			events.Add(VehicleType.Ambulance);
+			events.Add(VehicleType.ServiceCar);
+			events.Add(VehicleType.Caravan);
 			List<int> eventsNumbers = new List<int>();
-			events.Add(1);
-			events.Add(1);
-			List<Range> ranges = new List<Range>();
-			ranges.Add(new Range(120, 130));
-			ranges.Add(new Range(130, 140));
-			EventRanges eventRangesObject = new EventRanges(ranges);
-			currentLevel = new Level(1, map, 27.0f, 5, 200, 150, events, eventsNumbers, eventRangesObject);
+			eventsNumbers.Add(1);
+			eventsNumbers.Add(1);
+			eventsNumbers.Add(1);
+			eventsNumbers.Add(1);
+			List<EventTimes> eventTimes = new List<EventTimes>();
+			*/
+			currentLevel = new Level(2, map, 20.0f, 2, 200, 150, null, null, null, null);
 		}
-		*/
+		
 	}
 	
 	private void initVariables(){
@@ -213,8 +216,6 @@ public class GameMaster : MonoBehaviour {
 		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
 	}
 	
-	
-	
 	private void initObjects(){
 		Streets = currentLevel.LevelMap.Streets;
 		Paths = currentLevel.LevelMap.GamePaths;
@@ -224,7 +225,9 @@ public class GameMaster : MonoBehaviour {
 		eventsWarningTimes = new List<float>();
 		eventsWarningNames = new List<string>();
 		
-		InitEventsNeeds();
+		if(currentLevel.LevelEvents != null){
+			InitEventsNeeds();
+		}
 		
 		
 	}
@@ -232,23 +235,23 @@ public class GameMaster : MonoBehaviour {
 	private void InitEventsNeeds(){
 		if(currentLevel.LevelEvents.Contains(VehicleType.Ambulance)){
 			Ambulance.InitInstances();
-			Ambulance.SetAmbulanceRandomTime(MIN_TIME_BETWEEN_EVENTS);
+			Ambulance.SetEventTime(currentLevel.EventsTimesList.TimesList);
 		}
 		if(currentLevel.LevelEvents.Contains(VehicleType.Bus)){
 			Bus.InitInstances();
-			Bus.SetBusRandomTime(MIN_TIME_BETWEEN_EVENTS);
+			Bus.SetEventTime(currentLevel.EventsTimesList.TimesList);
 		}
 		if(currentLevel.LevelEvents.Contains(VehicleType.Caravan)){
 			Caravan.InitInstances();
-			Caravan.SetCaravanRandomTime(MIN_TIME_BETWEEN_EVENTS);
+			Caravan.SetEventTime(currentLevel.EventsTimesList.TimesList);
 		}
 		if(currentLevel.LevelEvents.Contains(VehicleType.ServiceCar)){
 			ServiceCar.InitInstances();
-			ServiceCar.SetServiceCarRandomTime(MIN_TIME_BETWEEN_EVENTS);
+			ServiceCar.SetEventTime(currentLevel.EventsTimesList.TimesList);
 		}
 		if(currentLevel.LevelEvents.Contains(VehicleType.Thief)){
 			Thief.InitInstances();
-			Thief.SetThiefRandomTime(MIN_TIME_BETWEEN_EVENTS);
+			Thief.SetEventTime(currentLevel.EventsTimesList.TimesList);
 		}
 		
 	}
@@ -285,7 +288,7 @@ public class GameMaster : MonoBehaviour {
 		}
 	//	gameTimeVarLabel.text = gameTime+"";
 		//gameTimeLabel = gameTimeLabelGo.GetComponent<UILabel>();
-		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 15){
+		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 10){ //***********************should beeee 15
 			secondsCounterFor30 ++;
 			if(secondsCounterFor30 == 30){	
 				if(satisfyBar >=0){
@@ -309,183 +312,104 @@ public class GameMaster : MonoBehaviour {
 	
 	private void InstantiatVehiclesArroundTime(){
 		List<int> randomsList = new List<int>();
-		instantiatThisTime = !instantiatThisTime;
+	//	instantiatThisTime = !instantiatThisTime;
+		
+			/*		
+			else {
+				Texture2D tx1 = GetRandomTexture(0, 4);
+				NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx1, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+				vehicilesCounter++;
+				AdjustEach15Vehicle();
+			}
+			*/
+		//randomsList = CheckAndGenerateTheEventElseVehicle(randomsList);
+		
+		for(int i = 0; i<currentLevel.InstatiationRate-1; i++){
+			List<int> temp = CheckAndGenerateVehicle(randomsList);
+			randomsList = temp;
+		}
+			
+	}
+	
+	private List<int> CheckAndGenerateTheEventElseVehicle(List<int> randomsList){
+		
 		if(!CheckAllStreetsFullness()){
 				//this piece of code is for the events
-			int pos1 = Random.Range(0, Paths.Count);
-			while(Paths[pos1].PathStreets[0].VehiclesNumber >= Paths[pos1].PathStreets[0].StreetCapacity){
-					pos1 = Random.Range(0, Paths.Count);
+			/*
+			int pos = Random.Range(0, Paths.Count);
+			while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
+					pos = Random.Range(0, Paths.Count);
 			}
 			
-			
-			if(currentLevel.LevelEvents.Contains(VehicleType.Bus)&& Bus.InsideBusTimeSlotsList(gameTime)){
+			*/
+			if(currentLevel.LevelEvents.Contains(VehicleType.Bus)&& Bus.InsideTimeSlotsList(gameTime)){
 				vibrationMade = false;
 				showBox = false;
 				eventWarningLabelGo.SetActive(false);
 				//eventWarningLabel.text = "";
 				Debug.Log("should be a bus");
-				Bus.GenerateBus(pos1, busPrefab, Paths);
+				Bus.GenerateVehicle(busPrefab, currentLevel.EventsPaths[0]); //*********************temppppppppppppppppppp SHOULD BE CHANGED
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
-				
+				//randomsList.Add();
 			}
 			
 			
-			else if(currentLevel.LevelEvents.Contains(VehicleType.Ambulance)&& Ambulance.InsideAmbulanceTimeSlotsList(gameTime)) {
+			else if(currentLevel.LevelEvents.Contains(VehicleType.Ambulance)&& Ambulance.InsideTimeSlotsList(gameTime)) {
 				vibrationMade = false;
 				showBox = false;
 				eventWarningLabelGo.SetActive(false);
 				eventWarningLabel.text = "";
 				Debug.Log("should be ambulance");
-				Ambulance.GenerateAmbulance(pos1, ambulancePrefab, Paths);
+				Ambulance.GenerateVehicle(ambulancePrefab, currentLevel.EventsPaths[0]);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
+				//randomsList.Add(pos);
 			}
 			
-			else if(currentLevel.LevelEvents.Contains(VehicleType.Caravan)&& Caravan.InsideCaravanTimeSlotsList(gameTime)) {
+			else if(currentLevel.LevelEvents.Contains(VehicleType.Caravan)&& Caravan.InsideTimeSlotsList(gameTime)) {
 				vibrationMade = false;
 				showBox = false;
 				eventWarningLabelGo.SetActive(false);
 				eventWarningLabel.text = "";
 				Debug.Log("should be caravan");
-				Caravan.GenerateCaravan(pos1, caravanPrefab, Paths);
+				Caravan.GenerateVehicle(caravanPrefab, currentLevel.EventsPaths[0]);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
+				//randomsList.Add(pos);
 			}
 			
-			else if(currentLevel.LevelEvents.Contains(VehicleType.ServiceCar)&& ServiceCar.InsideServiceCarTimeSlotsList(gameTime)) {
+			else if(currentLevel.LevelEvents.Contains(VehicleType.ServiceCar)&& ServiceCar.InsideTimeSlotsList(gameTime)) {
 				vibrationMade = false;
 				showBox = false;
 				eventWarningLabelGo.SetActive(false);
 				eventWarningLabel.text = "";
 				Debug.Log("should be a service car");
 				Texture2D tx = GetRandomTexture(4, 7);
-				ServiceCar.GenerateServiceCar(pos1, serviceCarPrefab, tx, Paths);
+				ServiceCar.GenerateVehicle(serviceCarPrefab, currentLevel.EventsPaths[0]);
 				vehicilesCounter ++;
 				AdjustEach15Vehicle();
+				//randomsList.Add(pos);
 			}
 			
 			
-			else if(currentLevel.LevelEvents.Contains(VehicleType.Thief)&& Thief.InsideThiefTimeSlotsList(gameTime)) {
+			else if(currentLevel.LevelEvents.Contains(VehicleType.Thief)&& Thief.InsideTimeSlotsList(gameTime)) {
 				if(CheckAllStreetsEmptiness()){
 					vibrationMade = false;
 				showBox = false;
 				eventWarningLabelGo.SetActive(false);
 				eventWarningLabel.text = "";
 					Debug.Log("should be a thief");
-					Thief.GenerateThief(pos1, thiefPrefab, Paths);
+					Thief.GenerateVehicle(thiefPrefab, currentLevel.EventsPaths[0]);
 					vehicilesCounter ++;
 					AdjustEach15Vehicle();
+					//randomsList.Add(pos);
 				}
 			}
-						
-			else {
-				Texture2D tx1 = GetRandomTexture(0, 4);
-				NormalVehicle.GenerateNormalVehicle(pos1, vehiclePrefab, tx1, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
-				vehicilesCounter++;
-				AdjustEach15Vehicle();
-			}
-			
-			randomsList.Add(pos1);
-			
-			for(int i = 0; i<1; i++){
-				List<int> temp = CheckAndGenerateVehicle(randomsList);
-				randomsList = temp;
-			}
-			
-			
-			/*
-				int pos2 = Random.Range(0, Paths.Count);
-				if(!CheckAllStreetsFullness()){
-					while(Paths[pos2].PathStreets[0].VehiclesNumber >= Paths[pos2].PathStreets[0].StreetCapacity-1){
-						pos2 = Random.Range(0, Paths.Count);
-					}
-					if((Paths[pos1].GenerationPointPosition != Paths[pos2].GenerationPointPosition)){
-						Texture2D tx = GetRandomTexture(0, 4);
-						NormalVehicle.GenerateNormalVehicle(pos2, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
-						vehicilesCounter++;
-						AdjustEach15Vehicle();
-					}
-				}
-			
-			
-			
-			
-			
-			int pos3 = Random.Range(0, Paths.Count);
-			if(!CheckAllStreetsFullness()){
-				while(Paths[pos3].PathStreets[0].VehiclesNumber >= Paths[pos3].PathStreets[0].StreetCapacity){
-					pos3 = Random.Range(0, Paths.Count);
-				}
-				if((Paths[pos1].GenerationPointPosition != Paths[pos3].GenerationPointPosition)
-					&&(Paths[pos2].GenerationPointPosition != Paths[pos3].GenerationPointPosition)){
-							
-					Texture2D tx = GetRandomTexture(0, 4);
-					
-					NormalVehicle.GenerateNormalVehicle(pos3, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
-					vehicilesCounter++;
-					AdjustEach15Vehicle();
-				}
-			}
-			
-			
-			int pos4 = Random.Range(0, Paths.Count);
-			if(!CheckAllStreetsFullness()){
-				while(Paths[pos4].PathStreets[0].VehiclesNumber >= Paths[pos4].PathStreets[0].StreetCapacity){
-					pos4 = Random.Range(0, Paths.Count);
-				}
-				if((Paths[pos1].GenerationPointPosition != Paths[pos4].GenerationPointPosition)
-					&&(Paths[pos2].GenerationPointPosition != Paths[pos4].GenerationPointPosition)
-					&&(Paths[pos3].GenerationPointPosition != Paths[pos4].GenerationPointPosition)){
-							
-					Texture2D tx = GetRandomTexture(0, 4);
-					
-					NormalVehicle.GenerateNormalVehicle(pos4, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
-					vehicilesCounter++;
-					AdjustEach15Vehicle();
-				}
-			}
-			
-			
-			int pos5 = Random.Range(0, Paths.Count);
-			if(!CheckAllStreetsFullness()){
-				while(Paths[pos5].PathStreets[0].VehiclesNumber >= Paths[pos5].PathStreets[0].StreetCapacity){
-					pos4 = Random.Range(0, Paths.Count);
-				}
-				if((Paths[pos1].GenerationPointPosition != Paths[pos5].GenerationPointPosition)
-					&&(Paths[pos2].GenerationPointPosition != Paths[pos5].GenerationPointPosition)
-					&&(Paths[pos3].GenerationPointPosition != Paths[pos5].GenerationPointPosition)
-					&&(Paths[pos4].GenerationPointPosition != Paths[pos5].GenerationPointPosition)){
-							
-					Texture2D tx = GetRandomTexture(0, 4);
-					
-					NormalVehicle.GenerateNormalVehicle(pos5, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
-					vehicilesCounter++;
-					AdjustEach15Vehicle();
-				}
-			}
-			
-			int pos6 = Random.Range(0, Paths.Count);
-			if(!CheckAllStreetsFullness()){
-				while(Paths[pos6].PathStreets[0].VehiclesNumber >= Paths[pos6].PathStreets[0].StreetCapacity){
-					pos6 = Random.Range(0, Paths.Count);
-				}
-				if((Paths[pos1].GenerationPointPosition != Paths[pos6].GenerationPointPosition)
-					&&(Paths[pos2].GenerationPointPosition != Paths[pos6].GenerationPointPosition)
-					&&(Paths[pos3].GenerationPointPosition != Paths[pos6].GenerationPointPosition)
-					&&(Paths[pos4].GenerationPointPosition != Paths[pos6].GenerationPointPosition)
-					&&(Paths[pos5].GenerationPointPosition != Paths[pos6].GenerationPointPosition)){
-						
-					Texture2D tx = GetRandomTexture(0, 4);
-					
-					NormalVehicle.GenerateNormalVehicle(pos6, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
-					vehicilesCounter++;
-					AdjustEach15Vehicle();
-				}
-			}
-			
-			*/
+		
+		
 		}
+		return randomsList;
 	}
 	
 	private List<int> CheckAndGenerateVehicle(List<int> randoms){
@@ -496,14 +420,16 @@ public class GameMaster : MonoBehaviour {
 				pos = Random.Range(0, Paths.Count);
 			}
 		
-			randoms.Add(pos);
+			
 			if(!isRepeatedPosition(randoms, pos)){
 				Texture2D tx = GetRandomTexture(0, 4);
 				NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
 				vehicilesCounter++;
 				AdjustEach15Vehicle();
+				randoms.Add(pos);
 			}
 		}
+		Debug.Log("randoms toolha kedaa " + randoms.Count);
 		return randoms;
 	}
 	
@@ -532,7 +458,7 @@ public class GameMaster : MonoBehaviour {
 	
 	private void AdjustEach15Vehicle(){
 		initedCarsNumber ++;
-		if(initedCarsNumber == 15){
+		if(initedCarsNumber == 10){	//**************************************** should be 15
 			cancelInvokeFirst15Vehicles = true;
 			initedCarsNumber =0;
 		}
@@ -542,8 +468,10 @@ public class GameMaster : MonoBehaviour {
 	private bool CheckAllStreetsFullness(){
 		int counter = 0;
 		for(int i= 0 ; i < Paths.Count ; i++){
-			if(Paths[i].PathStreets[0].VehiclesNumber >= Paths[i].PathStreets[0].StreetCapacity-1)
+			if(Paths[i].PathStreets[0].VehiclesNumber >= Paths[i].PathStreets[0].StreetCapacity-1){
+				
 				counter ++ ;
+			}
 		}
 		if(counter == Paths.Count)
 			return true;
@@ -612,30 +540,48 @@ public class GameMaster : MonoBehaviour {
 				//eventsSprite.spriteName = "bus1";
 			}
 			
-			/*
+			
 			if(eventsWarningNames[index] == "s"){
-				closeButtonGo.SetActive(true);
+				//	vibrationMade = false;
+				if(!vibrationMade && Globals.vibrationEnabled == true){
+					Handheld.Vibrate();
+					vibrationMade = true;
+				}
+				//closeButtonGo.SetActive(true);
+				eventWarningLabelGo.SetActive(true);
 				eventWarningLabel.text = "Service Car is Coming";
-				eventsSpriteGo.SetActive(true);
-				eventsSprite.spriteName = "ice";
+				//eventsSpriteGo.SetActive(true);
+				//eventsSprite.spriteName = "ice";
 			}
 			
 			if(eventsWarningNames[index] == "t"){
-				closeButtonGo.SetActive(true);
+				//	vibrationMade = false;
+				if(!vibrationMade && Globals.vibrationEnabled == true){
+					Handheld.Vibrate();
+					vibrationMade = true;
+				}
+				//closeButtonGo.SetActive(true);
+				eventWarningLabelGo.SetActive(true);
 				eventWarningLabel.text = "Thief is Coming";
-				eventsSpriteGo.SetActive(true);
-				eventsSprite.spriteName = "kolu-bike";
-			}
-			*/
-			/*
-			if(eventsWarningNames[index] == "c"){
-				closeButtonGo.SetActive(true);
-				eventWarningLabel.text = "Caravan is Coming";
-				eventsSpriteGo.SetActive(true);
-				eventsSprite.spriteName = "caravan1";
+				//eventsSpriteGo.SetActive(true);
+				//eventsSprite.spriteName = "kolu-bike";
 			}
 			
-			*/
+			
+			if(eventsWarningNames[index] == "c"){
+				//	vibrationMade = false;
+				if(!vibrationMade && Globals.vibrationEnabled == true){
+					Handheld.Vibrate();
+					vibrationMade = true;
+				}
+				//closeButtonGo.SetActive(true);
+				eventWarningLabelGo.SetActive(true);
+				eventWarningLabel.text = "Caravan is Coming";
+				//eventsSpriteGo.SetActive(true);
+				//eventsSprite.spriteName = "caravan1";
+			}
+			
+			
 			
 			//Time.timeScale = 0;
 			

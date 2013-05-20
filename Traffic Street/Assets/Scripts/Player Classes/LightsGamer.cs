@@ -18,7 +18,7 @@ public class LightsGamer : MonoBehaviour {
 	
 	public List<TrafficLight> lights;
 	
-	private const int MAX_OPENED_LIGHTS = 4;
+	private const int MAX_OPENED_LIGHTS = 3;
 	
 	
 	public const float MIN_VEHICLE_SPEED = 23.0f;		//this should be in the global class 

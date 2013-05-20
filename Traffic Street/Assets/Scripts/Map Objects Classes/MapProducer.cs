@@ -88,11 +88,6 @@ public class MapProducer : MonoBehaviour {
 			
 		}
 		
-		
-			
-		
-		
-		
 	}
 	
 	
@@ -123,14 +118,14 @@ public class MapProducer : MonoBehaviour {
 		Debug.Log(" see thatt " + pressCounter);
 		if(pressCounter <=3){
 			light = "none";
-			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\USER\Documents\GitHub\TrafficGame\map.txt", true))
+			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\USER\Documents\GitHub\TrafficGame\map2.txt", true))
 	        {
 	            file.WriteLine(streetsCounter+"%"+startPoint+"%"+endPoint+"%"+"0"+"%"+direction+"%"+light+"%"+"false"+"\n");
 				
 	        }
 		}
 		else{
-			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\USER\Documents\GitHub\TrafficGame\map.txt", true))
+			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\USER\Documents\GitHub\TrafficGame\map2.txt", true))
 	        {
 	            file.WriteLine(streetsCounter+"%"+startPoint+"%"+endPoint+"%"+stopPoint+"%"+direction+"%"+light+"%"+"true"+"\n");
 				

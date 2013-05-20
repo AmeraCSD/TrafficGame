@@ -13,13 +13,11 @@ public class LightTimerManager : MonoBehaviour {
 		startTimer = false;
 		timer = 15;
 		InvokeRepeating("CountTimerDown", 1.0f, 1.0f);
-
 	}
 	
 	private void CountTimerDown(){
 		if(startTimer){
 			if(analogousLight.renderer.material.color == Color.red){
-				
 				timer--;
 			}
 			else if(analogousLight.renderer.material.color != Color.red){

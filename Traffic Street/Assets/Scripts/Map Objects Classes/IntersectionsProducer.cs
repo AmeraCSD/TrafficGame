@@ -40,7 +40,7 @@ public class IntersectionsProducer : MonoBehaviour {
 			label.text = "Finish";
 		}
 		else{
-			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\USER\Documents\GitHub\TrafficGame\intersections.txt", true))
+			using (System.IO.StreamWriter file = new System.IO.StreamWriter(@"C:\Users\USER\Documents\GitHub\TrafficGame\intersections1.txt", true))
 	        {
 				for(int i = 0; i<intersections.Count; i++){
 	            	file.WriteLine("intersectionsList.Add("+ intersections[i] +");"+"\n");

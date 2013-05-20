@@ -111,6 +111,9 @@ public class VehicleController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+		if(speed < 0){
+			speed = 0.0f;
+		}
 		PerformEnqueue();
 		SetStopOffset();
 		CheckPosition_DeqIfPassed();
@@ -252,8 +255,10 @@ public class VehicleController : MonoBehaviour {
 				(_direction == StreetDirection.Left && transform.position.x < _stopPosition + Offset) ||
 				(_direction == StreetDirection.Down && transform.position.z < _stopPosition + Offset) ||
 				(_direction == StreetDirection.Up && transform.position.z > _stopPosition - Offset)  ){
+				//haveToReduceMySpeed = true;
 				
-				speed = 0.0f;
+				speed = 0;
+				
 				
 				if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
 					GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);

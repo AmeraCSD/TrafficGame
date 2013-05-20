@@ -158,7 +158,7 @@
      <Compile Include="Assets\NGUI\Scripts\UI\UITiledSprite.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
      <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
-     <Compile Include="Assets\Scripts\Base Classes\EventRanges.cs" />
+     <Compile Include="Assets\Scripts\Base Classes\EventTimes.cs" />
      <Compile Include="Assets\Scripts\Base Classes\GamePath.cs" />
      <Compile Include="Assets\Scripts\Base Classes\Level.cs" />
      <Compile Include="Assets\Scripts\Base Classes\Map.cs" />
@@ -187,6 +187,7 @@
      <Compile Include="Assets\Scripts\UI scripts\GoToMainMenu.cs" />
      <Compile Include="Assets\Scripts\UI scripts\GoToMapButton.cs" />
      <Compile Include="Assets\Scripts\UI scripts\LockedMapButton.cs" />
+     <Compile Include="Assets\Scripts\UI scripts\NextLevelButton.cs" />
      <Compile Include="Assets\Scripts\UI scripts\PanWithAcceleration.cs" />
      <Compile Include="Assets\Scripts\UI scripts\PauseButton.cs" />
      <Compile Include="Assets\Scripts\UI scripts\RepeatGame.cs" />

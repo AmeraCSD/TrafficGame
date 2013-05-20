@@ -4,43 +4,31 @@ using System.Collections.Generic;
 
 public class Bus : MonoBehaviour {
 
-	private const int BUS_HAPPEN_NUMBER = 1;
-
-	public static List<int> busTimeSlots;
+	public static List<float> busTimeSlots;
 	
 	
 	public static List<int> busStopTimeSlots;
  	
 	public static void InitInstances(){
-		busTimeSlots = new List<int>();
+		busTimeSlots = new List<float>();
 		busStopTimeSlots = new List<int>();
 	}
 	
-	public static void SetBusRandomTime(int timeBetweenEvents){
-			
-		int timeValue = 0;
-		timeValue = Random.Range(130, 140);
+	public  static void SetEventTime(List<float> eventTimes){
 		
-		for (int i = 0 ; i<BUS_HAPPEN_NUMBER; i++){
-							//*********** I should make an enum to each level
-			timeValue -= timeBetweenEvents;
-			if(timeValue >= 140){
-				timeValue -= 5;
-			}
-			if(!busTimeSlots.Contains(timeValue)){
-				busTimeSlots.Add(timeValue);
-				GameMaster.eventsWarningTimes.Add(timeValue+5);
-				GameMaster.eventsWarningNames.Add("b");
-			}
+		for (int i = 0 ; i<eventTimes.Count; i++){
+			
+			busTimeSlots.Add(eventTimes[i]);
+			GameMaster.eventsWarningTimes.Add(eventTimes[i]+5);
+			GameMaster.eventsWarningNames.Add("bus");
 		}	
+		
 	}
 	
 	
-	
-	public static bool InsideBusTimeSlotsList(float gameTime){
+	public static bool InsideTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		//Debug.Log("bustimeSlots.count "+ busTimeSlots.Count);
 		while(!found && i < busTimeSlots.Count){
 			if(busTimeSlots [i] == gameTime)
 				found = true;
@@ -49,27 +37,24 @@ public class Bus : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateBus(int pos,GameObject busPrefab, List<GamePath> Paths){	
-		
-			
-			if(busPrefab != null){
-				GameObject vehicle;
-					vehicle = Instantiate(busPrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
-					Paths[pos].PathStreets[0].VehiclesNumber ++;
-					//vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
-					vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
-					
-					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
-					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Bus, 
-																						12.0f, 
-																						MathsCalculatios.getVehicleLargeSize(vehicle), 
-																						Paths[pos].PathStreets[0].StreetLight.Type, 
-																						Paths[pos].PathStreets[0], 
-																						Paths[pos].PathStreets[1], 
-																						0,
-																						Paths[pos]);
-				
-			}
+	
+	public static void GenerateVehicle(GameObject busPrefab, GamePath path){	
+		if(busPrefab != null){
+			GameObject vehicle;
+			vehicle = Instantiate(busPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
+			path.PathStreets[0].VehiclesNumber ++;
+			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
+			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
+			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
+			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Bus, 
+																				Globals.BUS_SPEED, 
+																				MathsCalculatios.getVehicleLargeSize(vehicle), 
+																				path.PathStreets[0].StreetLight.Type, 
+																				path.PathStreets[0], 
+																				path.PathStreets[1], 
+																				0,
+																				path);
+		}
 			
 	}
 	

@@ -12,9 +12,21 @@ public class Level : MonoBehaviour {
 	private float _gameTime;
 	private List<VehicleType> _levelEvents;
 	private List<int> _eventsNumbers;
-	private EventRanges _eventsRangsObject;
+	private EventTimes _eventsTimes;
+	private List<GamePath> _eventsPaths;
 	
-	public Level(int anId, Map aMap, float theNormalVehicleSpeed,int theInstantiationRate, int theMinScore, float theGameTime, List<VehicleType> theLevelEvents, List<int> theEventsNumbers, EventRanges theEventsRangsObject){
+	public Level(int anId, 
+				Map aMap, 
+				float theNormalVehicleSpeed, 
+				int theInstantiationRate, 
+				int theMinScore, 
+				float theGameTime, 
+				List<VehicleType> theLevelEvents, 
+				List<int> theEventsNumbers, 
+				EventTimes theEventTimes, 
+				List<GamePath> theEventsPaths){
+		
+		
 		_id = anId;
 		_map = aMap;
 		_normalVehicleSpeed = theNormalVehicleSpeed;
@@ -23,7 +35,8 @@ public class Level : MonoBehaviour {
 		_gameTime = theGameTime;
 		_levelEvents = theLevelEvents;
 		_eventsNumbers = theEventsNumbers;
-		_eventsRangsObject = theEventsRangsObject;
+		_eventsTimes = theEventTimes;
+		_eventsPaths = theEventsPaths;
 	}
 	
 	public int ID{
@@ -66,9 +79,13 @@ public class Level : MonoBehaviour {
 		set{_eventsNumbers = value;}
 	}
 	
-	public EventRanges EventsRangesObject{
-		get{return _eventsRangsObject;}
-		set{_eventsRangsObject = value;}
+	public EventTimes EventsTimesList{
+		get{return _eventsTimes;}
+		set{_eventsTimes = value;}
 	}
 	
+	public List<GamePath> EventsPaths{ /////////////////////////////////////////////should be list of list
+		get{return _eventsPaths;}
+		set{_eventsPaths = value;}
+	}
 }

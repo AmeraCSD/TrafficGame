@@ -4,37 +4,27 @@ using System.Collections.Generic;
 
 public class Ambulance : MonoBehaviour {
 
-	private const int AMBULANCE_HAPPEN_NUMBER = 1;
 	
-	public static List<int> ambulanceTimeSlots;
+	public static List<float> ambulanceTimeSlots;
 	
 	public static void InitInstances(){
-		ambulanceTimeSlots = new List<int>();
+		ambulanceTimeSlots = new List<float>();
 	}
 	
-	public  static void SetAmbulanceRandomTime(int timeBetweenEvents){
-				
-		int timeValue = 0;
-		timeValue = Random.Range(120, 130 );
+	public  static void SetEventTime(List<float> eventTimes){
 		
-		for (int i = 0 ; i<AMBULANCE_HAPPEN_NUMBER; i++){
-			timeValue -= timeBetweenEvents;
-			if(timeValue >= 130){
-				timeValue -= 5;
-			}
-			if(!ambulanceTimeSlots.Contains(timeValue)){
-				ambulanceTimeSlots.Add(timeValue);
-				GameMaster.eventsWarningTimes.Add(timeValue+5);
-				GameMaster.eventsWarningNames.Add("a");
-			}
+		for (int i = 0 ; i<eventTimes.Count; i++){
+			
+			ambulanceTimeSlots.Add(eventTimes[i]);
+			GameMaster.eventsWarningTimes.Add(eventTimes[i]+5);
+			GameMaster.eventsWarningNames.Add("ambulance");
 		}	
 		
 	}
 	
-	public static bool InsideAmbulanceTimeSlotsList(float gameTime){
+	public static bool InsideTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		//Debug.Log("timeSlots.count "+ ambulanceTimeSlots.Count);
 		while(!found && i < ambulanceTimeSlots.Count){
 			if(ambulanceTimeSlots [i] == gameTime)
 				found = true;
@@ -43,29 +33,25 @@ public class Ambulance : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateAmbulance(int pos, GameObject ambulancePrefab, List<GamePath> Paths){	
-		
-			
-			if(ambulancePrefab != null){
-				
-				GameObject vehicle;
-					vehicle = Instantiate(ambulancePrefab, Paths[Paths.Count-1].GenerationPointPosition ,Quaternion.identity) as GameObject;
-					Paths[Paths.Count-1].PathStreets[0].VehiclesNumber ++;
-					//vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
-					vehicle.name = "Street # "+Paths[Paths.Count-1].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
+	public static void GenerateVehicle(GameObject ambulancePrefab, GamePath path){	
 					
-					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
-					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Ambulance, 
-																						29.0f, 
-																						MathsCalculatios.getVehicleLargeSize(vehicle), 
-																						Paths[Paths.Count-1].PathStreets[0].StreetLight.Type, 
-																						Paths[Paths.Count-1].PathStreets[0], 
-																						Paths[Paths.Count-1].PathStreets[1], 
-																						0,
-																						Paths[Paths.Count-1]);
+		if(ambulancePrefab != null){
+			GameObject vehicle;
+			vehicle = Instantiate(ambulancePrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
+			path.PathStreets[0].VehiclesNumber ++;
+			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
+			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
+			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
+			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Ambulance, 
+																				Globals.AMBULANCE_SPEED, 
+																				MathsCalculatios.getVehicleLargeSize(vehicle), 
+																				path.PathStreets[0].StreetLight.Type, 
+																				path.PathStreets[0], 
+																				path.PathStreets[1], 
+																				0,
+																				path);
 				
-			}
-			
+		}	
 	
 	}
 	

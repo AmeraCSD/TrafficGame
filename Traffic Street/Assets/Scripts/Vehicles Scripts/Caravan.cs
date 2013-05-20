@@ -4,38 +4,27 @@ using System.Collections.Generic;
 
 public class Caravan : MonoBehaviour {
 
-	private const int CARAVAN_HAPPEN_NUMBER = 1;
-	
-	public static List<int> caravanTimeSlots;
+
+	public static List<float> caravanTimeSlots;
 	
 	public static void InitInstances(){
-		caravanTimeSlots = new List<int>();
+		caravanTimeSlots = new List<float>();
 	}
 	
-	public  static void SetCaravanRandomTime(int timeBetweenEvents){
-				
-		int timeValue = 0;
-		timeValue = Random.Range(40, 50 );
+	public  static void SetEventTime(List<float> eventTimes){
 		
-		for (int i = 0 ; i<CARAVAN_HAPPEN_NUMBER; i++){
-							//*********** I should make an enum to each level
-			timeValue -= timeBetweenEvents;
-			if(timeValue >= 50){
-				timeValue -= 5;
-			}
-			if(!caravanTimeSlots.Contains(timeValue)){
-				caravanTimeSlots.Add(timeValue);
-				GameMaster.eventsWarningTimes.Add(timeValue);
-				GameMaster.eventsWarningNames.Add("c");
-			}
+		for (int i = 0 ; i<eventTimes.Count; i++){
+			
+			caravanTimeSlots.Add(eventTimes[i]);
+			GameMaster.eventsWarningTimes.Add(eventTimes[i]+5);
+			GameMaster.eventsWarningNames.Add("caravan");
 		}	
 		
 	}
 	
-	public static bool InsideCaravanTimeSlotsList(float gameTime){
+	public static bool InsideTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		//Debug.Log("timeSlots.count "+ caravanTimeSlots.Count);
 		while(!found && i < caravanTimeSlots.Count){
 			if(caravanTimeSlots [i] == gameTime)
 				found = true;
@@ -44,32 +33,27 @@ public class Caravan : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateCaravan(int pos, GameObject caravanPrefab, List<GamePath> Paths){	
-		
-			
-			if(caravanPrefab != null){
-				
-				GameObject vehicle;
-					vehicle = Instantiate(caravanPrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
-					Paths[pos].PathStreets[0].VehiclesNumber ++;
-					//vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
-					vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
+	public static void GenerateVehicle(GameObject caravanPrefab, GamePath path){	
 					
-					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
-					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Caravan, 
-																						13.0f, 
-																						MathsCalculatios.getVehicleLargeSize(vehicle), 
-																						Paths[pos].PathStreets[0].StreetLight.Type, 
-																						Paths[pos].PathStreets[0], 
-																						Paths[pos].PathStreets[1], 
-																						0,
-																						Paths[pos]);
+		if(caravanPrefab != null){
+			GameObject vehicle;
+			vehicle = Instantiate(caravanPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
+			path.PathStreets[0].VehiclesNumber ++;
+			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
+			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
+			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
+			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Caravan, 
+																				Globals.CARAVAN_SPEED, 
+																				MathsCalculatios.getVehicleLargeSize(vehicle), 
+																				path.PathStreets[0].StreetLight.Type, 
+																				path.PathStreets[0], 
+																				path.PathStreets[1], 
+																				0,
+																				path);
 				
-			}
-			
+		}	
 	
 	}
-	
 	
 	
 }

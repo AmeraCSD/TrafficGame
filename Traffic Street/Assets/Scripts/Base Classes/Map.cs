@@ -13,7 +13,8 @@ public class Map : MonoBehaviour {
 	public Map(List<Street> theStreets, List<GamePath> thePaths, List<Vector3> theIntersections, List<TrafficLight> theLights){
 		_streets = theStreets;
 		_paths = thePaths;
-		_intersections = theIntersections;
+		_intersections = theIntersections; 
+		_lights = theLights;
 	}
 	
 	public List<GamePath> GamePaths{

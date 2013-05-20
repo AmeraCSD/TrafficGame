@@ -4,44 +4,29 @@ using System.Collections.Generic;
 
 public class ServiceCar : MonoBehaviour {
 
-	private const int SERVICE_CAR_HAPPEN_NUMBER = 1;
 	
-	public static List<int> serviceCarTimeSlots;
+	public static List<float> serviceCarTimeSlots;
 	
 	
 	public static void InitInstances(){
-		serviceCarTimeSlots = new List<int>();
+		serviceCarTimeSlots = new List<float>();
 	}
 	
-	public  static void SetServiceCarRandomTime(int timeBetweenEvents){
-				
-		int timeValue = 0;
-		timeValue = Random.Range(130, 140);			//*********** I should make an enum to each level
-		for (int i = 0 ; i<SERVICE_CAR_HAPPEN_NUMBER; i++){
+	public  static void SetEventTime(List<float> eventTimes){
+	
+		for (int i = 0 ; i<eventTimes.Count; i++){
 			
-			timeValue -= timeBetweenEvents;
-		//	if(timeValue < 130 ){
-		//		timeValue += 10;
-		//	}
-			if(timeValue >= 140){
-				timeValue -= 5;
-			}
-			if(!serviceCarTimeSlots.Contains(timeValue)){
-				serviceCarTimeSlots.Add(timeValue) ;
-				GameMaster.eventsWarningTimes.Add(timeValue);
-				Debug.Log("Adding to the list the time ..." + i + "...its equal to .. " + timeValue);
-				GameMaster.eventsWarningNames.Add("s");
-			}	
+			serviceCarTimeSlots.Add(eventTimes[i]);
+			GameMaster.eventsWarningTimes.Add(eventTimes[i]+5);
+			GameMaster.eventsWarningNames.Add("serviceCar");
 		}	
 		
 	}
 	
 	
-	
-	public static bool InsideServiceCarTimeSlotsList(float gameTime){
+	public static bool InsideTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		Debug.Log("timeSlots.count "+ serviceCarTimeSlots.Count);
 		while(!found && i < serviceCarTimeSlots.Count){
 			if(serviceCarTimeSlots [i] == gameTime)
 				found = true;
@@ -50,29 +35,25 @@ public class ServiceCar : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateServiceCar(int pos, GameObject serviceCarPrefab,Texture2D tx, List<GamePath> Paths){	
-		
-			
-			if(serviceCarPrefab != null){
+	public static void GenerateVehicle(GameObject serviceCarPrefab, GamePath path){	
+					
+		if(serviceCarPrefab != null){
+			GameObject vehicle;
+			vehicle = Instantiate(serviceCarPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
+			path.PathStreets[0].VehiclesNumber ++;
+			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
+			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
+			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
+			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Caravan, 
+																				Globals.SERVICE_CAR_SPEED, 
+																				MathsCalculatios.getVehicleLargeSize(vehicle), 
+																				path.PathStreets[0].StreetLight.Type, 
+																				path.PathStreets[0], 
+																				path.PathStreets[1], 
+																				0,
+																				path);
 				
-				GameObject vehicle;
-					vehicle = Instantiate(serviceCarPrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
-					Paths[pos].PathStreets[0].VehiclesNumber ++;
-					//vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " # " + Paths[pos].PathStreets[0].VehiclesNumber;
-					vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
-					vehicle.renderer.material.mainTexture = tx;
-					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
-					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.ServiceCar, 
-																						13.0f, 
-																						MathsCalculatios.getVehicleLargeSize(vehicle), 
-																						Paths[pos].PathStreets[0].StreetLight.Type, 
-																						Paths[pos].PathStreets[0], 
-																						Paths[pos].PathStreets[1], 
-																						0,
-																						Paths[pos]);
-				
-			}
-			
+		}	
 	
 	}
 	
