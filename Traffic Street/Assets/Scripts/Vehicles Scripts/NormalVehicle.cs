@@ -23,7 +23,7 @@ public class NormalVehicle : MonoBehaviour {
 					vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																						25, 
+																						Random.Range(20,25), 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
 																						Paths[pos].PathStreets[0].StreetLight.Type, 
 																						Paths[pos].PathStreets[0], 
@@ -42,7 +42,7 @@ public class NormalVehicle : MonoBehaviour {
 					
 					//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 					vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																						25, 
+																						Random.Range(20,25), 
 																						MathsCalculatios.getVehicleLargeSize(vehicle), 
 																						Paths[pos].PathStreets[0].StreetLight.Type, 
 																						Paths[pos].PathStreets[0], 

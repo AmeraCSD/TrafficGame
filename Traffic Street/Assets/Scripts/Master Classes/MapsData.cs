@@ -54,18 +54,18 @@ public class MapsData : MonoBehaviour {
 		"41%(-65.0, 5.0, 15.0)%(-35.0, 5.0, 15.0)%0%Right%none%false%1\n" +
 		"42%(-35.0, 5.0, 15.0)%(-35.0, 5.0, 45.0)%0%Up%none%false%1";
 	
-	private string Map2FileString = "0%(-115.0, 5.0, -35.0)%(25.0, 5.0, -35.0)%15%Right%lightRight%true%8\n" +
+	private string Map2FileString = "0%(-125.0, 5.0, -35.0)%(25.0, 5.0, -35.0)%15%Right%lightRight%true%8\n" +
 		"1%(25.0, 5.0, -75.0)%(25.0, 5.0, -35.0)%-45%Up%lightUp%true%3\n" +
-		"2%(25.0, 5.0, -35.0)%(115.0, 5.0, -35.0)%0%Right%none%false%8\n" +
-		"3%(-115.0, 5.0, -25.0)%(35.0, 5.0, -25.0)%15%Right%lightRight%true%8\n" +
+		"2%(25.0, 5.0, -35.0)%(125.0, 5.0, -35.0)%0%Right%none%false%8\n" +
+		"3%(-125.0, 5.0, -25.0)%(35.0, 5.0, -25.0)%15%Right%lightRight%true%8\n" +
 		"4%(35.0, 5.0, -25.0)%(75.0, 5.0, -25.0)%0%Right%none%false%2\n" +
-		"5%(75.0, 5.0, -25.0)%(115.0, 5.0, -25.0)%0%Right%none%false%2\n" +
+		"5%(75.0, 5.0, -25.0)%(125.0, 5.0, -25.0)%0%Right%none%false%2\n" +
 		"6%(25.0, 5.0, -15.0)%(-105.0, 5.0, -15.0)%0%Left%none%false%8\n" +
 		"7%(75.0, 5.0, -15.0)%(25.0, 5.0, -15.0)%45%Left%lightLeft1%true%3\n" +
-		"8%(115.0, 5.0, -15.0)%(75.0, 5.0, -15.0)%95%Left%lightLeft%true%2\n" +
-		"9%(25.0, 5.0, -5.0)%(-115.0, 5.0, -5.0)%0%Left%none%false%8\n" +
+		"8%(125.0, 5.0, -15.0)%(75.0, 5.0, -15.0)%95%Left%lightLeft%true%2\n" +
+		"9%(25.0, 5.0, -5.0)%(-125.0, 5.0, -5.0)%0%Left%none%false%8\n" +
 		"10%(85.0, 5.0, -5.0)%(25.0, 5.0, -5.0)%45%Left%lightLeft1%true%3\n" +
-		"11%(115.0, 5.0, -5.0)%(85.0, 5.0, -5.0)%95%Left%lightLeft%true%2\n" +
+		"11%(125.0, 5.0, -5.0)%(85.0, 5.0, -5.0)%95%Left%lightLeft%true%2\n" +
 		"12%(25.0, 5.0, 15.0)%(25.0, 5.0, -5.0)%0%Down%none%false%1\n" +
 		"13%(35.0, 5.0, 35.0)%(35.0, 5.0, -25.0)%0%Down%none%false%3\n" +
 		"14%(75.0, 5.0, -15.0)%(75.0, 5.0, 35.0)%0%Up%none%false%3\n" +
@@ -76,10 +76,10 @@ public class MapsData : MonoBehaviour {
 		"19%(25.0, 5.0, 45.0)%(25.0, 5.0, 15.0)%0%Down%none%false%1\n" +
 		"20%(-55.0, 5.0, 35.0)%(-55.0, 5.0, 15.0)%0%Down%none%false%1\n" +
 		"21%(-45.0, 5.0, 25.0)%(-45.0, 5.0, 35.0)%0%Up%none%false%1\n" +
-		"22%(-55.0, 5.0, 35.0)%(-115.0, 5.0, 35.0)%0%Left%none%false%5\n" +
+		"22%(-55.0, 5.0, 35.0)%(-125.0, 5.0, 35.0)%0%Left%none%false%5\n" +
 		"23%(35.0, 5.0, 35.0)%(-55.0, 5.0, 35.0)%0%Left%none%false%6\n" +
 		"24%(75.0, 5.0, 35.0)%(35.0, 5.0, 35.0)%0%Left%none%false%3\n" +
-		"25%(-45.0, 5.0, 45.0)%(-115.0, 5.0, 45.0)%0%Left%none%false%5\n" +
+		"25%(-45.0, 5.0, 45.0)%(-125.0, 5.0, 45.0)%0%Left%none%false%5\n" +
 		"26%(25.0, 5.0, 45.0)%(-45.0, 5.0, 45.0)%0%Left%none%false%6\n" +
 		"27%(85.0, 5.0, 45.0)%(25.0, 5.0, 45.0)%0%Left%none%false%4\n" +
 		"28%(-55.0, 5.0, 85.0)%(-55.0, 5.0, 35.0)%55%Down%lightDown1%true%2\n" +
@@ -149,7 +149,7 @@ public class MapsData : MonoBehaviour {
 									MakeTheTrafficLight(StreetsAttributes[i][4], StreetsAttributes[i][5], StreetsAttributes[i][6]), 
 									float.Parse(StreetsAttributes[i][3]), 
 									Globals.STREET_WIDTH, 	
-									int.Parse(StreetsAttributes[i][7]) 
+									int.Parse(StreetsAttributes[i][7])-1 
 									));
 									
 		}

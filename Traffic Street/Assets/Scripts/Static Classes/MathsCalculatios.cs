@@ -2,6 +2,62 @@ using UnityEngine;
 using System.Collections;
 
 public class MathsCalculatios  {
+	public static float ResetTheSpeedIfGreater(float speed, float maxSpeed){
+		if (speed > maxSpeed){
+			speed = maxSpeed;
+		}
+		return speed;
+	}
+	
+	public static float CalculateAcclerationByNewtonFormula(float initialSpeed, float finalSpeed, float distance){
+		if(distance == 0){
+			return 0;
+		}
+		float time = 2 * distance / (finalSpeed + initialSpeed) / Time.deltaTime ;
+		
+		float accleration = (finalSpeed - initialSpeed)/time;
+		
+		return accleration;
+		
+	}
+	
+	public static float GetDistanceBetweenVehicleAndOtherPosition(Vector3 vehiclePos, float pos, StreetDirection direction) {
+		if(direction == StreetDirection.Right || direction == StreetDirection.Left){
+			return Mathf.Abs(pos - vehiclePos.x);
+		}
+		
+		else {
+			return Mathf.Abs(pos - vehiclePos.z);
+		}
+	}
+	
+	public static float GetDistanceBetweenVehicleAndOtherPosition(Vector3 vehiclePos, Vector3 pos, StreetDirection direction) {
+		if(direction == StreetDirection.Right || direction == StreetDirection.Left){
+			return Mathf.Abs(pos.x - vehiclePos.x);
+		}
+		
+		else {
+			return Mathf.Abs(pos.z - vehiclePos.z);
+		}
+	}
+	
+	public static int CheckStoppingPosition(StreetDirection direction, Vector3 vehiclePos, float stopPos, float Offset){
+		if(direction == StreetDirection.Right && vehiclePos.x > stopPos-(15+Offset) - Offset) 
+			return 1;
+		
+		else if(direction == StreetDirection.Left && vehiclePos.x < stopPos+(15+Offset) + Offset) 
+			return 2;
+		
+		else if(direction == StreetDirection.Down && vehiclePos.z < stopPos+(15+Offset) + Offset) 
+			return 3;
+		
+		else if(direction == StreetDirection.Up && vehiclePos.z > stopPos-(15+Offset) - Offset) 
+			return 4;
+		
+		else 
+			return -1;
+	
+	}
 	
 	public static Vector3 GetApproximatedPosition(Vector3 position){
 		int xPos  ;
