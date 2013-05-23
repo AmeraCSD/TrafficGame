@@ -49,7 +49,7 @@ public class Ambulance : MonoBehaviour {
 																				path.PathStreets[0], 
 																				path.PathStreets[1], 
 																				0,
-																				path);
+																				path,null);
 				
 		}	
 	

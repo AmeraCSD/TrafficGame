@@ -21,6 +21,7 @@ public class Vehicle  {
 	private Street _nextStreet;
 	private int _curStreetNumber;
 	private GamePath _myPath;
+	private AudioClip _horn;
 	
 	
 	//attributes to specialize the events
@@ -28,7 +29,7 @@ public class Vehicle  {
 	
 	//the constructor
 	
-	public Vehicle(VehicleType type,float speed,float size, StreetDirection curDir, Street curStreet, Street nextStreet,int curStrNum, GamePath path){
+	public Vehicle(VehicleType type,float speed,float size, StreetDirection curDir, Street curStreet, Street nextStreet,int curStrNum, GamePath path, AudioClip theHorn){
 		_type = type;
 		_speed = speed;
 		_size = size;
@@ -37,6 +38,7 @@ public class Vehicle  {
 		_nextStreet = nextStreet;
 		_curStreetNumber = curStrNum;
 		_myPath = path;
+		_horn = theHorn;
 	}
 
 	
@@ -87,7 +89,10 @@ public class Vehicle  {
 		set{_stoppable = value;}
 	}
 	
-	
+	public AudioClip Horn{
+		get{return _horn;}
+		set{_horn = value;}
+	} 
 	
 }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Globals : MonoBehaviour {
 	
@@ -13,11 +14,13 @@ public class Globals : MonoBehaviour {
 	public static float SERVICE_CAR_SPEED = 13;
 	public static float THIEF_SPEED = 30;
 	
-	
+	public static List<AudioClip> Horns;
+	public List<AudioClip> HornsGos;
 	
 	
 	// Use this for initialization
 	void Start () {
+		Horns = HornsGos;
 		//vibrationEnabled = false;
 	}
 	

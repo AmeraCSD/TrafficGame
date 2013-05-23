@@ -20,11 +20,7 @@ public class IntersectionArea : MonoBehaviour {
 			if( checkFaceToFaceVehicles(vehiclesOnMe[0].GetComponent<VehicleController>(), vehiclesOnMe[1].GetComponent<VehicleController>()) ||
 				checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
 				
-				VehicleController vcScript = vehiclesOnMe[0].GetComponent<VehicleController>();
-				vcScript.speed += MathsCalculatios.CalculateAcclerationByNewtonFormula( vcScript.speed,
-																						vcScript.myVehicle.Speed, 
-																						5);
-				//vcScript.speed = MathsCalculatios.ResetTheSpeedIfGreater(vcScript.speed, vcScript.myVehicle.Speed);
+					vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
 				/*
 				if(vehiclesOnMe[0].GetComponent<VehicleController>().ImTheOneToMove){
 					vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
@@ -119,12 +115,9 @@ public class IntersectionArea : MonoBehaviour {
 		if(other.tag == "vehicle"){
 			vehiclesOnMe.Remove(other.gameObject);
 			if(vehiclesOnMe.Count == 1){
-				VehicleController vcScript = vehiclesOnMe[0].GetComponent<VehicleController>();
-				vcScript.haveToReduceMySpeed = false;
-				vcScript.speed += MathsCalculatios.CalculateAcclerationByNewtonFormula( vcScript.speed,
-																						vcScript.myVehicle.Speed, 5);
-			//	vcScript.speed = MathsCalculatios.ResetTheSpeedIfGreater(vcScript.speed, vcScript.myVehicle.Speed);
-				//vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
+				
+				vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = false;
+				vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
 				
 			}
 		}

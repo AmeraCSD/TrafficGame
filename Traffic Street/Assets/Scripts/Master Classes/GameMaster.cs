@@ -180,7 +180,7 @@ public class GameMaster : MonoBehaviour {
 			eventsNumbers.Add(1);
 			List<EventTimes> eventTimes = new List<EventTimes>();
 			*/
-			currentLevel = new Level(2, map, 20.0f, 3, 200, 150, null, null, null, null);
+			currentLevel = new Level(2, map, 20.0f, 2, 200, 150, null, null, null, null);
 		}
 		
 	}
@@ -212,7 +212,7 @@ public class GameMaster : MonoBehaviour {
 		
 		InstantiateIntersections();
 		
-		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.5f);
+		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.3f);
 		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
 	}
 	
@@ -288,7 +288,7 @@ public class GameMaster : MonoBehaviour {
 		}
 	//	gameTimeVarLabel.text = gameTime+"";
 		//gameTimeLabel = gameTimeLabelGo.GetComponent<UILabel>();
-		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 5){ //***********************should beeee 15
+		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 10){ //***********************should beeee 15
 			secondsCounterFor30 ++;
 			if(secondsCounterFor30 == 30){	
 				if(satisfyBar >=0){
@@ -458,7 +458,7 @@ public class GameMaster : MonoBehaviour {
 	
 	private void AdjustEach15Vehicle(){
 		initedCarsNumber ++;
-		if(initedCarsNumber == 5){	//**************************************** should be 15
+		if(initedCarsNumber == 10){	//**************************************** should be 15
 			cancelInvokeFirst15Vehicles = true;
 			initedCarsNumber =0;
 		}
