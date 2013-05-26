@@ -17,7 +17,7 @@ public class GameMaster : MonoBehaviour {
 	public List<Street> Streets;
 	public List<Vector3> Intersections;
 	public List<TrafficLight> Lights;
-	
+		
 	//HUDs variables 
 	public static int score;
 	public float gameTime;
@@ -25,27 +25,24 @@ public class GameMaster : MonoBehaviour {
 	public bool gameOver;
 	public int trullyPassedEventsNum;
 	
-	private const float GAME_TIME = 150;			//should equal to 5 minutes
+	private const float GAME_TIME = 300;			//should equal to 5 minutes
 	private const int WARNING_BEFORE_EVENT_SECONDS = 3;
 	
 	public List<Texture2D> vehiclesTextures;
 	
-	
 	public GameObject vehiclePrefab;				//this object should be initialized in unity with the VehiclePrefab
 	public GameObject ambulancePrefab;				//this object should be initialized in unity with the AmbulancePrefab
 	public GameObject busPrefab;					//this object should be initialized in unity with the BusPrefab
-	public GameObject caravanPrefab;
-	public GameObject serviceCarPrefab;
-	public GameObject thiefPrefab;
-
+	public GameObject caravanPrefab;		
+	public GameObject serviceCarPrefab;		
+	public GameObject thiefPrefab;			
 	
+	public GameObject intersectionPrefab;	
 	
-	public GameObject intersectionPrefab;
+	public static List<float> eventsWarningTimes;	
+	public static List<string> eventsWarningNames;	
 	
-	public static List<float> eventsWarningTimes;
-	public static List<string> eventsWarningNames;
-	
-	public Queue existedVehicles;
+	public Queue existedVehicles;					
 	
 	private SatisfyBar satisfyBarScript;
 	
@@ -53,8 +50,7 @@ public class GameMaster : MonoBehaviour {
 	private bool cancelInvokeFirst15Vehicles;
 	private bool canInstatiateTheRest;
 	private int currentCarsNumber;
-	private int secondsCounterFor30;
-	private int secondsCounterForAnger;
+	public int secondsCounterForAnger;
 	private bool instantiatThisTime;
 	
 	public static int vehicilesCounter;
@@ -111,7 +107,10 @@ public class GameMaster : MonoBehaviour {
 	
 	public bool vibrationMade = false;
 	
-	
+	private int vehiclesShouldGenerated;
+	private int currentGroupNumber;
+	private int currentRateIndex;
+		
 	private void InitGUIVariables(){
 		eventWarningLabel = eventWarningLabelGo.GetComponent<UILabel>();
 //		closeButton = closeButtonGo.GetComponent<UIButton>();
@@ -136,6 +135,8 @@ public class GameMaster : MonoBehaviour {
 	
 	int index =0 ;
 	void Awake(){
+		currentGroupNumber = 0;
+		
 		InitTheCurrentLevel();
 		initObjects();
 		initVariables();
@@ -162,7 +163,7 @@ public class GameMaster : MonoBehaviour {
 			ranges.Add(new Range(130, 140));
 			EventRanges eventRangesObject = new EventRanges(ranges);
 			*/
-			currentLevel = new Level(1, map, 27.0f, 4, 200, 150, null, null, null, null);
+		//	currentLevel = new Level(1, map, 27.0f, 4, 200, 150, null, null, null, null);
 		}
 		
 		else if(Application.loadedLevelName == "Map 2"){
@@ -176,11 +177,58 @@ public class GameMaster : MonoBehaviour {
 			List<int> eventsNumbers = new List<int>();
 			eventsNumbers.Add(1);
 			eventsNumbers.Add(1);
-			eventsNumbers.Add(1);
+			eventsNumbers.Add(1);3030300
 			eventsNumbers.Add(1);
 			List<EventTimes> eventTimes = new List<EventTimes>();
 			*/
-			currentLevel = new Level(2, map, 20.0f, 2, 200, 150, null, null, null, null);
+			List<int> groups = new List<int>();
+			//25
+			groups.Add(1);
+			groups.Add(2);
+			groups.Add(2);
+			groups.Add(4);
+			groups.Add(6);
+			groups.Add(10);
+			
+			
+			//75
+			groups.Add(10);
+			groups.Add(15);
+			groups.Add(25);
+			groups.Add(25);
+			
+			//100
+			groups.Add(50);
+			groups.Add(50);
+			
+			List<int []> init_rates_intervals = new List<int[]>();
+			
+			init_rates_intervals.Add(new int[2]{1,280});
+			init_rates_intervals.Add(new int[2]{2,260});
+			init_rates_intervals.Add(new int[2]{3,240});
+			init_rates_intervals.Add(new int[2]{4,220});
+			init_rates_intervals.Add(new int[2]{5,200});
+			
+			init_rates_intervals.Add(new int[2]{8,0});
+			
+			/*
+			init_rates_intervals.Add(new int[2]{20,80});
+			init_rates_intervals.Add(new int[2]{25,60});
+			init_rates_intervals.Add(new int[2]{30,40});
+			init_rates_intervals.Add(new int[2]{35,20});
+			init_rates_intervals.Add(new int[2]{40,0});
+			*/
+			/*
+			init_rates_intervals[1,0] = 2;
+			init_rates_intervals[1,1] = 50;
+			init_rates_intervals[2,0] = 3;
+			init_rates_intervals[2,1] = 0;
+			*/
+			
+			currentLevel = new Level(2, map, 20.0f, groups, init_rates_intervals, 200, 150, null, null, null, null);
+			
+			vehiclesShouldGenerated = groups[0];
+			currentRateIndex = 0;
 		}
 		
 	}
@@ -193,7 +241,6 @@ public class GameMaster : MonoBehaviour {
 		showBox = false;
 		instantiatThisTime = false;
 		vehicilesCounter = 0;
-		secondsCounterFor30 = 0;		//this variable to decrement the satify
 		secondsCounterForAnger = 0;
 		canInstatiateTheRest = false;
 		cancelInvokeFirst15Vehicles = false;
@@ -212,7 +259,7 @@ public class GameMaster : MonoBehaviour {
 		
 		InstantiateIntersections();
 		
-		InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.3f);
+		//InvokeRepeating("generateFirst15Cars", Time.deltaTime, 0.3f);
 		InvokeRepeating("CountTimeDown", 1.0f, 1.0f);
 	}
 	
@@ -288,29 +335,52 @@ public class GameMaster : MonoBehaviour {
 		}
 	//	gameTimeVarLabel.text = gameTime+"";
 		//gameTimeLabel = gameTimeLabelGo.GetComponent<UILabel>();
-		if( GameObject.FindGameObjectsWithTag("vehicle").Length < 10){ //***********************should beeee 15
-			secondsCounterFor30 ++;
-			if(secondsCounterFor30 == 30){	
+		//if( GameObject.FindGameObjectsWithTag("vehicle").Length < 10){ //***********************should beeee 15
+			secondsCounterForAnger ++;
+			if(secondsCounterForAnger == 90){	
 				if(satisfyBar >=0){
 					satisfyBar --;
-					secondsCounterFor30 = 0;
+					secondsCounterForAnger = 0;
 					satisfyBarScript.AddjustSatisfaction(-1);
 				}
 			}
+	//	}
+	//	else{
+	//		secondsCounterForAnger = 0;
+		
+	//	}
+		
+		
+	//	if( canInstatiateTheRest){
+		//for(int i=0; i<currentLevel.InstatiationRateAndIntervals.GetUpperBound(0); i++){
+		Debug.LogWarning("amiraaaaaaaaaaa"+currentLevel.InstatiationRateAndIntervals.Count);
+		if((currentRateIndex < currentLevel.InstatiationRateAndIntervals.Count) && (gameTime > currentLevel.InstatiationRateAndIntervals[currentRateIndex][1] )){
+			if(vehiclesShouldGenerated >0){
+				InstantiatVehiclesArroundTime(currentLevel.InstatiationRateAndIntervals[currentRateIndex][0]);
+				
+			}
 		}
-		else{
-			secondsCounterFor30 = 0;
-		
+		else if(gameTime <= currentLevel.InstatiationRateAndIntervals[currentRateIndex][1]){
+			currentRateIndex ++;
 		}
 		
-		
-		if( canInstatiateTheRest){
+	//	if(currentCarsNumber ==0){
 			
-			InstantiatVehiclesArroundTime();
+			
+	//	}
+		
+		if(GameObject.FindGameObjectsWithTag("vehicle").Length==0){
+			currentGroupNumber ++;
+			if(currentGroupNumber<currentLevel.VehicleGroups.Count){
+				vehiclesShouldGenerated = currentLevel.VehicleGroups[currentGroupNumber];
+			}
 		}
+		
+	//	}
+	//	}
 	}
 	
-	private void InstantiatVehiclesArroundTime(){
+	private void InstantiatVehiclesArroundTime(int rate){
 		List<int> randomsList = new List<int>();
 	//	instantiatThisTime = !instantiatThisTime;
 		
@@ -324,7 +394,7 @@ public class GameMaster : MonoBehaviour {
 			*/
 		//randomsList = CheckAndGenerateTheEventElseVehicle(randomsList);
 		
-		for(int i = 0; i<currentLevel.InstatiationRate-1; i++){
+		for(int i = 0; i<rate; i++){
 			List<int> temp = CheckAndGenerateVehicle(randomsList);
 			randomsList = temp;
 		}
@@ -424,12 +494,13 @@ public class GameMaster : MonoBehaviour {
 			if(!isRepeatedPosition(randoms, pos)){
 				Texture2D tx = GetRandomTexture(0, 4);
 				NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, cancelInvokeFirst15Vehicles, existedVehicles);
+				vehiclesShouldGenerated--;
 				vehicilesCounter++;
 				AdjustEach15Vehicle();
 				randoms.Add(pos);
 			}
 		}
-		Debug.Log("randoms toolha kedaa " + randoms.Count);
+//		Debug.Log("randoms toolha kedaa " + randoms.Count);
 		return randoms;
 	}
 	
@@ -493,9 +564,13 @@ public class GameMaster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+				
+//		Debug.Log("el group ahooooooo   "+currentLevel.VehicleGroups[currentGroupNumber]);	
+	//	Debug.Log("el rate nowww  " + currentLevel.InstatiationRateAndIntervals[currentRateIndex][0]);
+		
 		DisplayGUIs();
 		
+
 	}
 	
 	

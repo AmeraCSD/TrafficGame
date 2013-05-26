@@ -116,7 +116,7 @@ public class LightsGamer : MonoBehaviour {
 	private void PutOnHoldOnMouseHit(RaycastHit hit){
 		
 		int index = ContainsLight(hit.collider.gameObject);
-		Debug.Log("the index is "+ index);
+//		Debug.Log("the index is "+ index);
 		if(index != -1){
 			for(int i=0; i<lights[index].AttachedStreets.Count; i++){
 				PutStateOnHold(lights[index].AttachedStreets[i]);

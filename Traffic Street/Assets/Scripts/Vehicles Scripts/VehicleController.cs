@@ -59,7 +59,7 @@ public class VehicleController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Awake(){
-		angerMount = .25f;
+		angerMount = .5f;
 		initInstancesAtFirst();
 		
 		angerSpriteGo = GameObject.FindGameObjectWithTag("comic");
@@ -329,7 +329,7 @@ public class VehicleController : MonoBehaviour {
 		if(speed == 0 && GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped){
 			SetLightTimer();
 				if(! stoppingTimerforAngerSet){
-					stoppingTimerforAnger = gameMasterScript.gameTime - 15 ;	
+					stoppingTimerforAnger = gameMasterScript.gameTime - 15 ;
 					stoppingTimerforAngerSet = true;
 				}
 		}
@@ -339,6 +339,7 @@ public class VehicleController : MonoBehaviour {
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(angerMount);
 				gameMasterScript.satisfyBar += angerMount;
 			//	satisfyAdjustedOnTime = true;
+				gameMasterScript.secondsCounterForAnger = 0;
 				stoppingTimerforAnger =0;
 				angerMount *= 2;
 				// comicccccccccccccccccccc and zamameeer
