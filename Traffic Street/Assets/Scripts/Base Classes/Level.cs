@@ -13,8 +13,9 @@ public class Level : MonoBehaviour {
 	private float _gameTime;
 	private List<VehicleType> _levelEvents;
 	private List<int> _eventsNumbers;
-	private EventTimes _eventsTimes;
-	private List<GamePath> _eventsPaths;
+	private List<EventTimes> _eventsTimes;
+	private List<List<GamePath>> _eventsPaths;
+	private int _maxLightsToOpen;
 	
 	public Level(int anId, 
 				Map aMap, 
@@ -25,8 +26,9 @@ public class Level : MonoBehaviour {
 				float theGameTime, 
 				List<VehicleType> theLevelEvents, 
 				List<int> theEventsNumbers, 
-				EventTimes theEventTimes, 
-				List<GamePath> theEventsPaths){
+				List<EventTimes> theEventTimes, 
+				List<List <GamePath>>theEventsPaths,
+				int theMaxLightsToOpen){
 		
 		
 		_id = anId;
@@ -40,6 +42,7 @@ public class Level : MonoBehaviour {
 		_eventsNumbers = theEventsNumbers;
 		_eventsTimes = theEventTimes;
 		_eventsPaths = theEventsPaths;
+		_maxLightsToOpen = theMaxLightsToOpen;
 	}
 	
 	public int ID{
@@ -87,13 +90,18 @@ public class Level : MonoBehaviour {
 		set{_eventsNumbers = value;}
 	}
 	
-	public EventTimes EventsTimesList{
+	public List<EventTimes> EventsTimesList{
 		get{return _eventsTimes;}
 		set{_eventsTimes = value;}
 	}
 	
-	public List<GamePath> EventsPaths{ /////////////////////////////////////////////should be list of list
+	public List<List<GamePath>> EventsPaths{ /////////////////////////////////////////////should be list of list
 		get{return _eventsPaths;}
 		set{_eventsPaths = value;}
+	}
+	
+	public int MaxLightsToOpen{
+		get{return _maxLightsToOpen;}
+		set{_maxLightsToOpen = value;}
 	}
 }

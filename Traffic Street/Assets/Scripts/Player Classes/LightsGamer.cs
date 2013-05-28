@@ -18,7 +18,7 @@ public class LightsGamer : MonoBehaviour {
 	
 	public List<TrafficLight> lights;
 	
-	private const int MAX_OPENED_LIGHTS = 3;
+	private int max_lights_to_open;
 	
 	
 	public const float MIN_VEHICLE_SPEED = 23.0f;		//this should be in the global class 
@@ -32,10 +32,13 @@ public class LightsGamer : MonoBehaviour {
 	public List<GameObject> currentlyOpenedLights;
 	
 	public GameObject youCantOpenLightLabelGo;
+	public GameObject youCantOpenLightLabelVarGo;
 	//private UILabel youCantOpenLightLabel;
 	
 	void Awake(){
 		youCantOpenLightLabelGo.SetActive(false);
+		youCantOpenLightLabelVarGo.SetActive(false);
+
 	//	youCantOpenLightLabel = youCantOpenLightLabelGo.GetComponent<UILabel>();
 	}
 	
@@ -47,7 +50,7 @@ public class LightsGamer : MonoBehaviour {
 
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().Streets; //To get the streets in the whole game here in one list
 		lights = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().Lights;
-		Debug.Log("come onnnnn hereeeeeeeeeeeeeeee " + lights.Count);
+		max_lights_to_open = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().currentLevel.MaxLightsToOpen;
 		InitLightsColors();	
 		
 	}
@@ -89,7 +92,7 @@ public class LightsGamer : MonoBehaviour {
     		RaycastHit hit ;
     		if (Physics.Raycast(ray, out hit)){
 				if(hit.collider.gameObject.renderer.material.color == Color.red){
-					if(currentlyOpenedLights.Count < MAX_OPENED_LIGHTS){
+					if(currentlyOpenedLights.Count < max_lights_to_open){
 						currentlyOpenedLights.Add(hit.collider.gameObject);
 						timer = Time.time ;
 						PutOnHoldOnMouseHit(hit);
@@ -97,11 +100,14 @@ public class LightsGamer : MonoBehaviour {
 					else{
 						Debug.Log("you cannot do thisssss");
 						youCantOpenLightLabelGo.SetActive(true);
+						youCantOpenLightLabelVarGo.SetActive(true);
+						youCantOpenLightLabelVarGo.GetComponent<UILabel>().text = max_lights_to_open+"";
 					}
 					
 				}
 				else if(hit.collider.gameObject.renderer.material.color == Color.green){
 					youCantOpenLightLabelGo.SetActive(false);
+					youCantOpenLightLabelVarGo.SetActive(false);
 					if(currentlyOpenedLights.Contains(hit.collider.gameObject)){
 						currentlyOpenedLights.Remove(hit.collider.gameObject);
 					}

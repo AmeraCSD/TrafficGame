@@ -51,7 +51,8 @@ public class ServiceCar : MonoBehaviour {
 																				path.PathStreets[0], 
 																				path.PathStreets[1], 
 																				0,
-																				path,null);
+																				path,
+																				Globals.Horns[Random.Range(0,4)]);
 				
 		}	
 	

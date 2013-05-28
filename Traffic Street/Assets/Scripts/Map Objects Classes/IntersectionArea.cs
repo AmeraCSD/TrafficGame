@@ -41,7 +41,7 @@ public class IntersectionArea : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider other) {
-		Debug.Log("there is a vehicle entered the plane ");
+	//	Debug.Log("there is a vehicle entered the plane ");
 		
 		
 		if(other.tag == "vehicle"){

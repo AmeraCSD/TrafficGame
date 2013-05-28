@@ -7,11 +7,14 @@ public class Globals : MonoBehaviour {
 	public static bool vibrationEnabled;
 	
 	public static float STREET_WIDTH = 23;
+	public static int ANGER_TIMER = 10;
 	
-	public static float AMBULANCE_SPEED = 29;
+	public static float NORMAL_AVG_VEHICLE_SPEED = 25;
+	
+	public static float AMBULANCE_SPEED = 36;
 	public static float BUS_SPEED = 12;
 	public static float CARAVAN_SPEED = 10;
-	public static float SERVICE_CAR_SPEED = 13;
+	public static float SERVICE_CAR_SPEED = 10;
 	public static float THIEF_SPEED = 30;
 	
 	public static List<AudioClip> Horns;

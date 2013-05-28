@@ -92,7 +92,8 @@ public class VehicleController : MonoBehaviour {
 	
 	void Start () {
 		InitStreetAndVehicleAttributes();
-		gameObject.GetComponent<AudioSource>().clip = myVehicle.Horn;
+		if(myVehicle.Horn != null)
+			gameObject.GetComponent<AudioSource>().clip = myVehicle.Horn;
 	}
 	
 	public void InitStreetAndVehicleAttributes(){
@@ -223,7 +224,7 @@ public class VehicleController : MonoBehaviour {
 			}
 			else{
 				myVehicle.NextStreet = null;
-				Debug.Log("next street is null " );
+//				Debug.Log("next street is null " );
 			}
 			
 			_street = myVehicle.CurrentStreet; 
@@ -256,7 +257,7 @@ public class VehicleController : MonoBehaviour {
 				}
 				else{
 					//if(vehType != VehicleType.Ambulance)
-						gameMasterScript.trullyPassedEventsNum ++;
+					gameMasterScript.trullyPassedEventsNum ++;
 				}
 				GameMaster.score += 1;
 				
@@ -329,12 +330,12 @@ public class VehicleController : MonoBehaviour {
 		if(speed == 0 && GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped){
 			SetLightTimer();
 				if(! stoppingTimerforAngerSet){
-					stoppingTimerforAnger = gameMasterScript.gameTime - 15 ;
+					stoppingTimerforAnger = gameMasterScript.gameTime - Globals.ANGER_TIMER ;
 					stoppingTimerforAngerSet = true;
 				}
 		}
 		if(GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped ){
-			if(vehType != VehicleType.Ambulance && gameMasterScript.gameTime <= stoppingTimerforAnger){
+			if(gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(angerMount);
 				gameMasterScript.satisfyBar += angerMount;

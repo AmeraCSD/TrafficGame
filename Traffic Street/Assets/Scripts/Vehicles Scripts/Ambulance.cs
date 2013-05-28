@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Ambulance : MonoBehaviour {
-
 	
 	public static List<float> ambulanceTimeSlots;
 	
@@ -12,12 +11,11 @@ public class Ambulance : MonoBehaviour {
 	}
 	
 	public  static void SetEventTime(List<float> eventTimes){
-		
 		for (int i = 0 ; i<eventTimes.Count; i++){
 			
 			ambulanceTimeSlots.Add(eventTimes[i]);
 			GameMaster.eventsWarningTimes.Add(eventTimes[i]+5);
-			GameMaster.eventsWarningNames.Add("ambulance");
+			GameMaster.eventsWarningNames.Add("a");
 		}	
 		
 	}
