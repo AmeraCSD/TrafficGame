@@ -50,9 +50,11 @@ public class VehicleController : MonoBehaviour {
 	private bool stoppingTimerforAngerSet;
 	
 	private List<int> serviceCarStops; 
+	private List<int> taxiStops;
 	
 	public float busStopTimer;
 	private float serviceCarStopTimer;
+	private float taxiStopTimer;
 	
 	public GameObject angerSpriteGo;
 	private GameObject myAngerSprite;
@@ -85,6 +87,7 @@ public class VehicleController : MonoBehaviour {
 		haveToReduceMySpeed = false;
 		busStopTimer = 0;
 		serviceCarStopTimer = 0;
+		taxiStopTimer =0;
 		
 		ImTheOneToMove = false;
 		
@@ -116,6 +119,10 @@ public class VehicleController : MonoBehaviour {
 			serviceCarStops = ServiceCar.SetGetServiceCarRandomStops(gameMasterScript.gameTime -9, gameMasterScript.gameTime-15);
 		}
 		
+		if(vehType == VehicleType.Taxi){
+			taxiStops = Taxi.SetGetTaxiRandomStops(gameMasterScript.gameTime -5, gameMasterScript.gameTime-10);
+		}
+		
 	}
 	
 	
@@ -145,6 +152,7 @@ public class VehicleController : MonoBehaviour {
 				StopMovingOnRed();
 		}
 		CheckServiceCarStops();
+		CheckTaxiStops();
 		CheckMyAnger();
 		
 		
@@ -168,7 +176,7 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void SetStopOffset(){
-		Offset =  (GetMyOrderInQueue()) * (_size + 9);
+		Offset = _size*4 + (GetMyOrderInQueue() * (_size + 9));
 	}
 	
 	private void CheckPosition_DeqIfPassed(){
@@ -242,6 +250,7 @@ public class VehicleController : MonoBehaviour {
 			dequeued = false;
 			enqueued = false;
 			passed = false;
+			stoppingTimerforAngerSet = false;
 			//haveToReduceMySpeed = false;
 		}
 	}
@@ -318,6 +327,34 @@ public class VehicleController : MonoBehaviour {
 				serviceCarStopTimer = 0;
 			}
 			if(serviceCarStopTimer != 0) {
+				speed = 0;
+				haveToReduceMySpeed = true;
+			}
+		}
+		 
+			
+	}
+	
+	private void CheckTaxiStops(){
+		if(vehType == VehicleType.Taxi){
+			if(Taxi.InsideTaxiStops(taxiStops , gameMasterScript.gameTime)){
+				if(taxiStopTimer ==0){
+					taxiStopTimer = gameMasterScript.gameTime-2;
+					//stop
+					//Debug.Log("Stopping the service car" + gameMasterScript.gameTime );
+					speed = 0;
+					haveToReduceMySpeed = true;
+				}
+				
+			}
+			
+			else if(gameMasterScript.gameTime <= taxiStopTimer){
+				//move
+				//Debug.Log("Moving the service car againnn" + gameMasterScript.gameTime );
+				haveToReduceMySpeed = false;
+				taxiStopTimer = 0;
+			}
+			if(taxiStopTimer != 0) {
 				speed = 0;
 				haveToReduceMySpeed = true;
 			}
@@ -444,9 +481,9 @@ public class VehicleController : MonoBehaviour {
 			}
 		}
 		else{ 
-			if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus)
+			if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus || vehType == VehicleType.Taxi)
 					speed = myVehicle.Speed;
-			if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar) &&(vehType != VehicleType.Caravan)&& (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus))
+			if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar || vehType != VehicleType.Taxi) &&(vehType != VehicleType.Caravan)&& (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus) && (vehType != VehicleType.Taxi))
 				haveToReduceMySpeed = false;
 		}
 

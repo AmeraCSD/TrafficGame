@@ -35,16 +35,17 @@ public class ServiceCar : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateVehicle(GameObject serviceCarPrefab, GamePath path){	
+	public static void GenerateVehicle(GameObject serviceCarPrefab, Texture2D tx, GamePath path){	
 					
 		if(serviceCarPrefab != null){
 			GameObject vehicle;
 			vehicle = Instantiate(serviceCarPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
+			vehicle.renderer.material.mainTexture = tx;
 			path.PathStreets[0].VehiclesNumber ++;
 			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
 			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
-			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Caravan, 
+			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.ServiceCar, 
 																				Globals.SERVICE_CAR_SPEED, 
 																				MathsCalculatios.getVehicleLargeSize(vehicle), 
 																				path.PathStreets[0].StreetLight.Type, 

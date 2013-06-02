@@ -15,7 +15,7 @@ public class Ambulance : MonoBehaviour {
 			
 			ambulanceTimeSlots.Add(eventTimes[i]);
 			GameMaster.eventsWarningTimes.Add(eventTimes[i]+5);
-			GameMaster.eventsWarningNames.Add("a");
+			GameMaster.eventsWarningNames.Add("ambulance");
 		}	
 		
 	}

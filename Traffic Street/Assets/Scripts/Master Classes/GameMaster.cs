@@ -34,7 +34,8 @@ public class GameMaster : MonoBehaviour {
 	public GameObject busPrefab;					//this object should be initialized in unity with the BusPrefab
 	public GameObject caravanPrefab;		
 	public GameObject serviceCarPrefab;		
-	public GameObject thiefPrefab;			
+	public GameObject thiefPrefab;
+	public GameObject taxiPrefab;
 	
 	public GameObject intersectionPrefab;	
 	
@@ -98,7 +99,7 @@ public class GameMaster : MonoBehaviour {
 	public GameObject endGameSpriteGo;
 	private UISlicedSprite endGameSprite;
 
-
+	private bool instantiationFlag;
 
 
 	public GameObject winMenu;
@@ -136,7 +137,9 @@ public class GameMaster : MonoBehaviour {
 	
 	int index =0 ;
 	void Awake(){
+		Globals.NORMAL_AVG_VEHICLE_SPEED = 25;
 		currentGroupNumber = 0;
+		instantiationFlag = true;
 		
 		InitTheCurrentLevel();
 		initObjects();
@@ -221,7 +224,6 @@ public class GameMaster : MonoBehaviour {
 		existedVehicles = new Queue();
 		trullyPassedEventsNum = 0;
 		showBox = false;
-		instantiatThisTime = false;
 		vehicilesCounter = 0;
 		secondsCounterForAnger = 0;
 		canInstatiateTheRest = false;
@@ -263,24 +265,82 @@ public class GameMaster : MonoBehaviour {
 	
 	private void InitEventsLists(){
 		List<VehicleType> events = new List<VehicleType>();
-		events.Add(VehicleType.Ambulance);
-		
 		List<int> eventsNumbers = new List<int>();
-		eventsNumbers.Add(2);
-		
 		List<EventTimes> eventTimes = new List<EventTimes>();
+		List <List<GamePath>> eventsPaths = new List<List<GamePath>>();
 		
+		
+		//ambulance
+		//1
+		events.Add(VehicleType.Ambulance);
+		//2
+		eventsNumbers.Add(2);
+		//3
 		List <float> ambulanceTimeslist = new List<float>();
 		ambulanceTimeslist.Add(200);
 		ambulanceTimeslist.Add(250);
 		eventTimes.Add(new EventTimes(ambulanceTimeslist));
-		
+		//4
 		List <GamePath> ambulanceGamePathsList = new List<GamePath>();
 		ambulanceGamePathsList.Add(Paths[0]);
 		ambulanceGamePathsList.Add(Paths[2]);
-		
-		List <List<GamePath>> eventsPaths = new List<List<GamePath>>();
 		eventsPaths.Add(ambulanceGamePathsList);
+		
+		//Bus
+		//1
+		events.Add(VehicleType.Bus);
+		//2
+		eventsNumbers.Add(1);
+		//3
+		List <float> busTimeslist = new List<float>();
+		busTimeslist.Add(260);
+		eventTimes.Add(new EventTimes(busTimeslist));
+		//4
+		List <GamePath> busGamePathsList = new List<GamePath>();
+		busGamePathsList.Add(Paths[0]);
+		busGamePathsList.Add(Paths[2]);
+		eventsPaths.Add(busGamePathsList);
+		
+		//service car
+		//1
+		events.Add(VehicleType.ServiceCar);
+		//2
+		eventsNumbers.Add(1);
+		//3
+		List <float> serviceCarTimeslist = new List<float>();
+		serviceCarTimeslist.Add(240);
+		eventTimes.Add(new EventTimes(serviceCarTimeslist));
+		//4
+		List <GamePath> servicCarGamePathsList = new List<GamePath>();
+		servicCarGamePathsList.Add(Paths[0]);
+		servicCarGamePathsList.Add(Paths[2]);
+		eventsPaths.Add(servicCarGamePathsList);
+		
+		//taxi
+		//1
+		events.Add(VehicleType.Taxi);
+		//2
+		eventsNumbers.Add(5);
+		//3
+		List <float> taxiTimeslist = new List<float>();
+		taxiTimeslist.Add(280);
+		taxiTimeslist.Add(265);
+		taxiTimeslist.Add(245);
+		taxiTimeslist.Add(225);
+		taxiTimeslist.Add(205);
+		/*
+		taxiTimeslist.Add(185);
+		taxiTimeslist.Add(165);
+		taxiTimeslist.Add(145);
+		taxiTimeslist.Add(125);
+		taxiTimeslist.Add(105);
+		*/
+		eventTimes.Add(new EventTimes(taxiTimeslist));
+		//4
+		List <GamePath> taxiGamePathsList = new List<GamePath>();
+		taxiGamePathsList.Add(Paths[0]);
+		taxiGamePathsList.Add(Paths[2]);
+		eventsPaths.Add(taxiGamePathsList);
 		
 		currentLevel.LevelEvents = events;
 		currentLevel.EventsNumber = eventsNumbers;
@@ -309,7 +369,10 @@ public class GameMaster : MonoBehaviour {
 			Thief.InitInstances();
 			Thief.SetEventTime(currentLevel.EventsTimesList[currentLevel.LevelEvents.IndexOf(VehicleType.Thief)].TimesList);
 		}
-		
+		if(currentLevel.LevelEvents.Contains(VehicleType.Taxi)){
+			Taxi.InitInstances();
+			Taxi.SetEventTime(currentLevel.EventsTimesList[currentLevel.LevelEvents.IndexOf(VehicleType.Taxi)].TimesList);
+		}
 	}
 	
 	private void InstantiateIntersections(){
@@ -337,6 +400,7 @@ public class GameMaster : MonoBehaviour {
 	//This method is called in the Start() it counts down the game time each second and generates the vehicles in the random time calculated at the first of the game
 	void CountTimeDown ()
 	{
+		instantiationFlag = true;
 		if(--gameTime == 0)
 		{
 			CancelInvoke("CountTimeDown");
@@ -365,7 +429,8 @@ public class GameMaster : MonoBehaviour {
 		CheckAndGenerateTheEventElseVehicle();
 		
 		if((currentRateIndex < currentLevel.InstatiationRateAndIntervals.Count) && (gameTime > currentLevel.InstatiationRateAndIntervals[currentRateIndex][1] )){
-			if(vehiclesShouldGenerated >0){
+			
+			if(vehiclesShouldGenerated >0 && instantiationFlag){
 				InstantiatVehiclesArroundTime(currentLevel.InstatiationRateAndIntervals[currentRateIndex][0]);
 				
 			}
@@ -376,13 +441,19 @@ public class GameMaster : MonoBehaviour {
 		
 	
 		GameObject [] vehiclesFound = GameObject.FindGameObjectsWithTag("vehicle");
-		int counter = 0;
+		int tempLength = vehiclesFound.Length;
+		
+		int counter =0;
 		for(int i= 0; i< vehiclesFound.Length; i++){
-			if(vehiclesFound[i].GetComponent<VehicleController>().myVehicle.NextStreet == null){
+			VehicleController tempScript = vehiclesFound[i].GetComponent<VehicleController>();
+			if(tempScript.myVehicle.Type != VehicleType.Normal){
+				tempLength--;
+			}
+			else if(tempScript.myVehicle.NextStreet == null){
 				counter ++;
 			}
 		}
-		if(counter == vehiclesFound.Length){
+		if(counter == tempLength){
 			currentGroupNumber ++;
 			if(currentGroupNumber<currentLevel.VehicleGroups.Count){
 				vehiclesShouldGenerated = currentLevel.VehicleGroups[currentGroupNumber];
@@ -428,11 +499,10 @@ public class GameMaster : MonoBehaviour {
 				vibrationMade = false;
 				showBox = false;
 				eventWarningLabelGo.SetActive(false);
-				//eventWarningLabel.text = "";
 				Debug.Log("should be a bus");
 				Bus.GenerateVehicle(busPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Bus)][0]); //*********************temppppppppppppppppppp SHOULD BE CHANGED
 				vehicilesCounter ++;
-				//randomsList.Add();
+				instantiationFlag = false;
 			}
 			
 			
@@ -444,7 +514,7 @@ public class GameMaster : MonoBehaviour {
 				Debug.Log("should be ambulance");
 				Ambulance.GenerateVehicle(ambulancePrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Ambulance)][Random.Range(0, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Ambulance)].Count)]);
 				vehicilesCounter ++;
-				//randomsList.Add(pos);
+				instantiationFlag = false;
 			}
 			
 			else if(currentLevel.LevelEvents.Contains(VehicleType.Caravan)&& Caravan.InsideTimeSlotsList(gameTime)) {
@@ -455,7 +525,7 @@ public class GameMaster : MonoBehaviour {
 				Debug.Log("should be caravan");
 				Caravan.GenerateVehicle(caravanPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Caravan)][0]);
 				vehicilesCounter ++;
-				//randomsList.Add(pos);
+				instantiationFlag = false;
 			}
 			
 			else if(currentLevel.LevelEvents.Contains(VehicleType.ServiceCar)&& ServiceCar.InsideTimeSlotsList(gameTime)) {
@@ -464,10 +534,10 @@ public class GameMaster : MonoBehaviour {
 				eventWarningLabelGo.SetActive(false);
 				eventWarningLabel.text = "";
 				Debug.Log("should be a service car");
-				Texture2D tx = GetRandomTexture(4, 7);
-				ServiceCar.GenerateVehicle(serviceCarPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.ServiceCar)][0]);
+				Texture2D tx = GetRandomTexture(4,5);
+				ServiceCar.GenerateVehicle(serviceCarPrefab, tx,currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.ServiceCar)][0]);
 				vehicilesCounter ++;
-				//randomsList.Add(pos);
+				instantiationFlag = false;
 			}
 			
 			
@@ -480,11 +550,22 @@ public class GameMaster : MonoBehaviour {
 					Debug.Log("should be a thief");
 					Thief.GenerateVehicle(thiefPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Thief)][0]);
 					vehicilesCounter ++;
-					//randomsList.Add(pos);
+					instantiationFlag = false;
 				}
 			}
 		
-		
+			else if(currentLevel.LevelEvents.Contains(VehicleType.Taxi)&& Taxi.InsideTimeSlotsList(gameTime)) {
+				if(CheckAllStreetsEmptiness()){
+					vibrationMade = false;
+				showBox = false;
+				eventWarningLabelGo.SetActive(false);
+				eventWarningLabel.text = "";
+					Debug.Log("should be a taxi");
+					Taxi.GenerateVehicle(taxiPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Taxi)][0]);
+					vehicilesCounter ++;
+					instantiationFlag = false;
+				}
+			}
 		}
 	}
 	
@@ -594,7 +675,7 @@ public class GameMaster : MonoBehaviour {
 		}
 		
 		if(showBox){
-			if(eventsWarningNames[index] == "a"){
+			if(eventsWarningNames[index] == "ambulance"){
 				//closeButtonGo.SetActive(true);
 				
 				eventWarningLabelGo.SetActive(true);
@@ -609,7 +690,7 @@ public class GameMaster : MonoBehaviour {
 				//eventsSprite.spriteName = "ambulance1";
 			}
 			
-			if(eventsWarningNames[index] == "b"){
+			if(eventsWarningNames[index] == "bus"){
 			//	vibrationMade = false;
 				if(!vibrationMade && Globals.vibrationEnabled == true){
 					Handheld.Vibrate();
@@ -617,13 +698,13 @@ public class GameMaster : MonoBehaviour {
 				}
 				//closeButtonGo.SetActive(true);
 				eventWarningLabelGo.SetActive(true);
-				eventWarningLabel.text = "Bus is Coming";
+				eventWarningLabel.text = "Bus is Coming from the west";
 				//eventsSpriteGo.SetActive(true);
 				//eventsSprite.spriteName = "bus1";
 			}
 			
 			
-			if(eventsWarningNames[index] == "s"){
+			if(eventsWarningNames[index] == "serviceCar"){
 				//	vibrationMade = false;
 				if(!vibrationMade && Globals.vibrationEnabled == true){
 					Handheld.Vibrate();
@@ -631,12 +712,12 @@ public class GameMaster : MonoBehaviour {
 				}
 				//closeButtonGo.SetActive(true);
 				eventWarningLabelGo.SetActive(true);
-				eventWarningLabel.text = "Service Car is Coming";
+				eventWarningLabel.text = "Service Car is Coming from the west";
 				//eventsSpriteGo.SetActive(true);
 				//eventsSprite.spriteName = "ice";
 			}
 			
-			if(eventsWarningNames[index] == "t"){
+			if(eventsWarningNames[index] == "thief"){
 				//	vibrationMade = false;
 				if(!vibrationMade && Globals.vibrationEnabled == true){
 					Handheld.Vibrate();
@@ -650,7 +731,7 @@ public class GameMaster : MonoBehaviour {
 			}
 			
 			
-			if(eventsWarningNames[index] == "c"){
+			if(eventsWarningNames[index] == "caravan"){
 				//	vibrationMade = false;
 				if(!vibrationMade && Globals.vibrationEnabled == true){
 					Handheld.Vibrate();
@@ -663,7 +744,18 @@ public class GameMaster : MonoBehaviour {
 				//eventsSprite.spriteName = "caravan1";
 			}
 			
-			
+			if(eventsWarningNames[index] == "taxi"){
+				//	vibrationMade = false;
+				if(!vibrationMade && Globals.vibrationEnabled == true){
+					Handheld.Vibrate();
+					vibrationMade = true;
+				}
+				//closeButtonGo.SetActive(true);
+				eventWarningLabelGo.SetActive(true);
+				eventWarningLabel.text = "Taxi is coming from the west";
+				//eventsSpriteGo.SetActive(true);
+				//eventsSprite.spriteName = "caravan1";
+			}
 			
 			//Time.timeScale = 0;
 			

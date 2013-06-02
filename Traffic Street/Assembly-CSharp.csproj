@@ -201,6 +201,7 @@
      <Compile Include="Assets\Scripts\Vehicles Scripts\Caravan.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\NormalVehicle.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\ServiceCar.cs" />
+     <Compile Include="Assets\Scripts\Vehicles Scripts\Taxi.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Thief.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\VehicleBehavior.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\VehicleController.cs" />
