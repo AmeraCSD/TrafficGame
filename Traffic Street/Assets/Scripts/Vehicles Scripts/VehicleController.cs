@@ -144,6 +144,10 @@ public class VehicleController : MonoBehaviour {
 		Move();
 		
 		if(myVehicle.NextStreet!=null && MathsCalculatios.IsLeavingTheStreet(transform, _direction, _endPosition, _street)){
+			////////////////////////***************************Testing rotation hereee ************************************************88
+		//	transform.Rotate(0, Time.deltaTime, 0, Space.World);
+		//	Debug.Log("yaaady el neelah el soodaaaaaaaaaaa");
+			///////////////////////////////////////////////////////////////////////////////////
 			TransfereToNextStreet();
 		}
 		CheckAndDeactivateAtEnd();
@@ -188,6 +192,15 @@ public class VehicleController : MonoBehaviour {
 			passed = true ;
 			if(!dequeued && (!(_light.Stopped) || StillInStopRange() ) ){				
 				if(_myQueue.Count > 0){
+					//////////////////////////////////////////
+					//animation.Play("rotateLeftAnimation");
+					
+				//	Animator a = GetComponent<Animator>();
+					
+					/////////////////////////////////////
+					
+					
+					
 					_myQueue.Dequeue();
 					dequeued = true;
 					_street.VehiclesNumber --;
@@ -427,33 +440,32 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	
-	
 	private void Move(){
 		
 		if(_direction == StreetDirection.Left){
-    		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
-			transform.Translate(transform.TransformDirection(Vector3.left) * speed * Time.deltaTime, Space.Self);
+    		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
+			transform.Translate(transform.TransformDirection(transform.forward) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.left);
 			ReduceMeIfHit(ray);
 		}
 		else if(_direction == StreetDirection.Right){
-    		transform.localRotation = Quaternion.AngleAxis(0, Vector3.up);
-			transform.Translate(transform.TransformDirection(Vector3.right) * speed * Time.deltaTime, Space.Self);
+    		transform.localRotation = Quaternion.AngleAxis(270, Vector3.up);
+			transform.Translate(transform.TransformDirection(transform.forward) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.right);
 			ReduceMeIfHit(ray);
 		}
 		else if(_direction == StreetDirection.Down){
-    		transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
-			transform.Translate(transform.TransformDirection(Vector3.forward) * speed * Time.deltaTime, Space.Self);
+    		transform.localRotation = Quaternion.AngleAxis(0, Vector3.up);
+			transform.Translate(transform.TransformDirection(-1*transform.forward) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.back);
 			ReduceMeIfHit(ray);
 		}
 		else if(_direction == StreetDirection.Up){
-    		transform.localRotation = Quaternion.AngleAxis(270, Vector3.up);
-			transform.Translate(transform.TransformDirection(Vector3.back) * speed * Time.deltaTime, Space.Self);
+    		transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
+			transform.Translate(transform.TransformDirection(-1*transform.forward) * speed * Time.deltaTime, Space.Self);
 			
 			Ray ray = new Ray(transform.position, Vector3.forward);
 			ReduceMeIfHit(ray);
