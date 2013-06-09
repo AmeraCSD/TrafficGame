@@ -9,7 +9,8 @@ public class NormalVehicle : MonoBehaviour {
 		while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
 			pos = Random.Range(0, Paths.Count);
 		}
-		//pos = 0;
+		
+		pos = 6;
 		if(vehiclePrefab != null){
 		//*****************************optimization
 			GameObject vehicle;
