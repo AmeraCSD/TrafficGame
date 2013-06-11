@@ -299,8 +299,8 @@ public class GameMaster : MonoBehaviour {
 		eventTimes.Add(new EventTimes(busTimeslist));
 		//4
 		List <GamePath> busGamePathsList = new List<GamePath>();
+		busGamePathsList.Add(Paths[3]);
 		busGamePathsList.Add(Paths[0]);
-		busGamePathsList.Add(Paths[2]);
 		eventsPaths.Add(busGamePathsList);
 		
 		//service car

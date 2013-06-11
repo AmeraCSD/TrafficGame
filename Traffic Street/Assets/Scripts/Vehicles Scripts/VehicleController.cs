@@ -147,6 +147,9 @@ public class VehicleController : MonoBehaviour {
 		SetStopOffset();
 		CheckPosition_DeqIfPassed();
 		
+		if(_direction != _nextDirection)
+			MathsCalculatios.HaveToAccelerate(transform, _direction, _endPosition, _street, this);
+		
 		if(!rotateNow)
 			Move();
 		

@@ -296,4 +296,48 @@ public class MathsCalculatios  {
 		return corners[minIndex].transform.position;
 	}
 	
+	public static bool HaveToAccelerate(Transform transform, StreetDirection direction,Vector3 endPosition, Street street, VehicleController vehScript){
+		Debug.Log("amiraaaaaaaaaaa");
+		if(direction == StreetDirection.Left){
+			
+			if(transform.position.x < endPosition.x +10 ){
+				if(vehScript.speed > 0){
+					vehScript.speed -= 10.1f;
+				}
+				return true;
+				
+			}
+		}
+		
+	
+		if(direction == StreetDirection.Right){
+			if(transform.position.x > endPosition.x -10){
+				if(vehScript.speed > 0){
+					vehScript.speed -= 10.1f;
+				}
+				return true;
+			}
+		}
+		
+		
+		if(direction == StreetDirection.Up){
+			if(transform.position.z > endPosition.z -10){
+				if(vehScript.speed > 0){
+					vehScript.speed -= 10.1f;
+				}
+				return true;
+			}
+		}
+		
+		if(direction == StreetDirection.Down){
+			if(transform.position.z < endPosition.z +10){
+				if(vehScript.speed > 0){
+					vehScript.speed -= 10.1f;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }
