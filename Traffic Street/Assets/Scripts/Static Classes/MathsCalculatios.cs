@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MathsCalculatios  {
 	
@@ -168,28 +170,17 @@ public class MathsCalculatios  {
 		return false;
 	}
 	
-	public static bool IsLeavingTheStreet_Rotate(Transform transform, StreetDirection direction,Vector3 endPosition, Street street, StreetDirection nextDirection, VehicleController vehScript){
+	public static bool IsLeavingTheStreet_Rotate(GameObject [] corners, Transform transform, StreetDirection direction,Vector3 endPosition, Street street, StreetDirection nextDirection, VehicleController vehScript){
 		Vector3 obPos = transform.position;
 		
 		if(direction == StreetDirection.Left){
 			
 			if(transform.position.x < endPosition.x+5 ){
-				//finished
-				if(nextDirection == StreetDirection.Up){
-					//Debug.Log("transfrom position : "+transform.position);
-					
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x, 1, obPos.z+5);
-					} 
-					
-				}
-				/////////////
-				//**********************************************************
-				else if(nextDirection == StreetDirection.Down){
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x, 1, obPos.z-5);
-					} 
-				}
+				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
+				} 
+				
+				
 				//*******************************************************************
 				return true;
 				
@@ -199,20 +190,9 @@ public class MathsCalculatios  {
 		if(direction == StreetDirection.Down){
 			
 			if(transform.position.z < endPosition.z +5){
-				if(nextDirection == StreetDirection.Left){
-					//Debug.Log("transfrom position : "+transform.position);
-					
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x-5, 1, obPos.z);
-					} 
-					
-				}
-				
-				else if(nextDirection == StreetDirection.Right){
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x+5, 1, obPos.z+5);
-					} 
-				}
+				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
+				} 
 				
 				return true;
 			}
@@ -222,21 +202,9 @@ public class MathsCalculatios  {
 		if(direction == StreetDirection.Right){
 		//	if(transform.position.x > endPosition.x - 1 && transform.position.x < endPosition.x){
 			if(transform.position.x > endPosition.x - 5){
-				if(nextDirection == StreetDirection.Up){
-					//Debug.Log("transfrom position : "+transform.position);
-					
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x, 1, obPos.z-5);
-					} 
-					
-				}
-				/////////////
-				//**********************************************************
-				else if(nextDirection == StreetDirection.Down){
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x, 1, obPos.z-5);
-					} 
-				}
+				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
+				} 
 				return true;
 			}
 		}
@@ -245,20 +213,9 @@ public class MathsCalculatios  {
 		if(direction == StreetDirection.Up){
 			
 			if(transform.position.z > endPosition.z - 5){
-				if(nextDirection == StreetDirection.Left){
-					Debug.Log("transfrom position : "+transform.position);
-					
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x-5, 1, obPos.z);
-					} 
-				}
-				if(nextDirection == StreetDirection.Right){
-					Debug.Log("transfrom position : "+transform.position);
-					
-					if(vehScript.rotateAroundPosition == Vector3.zero){
-						vehScript.rotateAroundPosition = new Vector3(obPos.x+5, 1, obPos.z);
-					} 
-				}
+				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
+				} 
 				return true;
 			}
 		}
@@ -271,34 +228,72 @@ public class MathsCalculatios  {
 	}
 	
 	public static bool HasFinishedRotation(Vector3 transformForward, bool rotateNow, StreetDirection direction, StreetDirection nextDirection, VehicleController vehScript){
-		Debug.Log("transformForward ... " + -1*transformForward );
+		//Debug.Log("direc is >>  " + direction);
 		if(direction != nextDirection){
-			if(-1*transformForward.x > -.01 && rotateNow && nextDirection == StreetDirection.Up){
+			
+			Debug.Log("transformForward ... " + -1*transformForward.x );
+			if(direction == StreetDirection.Left && -1*transformForward.x > -0.01 && rotateNow && nextDirection == StreetDirection.Up){
 				vehScript.gameObject.transform.forward = -1*Vector3.forward;
 				return true;
 			}
 			
-			if(-1*transformForward.z < .01 && rotateNow && nextDirection == StreetDirection.Left){
+			if(direction == StreetDirection.Right && -1*transformForward.x < 0.01 && rotateNow && nextDirection == StreetDirection.Up){
+				vehScript.gameObject.transform.forward = -1*Vector3.forward;
+				Debug.Log("safwattttttttttttt");
+				return true;
+			}
+			
+			if(direction == StreetDirection.Up && -1*transformForward.z < 0.01 && rotateNow && nextDirection == StreetDirection.Left){
+				vehScript.gameObject.transform.forward = Vector3.right;
+				return true;
+			}
+			
+			if(direction == StreetDirection.Down && -1*transformForward.z > -0.01 && rotateNow && nextDirection == StreetDirection.Left){
 				vehScript.gameObject.transform.forward = Vector3.right;
 				return true;
 			}
 			///////////////////////////////////////////////////
 			
 			
-			if(-1*transformForward.x < .01 && rotateNow && nextDirection == StreetDirection.Down){
+			if(direction == StreetDirection.Left &&  -1*transformForward.x > -0.01 && rotateNow && nextDirection == StreetDirection.Down){
 				vehScript.gameObject.transform.forward = Vector3.forward;
 				return true;
 			}
 			
-			if(-1*transformForward.z >= 0 && rotateNow && nextDirection == StreetDirection.Right){
-				Debug.Log("bto2afy hena leeeeeeeeeeeeeh ya zbalaaah");
-				vehScript.gameObject.transform.forward = -1* Vector3.right;
+			if(direction == StreetDirection.Right &&  -1*transformForward.x < 0.01 && rotateNow && nextDirection == StreetDirection.Down){
+				vehScript.gameObject.transform.forward = Vector3.forward;
+				return true;
+			}
+			
+			if(direction == StreetDirection.Down && -1*transformForward.z > -0.01 && rotateNow && nextDirection == StreetDirection.Right){
+				vehScript.gameObject.transform.forward = -1*Vector3.right;
+				return true;
+			}
+			
+			if(direction == StreetDirection.Up && -1*transformForward.z < 0.01 && rotateNow && nextDirection == StreetDirection.Right){
+				vehScript.gameObject.transform.forward = -1*Vector3.right;
 				return true;
 			}
 			else
 				return false;
 		}
 		return true;
+	}
+	
+	public static Vector3 GetNearestCorner(GameObject[] corners, Vector3 vehPosition){
+		List<float> temp =  new List<float>();
+		float tempValue;
+		int minIndex = 0;
+		for(int i = 0; i<corners.Length; i++){
+			temp.Add(Vector3.Distance(vehPosition, corners[i].transform.position));
+			
+			if(Vector3.Distance(vehPosition, corners[i].transform.position) < temp[minIndex]){
+				minIndex = i;
+			}
+		}
+		
+		//temp.Sort();
+		return corners[minIndex].transform.position;
 	}
 	
 }

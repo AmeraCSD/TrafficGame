@@ -17,6 +17,7 @@ public class GameMaster : MonoBehaviour {
 	public List<Street> Streets;
 	public List<Vector3> Intersections;
 	public List<TrafficLight> Lights;
+	public GameObject [] Corners;
 		
 	//HUDs variables 
 	public static int score;
@@ -141,6 +142,7 @@ public class GameMaster : MonoBehaviour {
 		currentGroupNumber = 0;
 		instantiationFlag = true;
 		
+		Corners = GameObject.FindGameObjectsWithTag("corner");
 		InitTheCurrentLevel();
 		initObjects();
 		initVariables();

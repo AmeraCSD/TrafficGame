@@ -10,7 +10,7 @@ public class NormalVehicle : MonoBehaviour {
 			pos = Random.Range(0, Paths.Count);
 		}
 		
-		pos = 6;
+		//pos = 11;
 		if(vehiclePrefab != null){
 		//*****************************optimization
 			GameObject vehicle;

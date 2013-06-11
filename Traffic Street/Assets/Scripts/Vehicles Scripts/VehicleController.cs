@@ -8,6 +8,7 @@ public class VehicleController : MonoBehaviour {
 	
 	public bool ImTheOneToMove;
 	private int curScore;
+	private GameObject []  corners;
  
 	public Vehicle myVehicle;
 	private float angerMount;
@@ -80,6 +81,7 @@ public class VehicleController : MonoBehaviour {
 		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
 		boxColl = GetComponent<BoxCollider>();
 		
+		corners = gameMasterScript.Corners;
 		Offset = 0;
 		dequeued = false;
 		enqueued = false;
@@ -150,7 +152,7 @@ public class VehicleController : MonoBehaviour {
 		
 		if(myVehicle.NextStreet!=null){
 			if(_direction != _nextDirection){
-				if(MathsCalculatios.IsLeavingTheStreet_Rotate(transform, _direction, _endPosition, _street, _nextDirection, this)){
+				if(MathsCalculatios.IsLeavingTheStreet_Rotate(corners, transform, _direction, _endPosition, _street, _nextDirection, this)){
 					rotateNow = true;
 				}
 			}
@@ -176,7 +178,7 @@ public class VehicleController : MonoBehaviour {
 		
 		
 		if(_direction != _nextDirection && MathsCalculatios.HasFinishedRotation(transform.forward, rotateNow,_direction, _nextDirection, this)){
-			Debug.Log("hall mn mazeeeeeeeed");
+			//Debug.Log("hall mn mazeeeeeeeed");
 			rotateNow = false;
 			TransfereToNextStreet();
 			//rotateAroundPosition = Vector3.zero;
@@ -211,44 +213,47 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void RotateVehicle(){
+		float selfRotateSpeed = 40;
+		float worldRotateSpeed = 120;
 		if(_nextDirection == StreetDirection.Up && _direction == StreetDirection.Left){
-			transform.Rotate(transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition, Vector3.up, speed *3 * Time.deltaTime);
+			transform.Rotate(transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition, Vector3.up, worldRotateSpeed * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Up && _direction == StreetDirection.Right){
-			transform.Rotate(-1*transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition,-1* Vector3.up, speed *3 * Time.deltaTime);
+			transform.Rotate(-1*transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition,-1* Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Down && _direction == StreetDirection.Left){
-			transform.Rotate(-1*transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, speed *3 * Time.deltaTime);
+			transform.Rotate(-1*transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, worldRotateSpeed * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Down && _direction == StreetDirection.Right){
-			transform.Rotate(transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition,Vector3.up, speed *3 * Time.deltaTime);
+			transform.Rotate(transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition,Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Left && _direction == StreetDirection.Up){
-			transform.Rotate(-1*transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, speed *3 * Time.deltaTime);
+			transform.Rotate(-1*transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, worldRotateSpeed * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Left && _direction == StreetDirection.Down){
-			transform.Rotate(transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition, Vector3.up, speed *3 * Time.deltaTime);
+			Debug.Log("here weee gooooo");
+			transform.Rotate(transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition, Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Right && _direction == StreetDirection.Up){
-			transform.Rotate(-1*transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, speed *3 * Time.deltaTime);
+			transform.Rotate(-1*transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Right && _direction == StreetDirection.Down){
-			transform.Rotate(-1*transform.up* speed *.5f* Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, speed *3 * Time.deltaTime);
+			transform.Rotate(-1*transform.up* selfRotateSpeed *  Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
 		
 		Debug.DrawLine (transform.position, rotateAroundPosition);
@@ -557,7 +562,7 @@ public class VehicleController : MonoBehaviour {
 		}
 		else if(_direction == StreetDirection.Up){
 			if(myVehicle.CurrentStreetNumber == 0){
-    			transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
+    			transform.localRotation = Quaternion.AngleAxis(180, Vector3.up);
 			}
 		
 			transform.Translate(transform.TransformDirection(-1*transform.forward) * speed * Time.deltaTime, Space.Self);
