@@ -21,10 +21,14 @@ public class Globals : MonoBehaviour {
 	public static List<AudioClip> Horns;
 	public List<AudioClip> HornsGos;
 	
+	public List<GameObject> taxiStoppersGos;
+	public static List<GameObject> taxiStoppers;
+	
 	
 	// Use this for initialization
 	void Start () {
 		Horns = HornsGos;
+		taxiStoppers = taxiStoppersGos;
 		//vibrationEnabled = false;
 	}
 	

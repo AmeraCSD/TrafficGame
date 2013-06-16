@@ -10,7 +10,7 @@ public class MapsData : MonoBehaviour {
 	private List<Street> Streets;
 	
 	
-	private string Map1FileString =  "0%(-145.0, 5.0, -45.0)%(-65.0, 5.0, -45.0)%-75%Right%lightRight%true%5\n" +
+	private string Map2FileString =  "0%(-145.0, 5.0, -45.0)%(-65.0, 5.0, -45.0)%-75%Right%lightRight%true%5\n" +
 		"1%(-145.0, 5.0, -35.0)%(-55.0, 5.0, -35.0)%-75%Right%lightRight%true%5\n" +
 		"2%(-65.0, 5.0, -45.0)%(-65.0, 5.0, -75.0)%0%Down%none%false%2\n" +
 		"3%(-55.0, 5.0, -35.0)%(-55.0, 5.0, -75.0)%0%Down%none%false%2\n" +
@@ -54,7 +54,7 @@ public class MapsData : MonoBehaviour {
 		"41%(-65.0, 5.0, 15.0)%(-35.0, 5.0, 15.0)%0%Right%none%false%1\n" +
 		"42%(-35.0, 5.0, 15.0)%(-35.0, 5.0, 45.0)%0%Up%none%false%1";
 	
-	private string Map2FileString = "0%(-115.0, 5.0, -35.0)%(25.0, 5.0, -35.0)%15%Right%lightRight%true%8\n" +
+	private string Map1FileString = "0%(-115.0, 5.0, -35.0)%(25.0, 5.0, -35.0)%15%Right%lightRight%true%8\n" +
 		"1%(25.0, 5.0, -75.0)%(25.0, 5.0, -35.0)%-45%Up%lightUp%true%3\n" +
 		"2%(25.0, 5.0, -35.0)%(115.0, 5.0, -35.0)%0%Right%none%false%8\n" +
 		"3%(-115.0, 5.0, -25.0)%(35.0, 5.0, -25.0)%15%Right%lightRight%true%8\n" +
@@ -90,40 +90,6 @@ public class MapsData : MonoBehaviour {
 		"33%(-45.0, 5.0, 35.0)%(-45.0, 5.0, 45.0)%0%Up%none%false%1\n"+
 		"34%(25.0, 5.0, -35.0)%(25.0, 5.0, -15.0)%0%Up%none%false%2";
 
-	public List<Street> GetMap1Streets(){
-		Lights = new List<TrafficLight>();
-		Streets = new List<Street>();
-		
-		string [] lines = SplitStringOnLines(Map1FileString);
-		
-		List<string[]> StreetsAttributes = new List<string[]>();
-		
-		for(int i=0; i<lines.Length;i++){
-			StreetsAttributes.Add(SplitOneStreetLine(lines[i]));
-			for(int j= 0; j<lines.Length; j++){
-//				Debug.Log("wawaaa "+StreetsAttributes[i][j]);
-			}
-		}
-		
-		for(int i=0; i<StreetsAttributes.Count;i++){
-			
-		//	Debug.Log(ConvertStringToVector(StreetsAttributes[i][1]));
-			
-			Streets.Add(new Street( int.Parse(StreetsAttributes[i][0]),
-									ConvertStringToVector(StreetsAttributes[i][1]),
-									ConvertStringToVector(StreetsAttributes[i][2]),
-									MakeTheTrafficLight(StreetsAttributes[i][4], StreetsAttributes[i][5], StreetsAttributes[i][6]), 
-									float.Parse(StreetsAttributes[i][3]), 
-									Globals.STREET_WIDTH, 	
-									int.Parse(StreetsAttributes[i][7]) 
-									));
-									
-		}
-		
-		Map1AttachStreetsToLights();
-		return Streets;
-	}
-	
 	public List<Street> GetMap2Streets(){
 		Lights = new List<TrafficLight>();
 		Streets = new List<Street>();
@@ -158,8 +124,42 @@ public class MapsData : MonoBehaviour {
 		return Streets;
 	}
 	
+	public List<Street> GetMap1Streets(){
+		Lights = new List<TrafficLight>();
+		Streets = new List<Street>();
+		
+		string [] lines = SplitStringOnLines(Map1FileString);
+		
+		List<string[]> StreetsAttributes = new List<string[]>();
+		
+		for(int i=0; i<lines.Length;i++){
+			StreetsAttributes.Add(SplitOneStreetLine(lines[i]));
+			for(int j= 0; j<lines.Length; j++){
+//				Debug.Log("wawaaa "+StreetsAttributes[i][j]);
+			}
+		}
+		
+		for(int i=0; i<StreetsAttributes.Count;i++){
+			
+		//	Debug.Log(ConvertStringToVector(StreetsAttributes[i][1]));
+			
+			Streets.Add(new Street( int.Parse(StreetsAttributes[i][0]),
+									ConvertStringToVector(StreetsAttributes[i][1]),
+									ConvertStringToVector(StreetsAttributes[i][2]),
+									MakeTheTrafficLight(StreetsAttributes[i][4], StreetsAttributes[i][5], StreetsAttributes[i][6]), 
+									float.Parse(StreetsAttributes[i][3]), 
+									Globals.STREET_WIDTH, 	
+									int.Parse(StreetsAttributes[i][7]) 
+									));
+									
+		}
+		
+		Map1AttachStreetsToLights();
+		return Streets;
+	}
 	
-	public List<Vector3> GetMap1Intersections(){
+	
+	public List<Vector3> GetMap2Intersections(){
 		List<Vector3> intersectionsList = new List<Vector3>();
 		
 		//here weeee goooooooooooo
@@ -227,7 +227,7 @@ public class MapsData : MonoBehaviour {
 		return intersectionsList;
 	}
 	
-	public List<Vector3> GetMap2Intersections(){
+	public List<Vector3> GetMap1Intersections(){
 		List<Vector3> intersectionsList = new List<Vector3>();
 		
 		intersectionsList.Add(new Vector3 (25.0f, 5.0f, -35.0f));
@@ -267,7 +267,7 @@ public class MapsData : MonoBehaviour {
 		
 	}
 	
-	public List<GamePath> GetMap1Paths(){
+	public List<GamePath> GetMap2Paths(){
 		
 		List<GamePath> Paths = new List<GamePath>();
 		
@@ -450,7 +450,7 @@ public class MapsData : MonoBehaviour {
 		return Paths;
 	}
 	
-	public List<GamePath> GetMap2Paths(){
+	public List<GamePath> GetMap1Paths(){
 		
 		List<GamePath> Paths = new List<GamePath>();
 		
@@ -679,7 +679,7 @@ public class MapsData : MonoBehaviour {
 		return Lights;
 	}
 	
-	private void Map1AttachStreetsToLights(){
+	private void Map2AttachStreetsToLights(){
 		List<Street> temp;
 		for(int i= 0; i<Lights.Count; i++){
 			temp = new List<Street>();
@@ -726,7 +726,7 @@ public class MapsData : MonoBehaviour {
 		}
 	}
 	
-	private void Map2AttachStreetsToLights(){
+	private void Map1AttachStreetsToLights(){
 		List<Street> temp;
 		for(int i= 0; i<Lights.Count; i++){
 			temp = new List<Street>();

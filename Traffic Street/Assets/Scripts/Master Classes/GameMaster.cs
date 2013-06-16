@@ -154,10 +154,10 @@ public class GameMaster : MonoBehaviour {
 	private void InitTheCurrentLevel(){
 		MapsData data = new MapsData();
 		//levels = new List<Level>();
-		
-		if(Application.loadedLevelName == "Map 1"){
+		/*
+		if(Application.loadedLevelName == "Map 2"){
 			Map map = new Map(data.GetMap1Streets(), data.GetMap1Paths(), data.GetMap1Intersections(), data.GetMap1Lights());
-			/*
+			
 			List<VehicleType> events = new List<VehicleType>();
 			events.Add(VehicleType.Ambulance);
 			events.Add(VehicleType.Bus);
@@ -168,12 +168,12 @@ public class GameMaster : MonoBehaviour {
 			ranges.Add(new Range(120, 130));
 			ranges.Add(new Range(130, 140));
 			EventRanges eventRangesObject = new EventRanges(ranges);
-			*/
+			
 		//	currentLevel = new Level(1, map, 27.0f, 4, 200, 150, null, null, null, null);
 		}
-		
-		else if(Application.loadedLevelName == "Map 2"){
-			Map map = new Map(data.GetMap2Streets(), data.GetMap2Paths(), data.GetMap2Intersections(), data.GetMap2Lights());
+		*/
+		if(Application.loadedLevelName == "Map 1"){
+			Map map = new Map(data.GetMap1Streets(), data.GetMap1Paths(), data.GetMap1Intersections(), data.GetMap1Lights());
 			
 			
 			
@@ -288,6 +288,7 @@ public class GameMaster : MonoBehaviour {
 		ambulanceGamePathsList.Add(Paths[2]);
 		eventsPaths.Add(ambulanceGamePathsList);
 		
+		/*
 		//Bus
 		//1
 		events.Add(VehicleType.Bus);
@@ -302,6 +303,8 @@ public class GameMaster : MonoBehaviour {
 		busGamePathsList.Add(Paths[3]);
 		busGamePathsList.Add(Paths[0]);
 		eventsPaths.Add(busGamePathsList);
+		*/
+		
 		
 		//service car
 		//1
@@ -310,7 +313,7 @@ public class GameMaster : MonoBehaviour {
 		eventsNumbers.Add(1);
 		//3
 		List <float> serviceCarTimeslist = new List<float>();
-		serviceCarTimeslist.Add(240);
+		serviceCarTimeslist.Add(150);
 		eventTimes.Add(new EventTimes(serviceCarTimeslist));
 		//4
 		List <GamePath> servicCarGamePathsList = new List<GamePath>();
@@ -326,10 +329,7 @@ public class GameMaster : MonoBehaviour {
 		//3
 		List <float> taxiTimeslist = new List<float>();
 		taxiTimeslist.Add(280);
-		taxiTimeslist.Add(265);
-		taxiTimeslist.Add(245);
-		taxiTimeslist.Add(225);
-		taxiTimeslist.Add(205);
+		taxiTimeslist.Add(240);
 		/*
 		taxiTimeslist.Add(185);
 		taxiTimeslist.Add(165);

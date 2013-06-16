@@ -231,7 +231,7 @@ public class MathsCalculatios  {
 		//Debug.Log("direc is >>  " + direction);
 		if(direction != nextDirection){
 			
-			Debug.Log("transformForward ... " + -1*transformForward.x );
+//			Debug.Log("transformForward ... " + -1*transformForward.x );
 			if(direction == StreetDirection.Left && -1*transformForward.x > -0.01 && rotateNow && nextDirection == StreetDirection.Up){
 				vehScript.gameObject.transform.forward = -1*Vector3.forward;
 				return true;
@@ -297,7 +297,7 @@ public class MathsCalculatios  {
 	}
 	
 	public static bool HaveToAccelerate(Transform transform, StreetDirection direction,Vector3 endPosition, Street street, VehicleController vehScript){
-		Debug.Log("amiraaaaaaaaaaa");
+		//Debug.Log("amiraaaaaaaaaaa");
 		if(direction == StreetDirection.Left){
 			
 			if(transform.position.x < endPosition.x +10 ){
