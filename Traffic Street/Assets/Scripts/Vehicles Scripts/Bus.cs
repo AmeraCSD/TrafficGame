@@ -7,11 +7,11 @@ public class Bus : MonoBehaviour {
 	public static List<float> busTimeSlots;
 	
 	
-	public static List<int> busStopTimeSlots;
+	//public static List<int> busStopTimeSlots;
  	
 	public static void InitInstances(){
 		busTimeSlots = new List<float>();
-		busStopTimeSlots = new List<int>();
+	//	busStopTimeSlots = new List<int>();
 	}
 	
 	public  static void SetEventTime(List<float> eventTimes){

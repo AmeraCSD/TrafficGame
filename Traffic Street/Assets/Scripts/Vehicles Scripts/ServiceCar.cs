@@ -35,12 +35,12 @@ public class ServiceCar : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateVehicle(GameObject serviceCarPrefab, Texture2D tx, GamePath path){	
+	public static void GenerateVehicle(GameObject serviceCarPrefab, Material tx, GamePath path){	
 					
 		if(serviceCarPrefab != null){
 			GameObject vehicle;
 			vehicle = Instantiate(serviceCarPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
-			vehicle.renderer.material.mainTexture = tx;
+			vehicle.renderer.material = tx;
 			path.PathStreets[0].VehiclesNumber ++;
 			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
 			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
@@ -59,6 +59,7 @@ public class ServiceCar : MonoBehaviour {
 	
 	}
 	
+	/*
 	public  static List<int> SetGetServiceCarRandomStops( float timeFrom, float timeTo){
 		List<int> serviceCarStops = new List<int>();
 		int timeValue = 0;
@@ -84,6 +85,6 @@ public class ServiceCar : MonoBehaviour {
 		return found;
 	}
 	
-	
+	*/
 	
 }

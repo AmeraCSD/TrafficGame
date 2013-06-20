@@ -62,7 +62,7 @@ public class VehicleController : MonoBehaviour {
 	public GameObject angerSpriteGo;
 	private GameObject myAngerSprite;
 	
-	public bool taxiStop;
+	public bool busStop;
 	
 	public List <Vector3>  wayPoints;
 	private int currentWayPoint;
@@ -113,9 +113,9 @@ public class VehicleController : MonoBehaviour {
 		if(myVehicle.Horn != null)
 			gameObject.GetComponent<AudioSource>().clip = myVehicle.Horn;
 		
-		if(myVehicle.Type == VehicleType.Taxi){
-			for(int i=0; i<Globals.taxiStoppers.Count; i++){
-				wayPoints.Add(Globals.taxiStoppers[i].transform.position);
+		if(myVehicle.Type == VehicleType.Bus){
+			for(int i=0; i<Globals.busStoppers.Count; i++){
+				wayPoints.Add(Globals.busStoppers[i].transform.position);
 			}	
 		}
 	}
@@ -136,13 +136,13 @@ public class VehicleController : MonoBehaviour {
 		
 		_nextDirection = myVehicle.NextStreet.StreetLight.Type;
 		
-		if(vehType == VehicleType.ServiceCar){
-			serviceCarStops = ServiceCar.SetGetServiceCarRandomStops(gameMasterScript.gameTime -9, gameMasterScript.gameTime-15);
-		}
+	//	if(vehType == VehicleType.ServiceCar){
+	//		serviceCarStops = ServiceCar.SetGetServiceCarRandomStops(gameMasterScript.gameTime -9, gameMasterScript.gameTime-15);
+	//	}
 		
-		//if(vehType == VehicleType.Taxi){
-		//	taxiStops = Taxi.SetGetTaxiRandomStops(gameMasterScript.gameTime -5, gameMasterScript.gameTime-10);
-		//}
+		if(vehType == VehicleType.Taxi){
+			taxiStops = Taxi.SetGetTaxiRandomStops(gameMasterScript.gameTime -5, gameMasterScript.gameTime-10);
+		}
 		
 	}
 	
@@ -166,7 +166,7 @@ public class VehicleController : MonoBehaviour {
 		if(_direction != _nextDirection)
 			MathsCalculatios.HaveToAccelerate(transform, _direction, _endPosition, _street, this);
 		
-		if(!rotateNow && !taxiStop)
+		if(!rotateNow && !busStop)
 			Move();
 		
 		if(myVehicle.NextStreet!=null){
@@ -212,18 +212,18 @@ public class VehicleController : MonoBehaviour {
 		
 		
 		if(!passed){
-			//if(vehType != VehicleType.Thief)
+			if(vehType != VehicleType.Thief &&  vehType != VehicleType.Police)
 				StopMovingOnRed();
 		}
-		CheckServiceCarStops();
-		//CheckTaxiStops();
+//		CheckServiceCarStops();
+		CheckTaxiStops();
 		CheckMyAnger();
 		
-		
+		/*
 		if(busStopTimer >= gameMasterScript.gameTime){
 			speed = myVehicle.Speed;
 		}
-		
+		*/
 		
 		
 		if(!(_light.Stopped) && !haveToReduceMySpeed){
@@ -232,8 +232,10 @@ public class VehicleController : MonoBehaviour {
 		}
 		
 		/////Taxi's spot
-		if(taxiStop){
-			int rate=2; 
+		if(busStop){
+			speed = 5;
+			//haveToReduceMySpeed = true;
+			int rate=3; 
 			//Vector3 target = Vector3.zero;
 			if(currentWayPoint < wayPoints.Count){
 		 
@@ -245,40 +247,42 @@ public class VehicleController : MonoBehaviour {
 					//transform.LookAt(target);
 					if(Position.x<target.x)
 					{
-						Position.x +=10*Time.deltaTime ;
+						
+						Position.x +=5*Time.deltaTime ;
 						transform.position = Position;
 					}	
 					
 				//	transform.Translate(transform.TransformDirection(-1*transform.forward) * speed * Time.deltaTime, Space.Self);
+					
 					
 				}
 		       	else{
 		    
 			    	//transform.LookAt(-1*target);
 					
-					Debug.Log("currentWayPoint "+currentWayPoint);
+//					Debug.Log("currentWayPoint "+currentWayPoint);
 					if(currentWayPoint == 1 ){
-					 	transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-1*target - transform.position),rate*Time.deltaTime );
+					 	transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-1*target - transform.position),rate*.5f*Time.deltaTime );
 					}
 					else {	
 						if(currentWayPoint == 3 ){
-							SetStopTimeForTaxi();
+							SetStopTimeForBus();
 							speed =0;
-							if(taxiStopTimer >= gameMasterScript.gameTime){
+							if(busStopTimer >= gameMasterScript.gameTime){
 								speed =5;
-								transform.rotation =Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-1*target - (-1*transform.position)),rate*Time.deltaTime );
+								transform.rotation =Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-1*target - (-1*transform.position)),rate*.5f*Time.deltaTime );
 							
 							}
 						}
 						else{
-						transform.rotation =Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-1*target - (-1*transform.position)),rate*Time.deltaTime );
+						transform.rotation =Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-1*target - (-1*transform.position)),rate*.5f*Time.deltaTime );
 						}
 					}
 					
 					if(Position.x<target.x)
 					{
 						if(currentWayPoint == 3) {
-							if(taxiStopTimer >= gameMasterScript.gameTime){
+							if(busStopTimer >= gameMasterScript.gameTime){
 								Position.x +=rate*Time.deltaTime ;
 								transform.position = Position;
 							}
@@ -289,7 +293,7 @@ public class VehicleController : MonoBehaviour {
 						}
 					}
 					if(currentWayPoint == 3){
-						if(taxiStopTimer >= gameMasterScript.gameTime){
+						if(busStopTimer >= gameMasterScript.gameTime){
 							if(Position.z<target.z){
 								Position.z +=rate*Time.deltaTime ;
 								
@@ -321,8 +325,9 @@ public class VehicleController : MonoBehaviour {
 				if((target - transform.position).magnitude <1){
 				//if(transform.position.x>target.x && ){
 					currentWayPoint++;
+					Debug.Log("bus is here");
 					if(currentWayPoint == wayPoints.Count){
-						taxiStop =false;
+						busStop =false;
 						transform.forward = -1*Vector3.right;
 					}
 				}
@@ -363,7 +368,7 @@ public class VehicleController : MonoBehaviour {
 		}
 		
 		else if(_nextDirection == StreetDirection.Left && _direction == StreetDirection.Down){
-			Debug.Log("here weee gooooo");
+			//Debug.Log("here weee gooooo");
 			transform.Rotate(transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
 			transform.RotateAround(rotateAroundPosition, Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
@@ -378,8 +383,8 @@ public class VehicleController : MonoBehaviour {
 			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
 		
-		Debug.DrawLine (transform.position, rotateAroundPosition);
-		Debug.Log("rotate around position : "+rotateAroundPosition);
+	//	Debug.DrawLine (transform.position, rotateAroundPosition);
+	//	Debug.Log("rotate around position : "+rotateAroundPosition);
 	}
 	
 	
@@ -485,6 +490,9 @@ public class VehicleController : MonoBehaviour {
 		if(myVehicle.NextStreet == null){
 			
 			if(MathsCalculatios.CheckMyEndPosition(transform, _direction, _endPosition)){
+				if(vehType == VehicleType.Thief){
+					gameMasterScript.eventWarningLabel.text = "Oh No! Thief has escaped !!!";
+				}
 				gameObject.SetActive(false);
 				myAngerSprite.SetActive(false);
 				if(vehType == VehicleType.Normal){
@@ -533,6 +541,7 @@ public class VehicleController : MonoBehaviour {
 		}
 	}
 	
+	/*
 	private void CheckServiceCarStops(){
 		if(vehType == VehicleType.ServiceCar){
 			if(ServiceCar.InsideServiceCarStops(serviceCarStops , gameMasterScript.gameTime)){
@@ -560,14 +569,14 @@ public class VehicleController : MonoBehaviour {
 		 
 			
 	}
+	*/
 	
-	/*
 	private void CheckTaxiStops(){
 		if(vehType == VehicleType.Taxi){
 			if(Taxi.InsideTaxiStops(taxiStops , gameMasterScript.gameTime)){
 				if(taxiStopTimer ==0){
-					taxiStopTimer = gameMasterScript.gameTime-2;
-					speed = 0;
+					taxiStopTimer = gameMasterScript.gameTime-4;
+					speed -= 2;
 					haveToReduceMySpeed = true;
 				}
 				
@@ -579,15 +588,16 @@ public class VehicleController : MonoBehaviour {
 				haveToReduceMySpeed = false;
 				taxiStopTimer = 0;
 			}
+			
 			if(taxiStopTimer != 0) {
-				speed = 0;
+				speed -= 10;
 				haveToReduceMySpeed = true;
 			}
 		}
 		 
 			
 	}
-	*/
+	
 	private void CheckMyAnger(){
 		if(speed == 0 && GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped){
 			SetLightTimer();
@@ -648,7 +658,9 @@ public class VehicleController : MonoBehaviour {
 	
 	
 	public void SetStopTimeForBus(){
-		busStopTimer = gameMasterScript.gameTime - 3;
+		if(busStopTimer ==0){
+			busStopTimer = gameMasterScript.gameTime - 3;
+		}
 	}
 	
 	public void SetStopTimeForTaxi(){
@@ -656,6 +668,8 @@ public class VehicleController : MonoBehaviour {
 			taxiStopTimer = gameMasterScript.gameTime - 3;
 		}
 	}
+	
+	
 	
 	private void Move(){
 		
@@ -700,7 +714,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private void ReduceMeIfHit(Ray ray){
 		RaycastHit hit ;
-		if(Physics.Raycast(ray, out hit, 8) ){
+		if(vehType!= VehicleType.Thief && Physics.Raycast(ray, out hit, 8) ){
 			Debug.DrawLine (ray.origin, hit.point);
 			VehicleController hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
 			if(hitVehicleController !=null && (hitVehicleController.speed < speed || haveToReduceMySpeed)  ){
@@ -719,9 +733,9 @@ public class VehicleController : MonoBehaviour {
 			}
 		}
 		else{ 
-			if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus || vehType == VehicleType.Taxi)
+			if(vehType == VehicleType.ServiceCar || vehType == VehicleType.Bus || vehType == VehicleType.Taxi || vehType == VehicleType.Caravan)
 					speed = myVehicle.Speed;
-			if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar || vehType != VehicleType.Taxi) &&(vehType != VehicleType.Caravan)&& (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus) && (vehType != VehicleType.Taxi))
+			if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar || vehType != VehicleType.Taxi ||  vehType != VehicleType.Caravan)  &&(vehType != VehicleType.Caravan)&& (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus) && (vehType != VehicleType.Taxi))
 				haveToReduceMySpeed = false;
 		}
 
@@ -732,14 +746,19 @@ public class VehicleController : MonoBehaviour {
 		triggeredObject = other.gameObject;
 		
 //		Debug.Log("on trigger enterrrrr");
-	//	if(vehType == VehicleType.Thief || other.gameObject.GetComponent<VehicleController>().vehType == VehicleType.Thief){
+//		if(vehType == VehicleType.Thief || other.gameObject.GetComponent<VehicleController>().vehType == VehicleType.Thief){
+		
+		if(vehType == VehicleType.Thief && other.gameObject.tag == "vehicle"){
 			if(vehType == VehicleType.Thief){
-				GameObject.Destroy(gameObject);
+				gameObject.SetActive(false);
+				other.gameObject.GetComponent<VehicleController>().myAngerSprite.SetActive(false);;
+				other.gameObject.SetActive(false);
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
 				gameMasterScript.satisfyBar -= 1;
+				gameMasterScript.eventWarningLabel.text = "Well Done! Police has honered you";
 			}
 			
-	//	}
+		}
 		
 		if(other.tag == "vehicle"){
 			if(other.gameObject.GetComponent<VehicleController>().ImTheOneToMove){

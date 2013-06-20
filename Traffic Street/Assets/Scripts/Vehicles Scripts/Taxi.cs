@@ -55,7 +55,7 @@ public class Taxi : MonoBehaviour {
 		}	
 	
 	}
-	/*
+	
 	public  static List<int> SetGetTaxiRandomStops( float timeFrom, float timeTo){
 		List<int> taxiStops = new List<int>();
 		int timeValue = 0;
@@ -85,5 +85,5 @@ public class Taxi : MonoBehaviour {
 	}
 	
 	
-	*/
+	
 }

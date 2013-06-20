@@ -103,5 +103,6 @@ public enum VehicleType{
 	Caravan,
 	ServiceCar,
 	Taxi,
-	Thief
+	Thief,
+	Police
 }

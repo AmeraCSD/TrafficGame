@@ -15,28 +15,49 @@ public class IntersectionArea : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(vehiclesOnMe.Count> 1){
-			//Debug.Log(vehiclesOnMe[1].gameObject);
-			if( checkFaceToFaceVehicles(vehiclesOnMe[0].GetComponent<VehicleController>(), vehiclesOnMe[1].GetComponent<VehicleController>()) ||
-				checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
-				
-					vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
-				/*
-				if(vehiclesOnMe[0].GetComponent<VehicleController>().ImTheOneToMove){
-					vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
+		
+		
+		
+			if(vehiclesOnMe.Count> 1 ){
+				if(vehiclesOnMe[0] == vehiclesOnMe[1]){
+					vehiclesOnMe = new List<GameObject>();
 				}
-				else if(vehiclesOnMe[1].GetComponent<VehicleController>().ImTheOneToMove){
-					vehiclesOnMe[1].GetComponent<VehicleController>().speed = vehiclesOnMe[1].GetComponent<VehicleController>().myVehicle.Speed;
+				if(vehiclesOnMe[0]!= null ){
+					if(vehiclesOnMe.Count == 2 && vehiclesOnMe[1]== null){
+						vehiclesOnMe = new List<GameObject>();
+					}
+					else if(vehiclesOnMe.Count == 3 && vehiclesOnMe[2]== null){
+						vehiclesOnMe = new List<GameObject>();
+					}
+					else{
+						//Debug.Log(vehiclesOnMe[1].gameObject);
+						if( checkFaceToFaceVehicles(vehiclesOnMe[0].GetComponent<VehicleController>(), vehiclesOnMe[1].GetComponent<VehicleController>()) ||
+							checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
+							
+								vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
+							/*
+							if(vehiclesOnMe[0].GetComponent<VehicleController>().ImTheOneToMove){
+								vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
+							}
+							else if(vehiclesOnMe[1].GetComponent<VehicleController>().ImTheOneToMove){
+								vehiclesOnMe[1].GetComponent<VehicleController>().speed = vehiclesOnMe[1].GetComponent<VehicleController>().myVehicle.Speed;
+							}
+							else{
+								vehiclesOnMe[0].GetComponent<VehicleController>().ImTheOneToMove = true;
+							}
+							*/
+							
+							//GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().gameOver = true;
+						}
+						//Debug.Log(transform.position +" ---->  " +Vector3.Angle(vehiclesOnMe[0].transform.forward, vehiclesOnMe[1].transform.forward));
+					}
+					
 				}
 				else{
-					vehiclesOnMe[0].GetComponent<VehicleController>().ImTheOneToMove = true;
+					vehiclesOnMe = new List<GameObject>();
 				}
-				*/
-				
-				//GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().gameOver = true;
-			}
-			//Debug.Log(transform.position +" ---->  " +Vector3.Angle(vehiclesOnMe[0].transform.forward, vehiclesOnMe[1].transform.forward));
 		}
+		
 		
 	}
 	

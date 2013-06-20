@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 public class MapsData : MonoBehaviour {
 	
 	private List<TrafficLight> Lights;
+	private List<LightsGroup> lightsGroups;
 	private List<Street> Streets;
 	
 	
@@ -78,10 +79,10 @@ public class MapsData : MonoBehaviour {
 		"21%(-45.0, 5.0, 25.0)%(-45.0, 5.0, 35.0)%0%Up%none%false%1\n" +
 		"22%(-55.0, 5.0, 35.0)%(-115.0, 5.0, 35.0)%0%Left%none%false%5\n" +
 		"23%(35.0, 5.0, 35.0)%(-55.0, 5.0, 35.0)%0%Left%none%false%6\n" +
-		"24%(75.0, 5.0, 35.0)%(35.0, 5.0, 35.0)%0%Left%none%false%3\n" +
+		"24%(75.0, 5.0, 35.0)%(35.0, 5.0, 35.0)%45%Left%lightLeft2%true%3\n" +
 		"25%(-45.0, 5.0, 45.0)%(-115.0, 5.0, 45.0)%0%Left%none%false%5\n" +
 		"26%(25.0, 5.0, 45.0)%(-45.0, 5.0, 45.0)%0%Left%none%false%6\n" +
-		"27%(85.0, 5.0, 45.0)%(25.0, 5.0, 45.0)%0%Left%none%false%4\n" +
+		"27%(85.0, 5.0, 45.0)%(25.0, 5.0, 45.0)%45%Left%lightLeft2%true%4\n" +
 		"28%(-55.0, 5.0, 85.0)%(-55.0, 5.0, 35.0)%55%Down%lightDown1%true%2\n" +
 		"29%(-45.0, 5.0, 45.0)%(-45.0, 5.0, 85.0)%0%Up%none%false%2\n" +
 		"30%(25.0, 5.0, 85.0)%(25.0, 5.0, 45.0)%55%Down%lightDown%true%2\n" +
@@ -681,12 +682,14 @@ public class MapsData : MonoBehaviour {
 	
 	private void Map2AttachStreetsToLights(){
 		List<Street> temp;
+		
 		for(int i= 0; i<Lights.Count; i++){
 			temp = new List<Street>();
 			if(Lights[i].tLight.tag == "lightRight"){
 				temp.Add(Streets[0]);
 				temp.Add(Streets[1]);
 				Lights[i].AttachedStreets = temp;
+				
 			}
 			else if(Lights[i].tLight.tag == "lightRight1"){
 				temp.Add(Streets[24]);
@@ -728,6 +731,15 @@ public class MapsData : MonoBehaviour {
 	
 	private void Map1AttachStreetsToLights(){
 		List<Street> temp;
+		
+		lightsGroups = new List<LightsGroup>() ;
+		
+		List<TrafficLight> lightsList1 = new List<TrafficLight>();
+		List<TrafficLight> lightsList2 = new List<TrafficLight>();
+		List<TrafficLight> lightsList3 = new List<TrafficLight>();
+		List<TrafficLight> lightsList4 = new List<TrafficLight>();
+		
+		
 		for(int i= 0; i<Lights.Count; i++){
 			temp = new List<Street>();
 			
@@ -735,31 +747,53 @@ public class MapsData : MonoBehaviour {
 				temp.Add(Streets[11]);
 				temp.Add(Streets[8]);
 				Lights[i].AttachedStreets = temp;
+				lightsList1.Add(Lights[i]);
 			}
 			else if(Lights[i].tLight.tag == "lightLeft1"){
 				temp.Add(Streets[10]);
 				temp.Add(Streets[7]);
 				Lights[i].AttachedStreets = temp;
+				lightsList1.Add(Lights[i]);
 			}
 			else if(Lights[i].tLight.tag == "lightUp"){
 				temp.Add(Streets[1]);
 				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightDown1"){
-				temp.Add(Streets[28]);
-				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightDown"){
-				temp.Add(Streets[30]);
-				temp.Add(Streets[31]);
-				Lights[i].AttachedStreets = temp;
+				lightsList2.Add(Lights[i]);
 			}
 			else if(Lights[i].tLight.tag == "lightRight"){
 				temp.Add(Streets[0]);
 				temp.Add(Streets[3]);
 				Lights[i].AttachedStreets = temp;
+				lightsList2.Add(Lights[i]);
 			}
+			else if(Lights[i].tLight.tag == "lightDown1"){
+				temp.Add(Streets[28]);
+				Lights[i].AttachedStreets = temp;
+				lightsList4.Add(Lights[i]);
+			}
+			else if(Lights[i].tLight.tag == "lightDown"){
+				temp.Add(Streets[30]);
+				temp.Add(Streets[31]);
+				Lights[i].AttachedStreets = temp;
+				lightsList3.Add(Lights[i]);
+			}
+			else if(Lights[i].tLight.tag == "lightLeft2"){
+				temp.Add(Streets[24]);
+				temp.Add(Streets[27]);
+				Lights[i].AttachedStreets = temp;
+				lightsList3.Add(Lights[i]);
+			}
+			
 		}
+		lightsGroups.Add(new LightsGroup(lightsList1));
+		lightsGroups.Add(new LightsGroup(lightsList2));
+		lightsGroups.Add(new LightsGroup(lightsList3));
+		lightsGroups.Add(new LightsGroup(lightsList4));
+		
+	}
+	
+	public List<LightsGroup> GetMap1LightsGroups(){
+		return lightsGroups;
 	}
 	
 	void Start () {

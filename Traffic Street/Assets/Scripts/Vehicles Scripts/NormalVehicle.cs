@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class NormalVehicle : MonoBehaviour {
 												// ***************** Groooooooopssssssssssssssss *******************
 	
-	public static void GenerateNormalVehicle(int pos,GameObject vehiclePrefab, Texture2D tx, List<GamePath> Paths, Queue existedVehicles){	
+	public static void GenerateNormalVehicle(int pos,GameObject vehiclePrefab, Material tx, List<GamePath> Paths, Queue existedVehicles){	
 		while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
 			pos = Random.Range(0, Paths.Count);
 		}
@@ -16,7 +16,7 @@ public class NormalVehicle : MonoBehaviour {
 			GameObject vehicle;
 			if(existedVehicles.Count == 0){
 				vehicle = Instantiate(vehiclePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
-				vehicle.renderer.material.mainTexture = tx;
+				vehicle.renderer.material = tx;
 				Paths[pos].PathStreets[0].VehiclesNumber ++;
 				vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 				//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)

@@ -16,19 +16,20 @@ public class Globals : MonoBehaviour {
 	public static float CARAVAN_SPEED = 10;
 	public static float SERVICE_CAR_SPEED = 10;
 	public static float TAXI_SPEED = 25;
-	public static float THIEF_SPEED = 30;
+	public static float THIEF_SPEED = 35;
+	public static float POLICE_SPEED = 37;
 	
 	public static List<AudioClip> Horns;
 	public List<AudioClip> HornsGos;
 	
-	public List<GameObject> taxiStoppersGos;
-	public static List<GameObject> taxiStoppers;
+	public List<GameObject> busStoppersGos;
+	public static List<GameObject> busStoppers;
 	
 	
 	// Use this for initialization
 	void Start () {
 		Horns = HornsGos;
-		taxiStoppers = taxiStoppersGos;
+		busStoppers = busStoppersGos;
 		//vibrationEnabled = false;
 	}
 	

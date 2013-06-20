@@ -19,10 +19,10 @@ public class Stopper1 : MonoBehaviour {
 		if(Physics.Raycast(ray, out hit, 10)){
 			Debug.DrawLine (ray.origin, hit.point);
 			hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
-			if(hitVehicleController.vehType == VehicleType.Taxi){
-				Debug.Log("taxi stopping here");
+			if(hitVehicleController.vehType == VehicleType.Bus){
+//				Debug.Log("taxi stopping here");
 				//rotateTheTaxi = true;
-				hitVehicleController.taxiStop = true;
+				hitVehicleController.busStop = true;
 					
 			}
 		}
