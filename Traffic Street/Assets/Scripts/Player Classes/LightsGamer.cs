@@ -68,11 +68,11 @@ public class LightsGamer : MonoBehaviour {
 	private void InitLightsColors(){
 		for(int i=0; i<lightsGroups.Count ; i++ ){
 			Debug.Log("i = " + i);
-			lightsGroups[i].GroupOfLights[0].tLight.renderer.material.color = Color.red;
-			lightsGroups[i].GroupOfLights[0].Stopped = true;
+			lightsGroups[i].GroupOfLights[0].tLight.renderer.material.color = Color.green;
+			lightsGroups[i].GroupOfLights[0].Stopped = false;
 			if(lightsGroups[i].GroupOfLights.Count == 2){
-				lightsGroups[i].GroupOfLights[1].tLight.renderer.material.color = Color.green;
-				lightsGroups[i].GroupOfLights[1].Stopped = false;
+				lightsGroups[i].GroupOfLights[1].tLight.renderer.material.color = Color.red;
+				lightsGroups[i].GroupOfLights[1].Stopped = true;
 			}
 		//	if(Streets[i].StreetLight.tLight != null){
 			//	Streets[i].StreetLight.tLight.renderer.material.color = Color.red;

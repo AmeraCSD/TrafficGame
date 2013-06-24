@@ -285,8 +285,7 @@ public class GameMaster : MonoBehaviour {
 		eventTimes.Add(new EventTimes(ambulanceTimeslist));
 		//4
 		List <GamePath> ambulanceGamePathsList = new List<GamePath>();
-		ambulanceGamePathsList.Add(Paths[0]);
-		ambulanceGamePathsList.Add(Paths[2]);
+		ambulanceGamePathsList.Add(Paths[5]);
 		eventsPaths.Add(ambulanceGamePathsList);
 		
 		
@@ -341,21 +340,17 @@ public class GameMaster : MonoBehaviour {
 		//1
 		events.Add(VehicleType.Taxi);
 		//2
-		eventsNumbers.Add(5);
+		eventsNumbers.Add(3);
 		//3
 		List <float> taxiTimeslist = new List<float>();
 		taxiTimeslist.Add(293);
-		
-		taxiTimeslist.Add(233);
-		taxiTimeslist.Add(223);
 		taxiTimeslist.Add(213);
-		taxiTimeslist.Add(203);
+		taxiTimeslist.Add(184);
 		
 		eventTimes.Add(new EventTimes(taxiTimeslist));
 		//4
 		List <GamePath> taxiGamePathsList = new List<GamePath>();
-		taxiGamePathsList.Add(Paths[3]);
-		taxiGamePathsList.Add(Paths[2]);
+		taxiGamePathsList.Add(Paths[10]);
 		eventsPaths.Add(taxiGamePathsList);
 		
 		//Thief
@@ -550,7 +545,7 @@ public class GameMaster : MonoBehaviour {
 				showBox = false;
 				//eventWarningLabelGo.SetActive(false);
 			//	eventWarningLabel.text = "";
-				Debug.Log("should be a bus");
+			//	Debug.Log("should be a bus");
 				Bus.GenerateVehicle(busPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Bus)][0]); //*********************temppppppppppppppppppp SHOULD BE CHANGED
 				vehicilesCounter ++;
 				instantiationFlag = false;
@@ -562,7 +557,7 @@ public class GameMaster : MonoBehaviour {
 				showBox = false;
 			//	eventWarningLabelGo.SetActive(false);
 			//	eventWarningLabel.text = "";
-				Debug.Log("should be ambulance");
+			//	Debug.Log("should be ambulance");
 				Ambulance.GenerateVehicle(ambulancePrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Ambulance)][Random.Range(0, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Ambulance)].Count)]);
 				vehicilesCounter ++;
 				instantiationFlag = false;
@@ -573,7 +568,7 @@ public class GameMaster : MonoBehaviour {
 				showBox = false;
 			//	eventWarningLabelGo.SetActive(false);
 			//	eventWarningLabel.text = "";
-				Debug.Log("should be caravan");
+			//	Debug.Log("should be caravan");
 				Caravan.GenerateVehicle(caravanPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Caravan)][0]);
 				vehicilesCounter ++;
 				instantiationFlag = false;
@@ -584,7 +579,7 @@ public class GameMaster : MonoBehaviour {
 				showBox = false;
 			//	eventWarningLabelGo.SetActive(false);
 			//	eventWarningLabel.text = "";
-				Debug.Log("should be a service car");
+			//	Debug.Log("should be a service car");
 				Material tx = GetRandomTexture(4,5);
 				ServiceCar.GenerateVehicle(serviceCarPrefab, tx,currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.ServiceCar)][0]);
 				vehicilesCounter ++;
@@ -598,7 +593,7 @@ public class GameMaster : MonoBehaviour {
 				showBox = false;
 			//	eventWarningLabelGo.SetActive(false);
 			//	eventWarningLabel.text = "";
-					Debug.Log("should be a thief");
+				//	Debug.Log("should be a thief");
 					Thief.GenerateVehicle(thiefPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Thief)][0]);
 					vehicilesCounter ++;
 					instantiationFlag = false;
@@ -611,7 +606,7 @@ public class GameMaster : MonoBehaviour {
 				showBox = false;
 		//		eventWarningLabelGo.SetActive(false);
 		//		eventWarningLabel.text = ""; I commented it because it is a police 
-					Debug.Log("should be a police");
+			//		Debug.Log("should be a police");
 					Police.GenerateVehicle(policePrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Police)][0]);
 					vehicilesCounter ++;
 					instantiationFlag = false;
@@ -624,7 +619,7 @@ public class GameMaster : MonoBehaviour {
 				showBox = false;
 		//		eventWarningLabelGo.SetActive(false);
 		//		eventWarningLabel.text = "";
-					Debug.Log("should be a taxi");
+			//		Debug.Log("should be a taxi");
 					Taxi.GenerateVehicle(taxiPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Taxi)][0]);
 					vehicilesCounter ++;
 					instantiationFlag = false;
@@ -753,7 +748,7 @@ public class GameMaster : MonoBehaviour {
 					Handheld.Vibrate();
 					vibrationMade = true;
 				}
-				eventWarningLabel.text = "Ambulance is Coming from the West";
+				eventWarningLabel.text = "Ambulance is Coming from the east";
 				audio.PlayOneShot(ambulanceSound);
 				//eventsSpriteGo.SetActive(true);
 				//eventsSprite.spriteName = "ambulance1";
@@ -794,7 +789,7 @@ public class GameMaster : MonoBehaviour {
 				}
 				//closeButtonGo.SetActive(true);
 				eventWarningLabelGo.SetActive(true);
-				eventWarningLabel.text = "A Thief is coming from the north";
+				eventWarningLabel.text = "A Thief is coming from the west";
 				//eventsSpriteGo.SetActive(true);
 				//eventsSprite.spriteName = "kolu-bike";
 			}
@@ -833,7 +828,7 @@ public class GameMaster : MonoBehaviour {
 				}
 				//closeButtonGo.SetActive(true);
 				eventWarningLabelGo.SetActive(true);
-				eventWarningLabel.text = "Taxi is coming from the west";
+				eventWarningLabel.text = "Taxi is coming from the north";
 				//eventsSpriteGo.SetActive(true);
 				//eventsSprite.spriteName = "caravan1";
 			}

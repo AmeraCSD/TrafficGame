@@ -152,9 +152,8 @@ public class VehicleController : MonoBehaviour {
 	
 	void Update () {
 		
-		myAngerSprite.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);
-		myAngerSprite.transform.parent = GameObject.FindGameObjectWithTag("panel").transform;
-		myAngerSprite.transform.position = new Vector3(transform.position.x-10 , transform.position.y, transform.position.z+12);
+		
+		
 		
 		if(speed < 0){
 			speed = 0.0f;
@@ -199,6 +198,7 @@ public class VehicleController : MonoBehaviour {
 		if(_direction != _nextDirection && MathsCalculatios.HasFinishedRotation(transform.forward, rotateNow,_direction, _nextDirection, this)){
 			//Debug.Log("hall mn mazeeeeeeeed");
 			rotateNow = false;
+			haveToReduceMySpeed = false;
 			TransfereToNextStreet();
 			//rotateAroundPosition = Vector3.zero;
 		}
@@ -342,6 +342,7 @@ public class VehicleController : MonoBehaviour {
 	private void RotateVehicle(){
 		float selfRotateSpeed = 40;
 		float worldRotateSpeed = 120;
+		haveToReduceMySpeed = true;
 		if(_nextDirection == StreetDirection.Up && _direction == StreetDirection.Left){
 			transform.Rotate(transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
 			transform.RotateAround(rotateAroundPosition, Vector3.up, worldRotateSpeed * Time.deltaTime);
@@ -722,7 +723,11 @@ public class VehicleController : MonoBehaviour {
 				haveToReduceMySpeed = true;
 			}
 			else{
-				if(hit.collider.tag == "intersection"){
+				if(hit.collider.tag == "human"){
+					speed = 0;
+					haveToReduceMySpeed = true;
+				}
+				else if(hit.collider.tag == "intersection"){
 					if(hit.collider.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1){
 						haveToReduceMySpeed = false;
 						
@@ -745,6 +750,11 @@ public class VehicleController : MonoBehaviour {
 		
 		triggeredObject = other.gameObject;
 		
+	//	if(triggeredObject.tag == "human"){
+	//		speed = 0;
+	//		haveToReduceMySpeed = true;
+	//	}
+		
 //		Debug.Log("on trigger enterrrrr");
 //		if(vehType == VehicleType.Thief || other.gameObject.GetComponent<VehicleController>().vehType == VehicleType.Thief){
 		
@@ -752,7 +762,7 @@ public class VehicleController : MonoBehaviour {
 			if(vehType == VehicleType.Thief){
 				gameObject.SetActive(false);
 				other.gameObject.GetComponent<VehicleController>().myAngerSprite.SetActive(false);;
-				other.gameObject.SetActive(false);
+				//other.gameObject.SetActive(false);
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
 				gameMasterScript.satisfyBar -= 1;
 				gameMasterScript.eventWarningLabel.text = "Well Done! Police has honered you";
@@ -791,12 +801,18 @@ public class VehicleController : MonoBehaviour {
    	}	
 	
 	void OnTriggerExit(Collider other) {
-		triggeredObject = null;
-		if(other.transform.tag == "vehicle"){
-			Debug.Log("on trigger exit");
-			other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = false;
-			other.gameObject.GetComponent<VehicleController>().speed = myVehicle.Speed;			//speed = myVehicle.Speed;
-			ImTheOneToMove = false;
+		if(triggeredObject != null && triggeredObject.tag == "human"){
+			haveToReduceMySpeed = false;
+		}
+		else{
+			triggeredObject = null;
+			if(other.transform.tag == "vehicle"){
+				VehicleController vecCont = other.gameObject.GetComponent<VehicleController>();
+				//Debug.Log("on trigger exit");
+				vecCont.haveToReduceMySpeed = false;
+				vecCont.speed = myVehicle.Speed;			//speed = myVehicle.Speed;
+				ImTheOneToMove = false;
+			}
 		}
 		//Debug.Log ("speed " + speed);
 		

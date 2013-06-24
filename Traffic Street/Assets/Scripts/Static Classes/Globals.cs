@@ -25,13 +25,18 @@ public class Globals : MonoBehaviour {
 	public List<GameObject> busStoppersGos;
 	public static List<GameObject> busStoppers;
 	
-	
 	// Use this for initialization
 	void Start () {
 		Horns = HornsGos;
 		busStoppers = busStoppersGos;
 		//vibrationEnabled = false;
+		
+		
+		
+		
 	}
+	
+	
 	
 	// Update is called once per frame
 	void Update () {
