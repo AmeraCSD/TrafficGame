@@ -36,12 +36,12 @@ public class HumanGenerator : MonoBehaviour {
 		if(++humanGenerationTimer == 150)
 			CancelInvoke("GenerateOneHuman");
 			 
-		if(Random.Range(0,1) == 0){
+	//	if(Random.Range(0,1) == 0){
 			
 			int pathsListIndex = Random.Range(0, humanPaths.Count);
 			
 		
-			Debug.Log("Path_"+pathsListIndex + " lock is "+humanPaths[pathsListIndex].IsLocked);
+		//	Debug.Log("Path_"+pathsListIndex + " lock is "+humanPaths[pathsListIndex].IsLocked);
 			if(!humanPaths[pathsListIndex].IsLocked && humanPrefab != null){
 			//*****************************optimization
 				GameObject human;
@@ -50,14 +50,7 @@ public class HumanGenerator : MonoBehaviour {
 					human.renderer.material = humanMaterials[Random.Range(0, humanMaterials.Count)];
 					humanPaths[pathsListIndex].IsLocked = true;
 					//public HumanPath(string walkAnimationName, string passAnimationName, List<Street> toBePassedStreets, char directionAxis, float passEndPos, bool locked){
-					human.GetComponent<HumanController>().myHumanPath = new HumanPath( 	humanPaths[pathsListIndex].GenerationPosition,
-																						humanPaths[pathsListIndex].WalkAnimationName,
-																						humanPaths[pathsListIndex].PassAnimationName,
-																						humanPaths[pathsListIndex].ToBePassedStreets,
-																						humanPaths[pathsListIndex].DirectionAxis,
-																						humanPaths[pathsListIndex].WalkEndPos,
-																						humanPaths[pathsListIndex].PassEndPos,
-																						humanPaths[pathsListIndex].IsLocked);
+					human.GetComponent<HumanController>().myHumanPath = humanPaths[pathsListIndex];
 					
 				}
 				else{
@@ -68,21 +61,14 @@ public class HumanGenerator : MonoBehaviour {
 					human.SetActive(true);
 					humanPaths[pathsListIndex].IsLocked = true;
 					//public HumanPath(string walkAnimationName, string passAnimationName, List<Street> toBePassedStreets, char directionAxis, float passEndPos, bool locked){
-					human.GetComponent<HumanController>().myHumanPath = new HumanPath( 	humanPaths[pathsListIndex].GenerationPosition,
-																						humanPaths[pathsListIndex].WalkAnimationName,
-																						humanPaths[pathsListIndex].PassAnimationName,
-																						humanPaths[pathsListIndex].ToBePassedStreets,
-																						humanPaths[pathsListIndex].DirectionAxis,
-																						humanPaths[pathsListIndex].WalkEndPos,
-																						humanPaths[pathsListIndex].PassEndPos,
-																						humanPaths[pathsListIndex].IsLocked);
+					human.GetComponent<HumanController>().myHumanPath = humanPaths[pathsListIndex];
 					human.GetComponent<HumanController>().ReStratHuman();
 					
 				}
 				
 				//humanPaths[pathsListIndex].IsLocked = true;
 			}	
-		}
+	//	}
 	}
 	
 	

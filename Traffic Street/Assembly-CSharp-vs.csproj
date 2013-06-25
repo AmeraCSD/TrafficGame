@@ -206,6 +206,8 @@
      <Compile Include="Assets\Scripts\UI scripts\SatisfyBar.cs" />
      <Compile Include="Assets\Scripts\UI scripts\ScoreCounting.cs" />
      <Compile Include="Assets\Scripts\UI scripts\WrittenLabelManager.cs" />
+     <Compile Include="Assets\Scripts\Vehicles Scripts\Accident.cs" />
+     <Compile Include="Assets\Scripts\Vehicles Scripts\AccidentVehicleController.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Ambulance.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Bus.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Caravan.cs" />
@@ -216,6 +218,7 @@
      <Compile Include="Assets\Scripts\Vehicles Scripts\Thief.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\VehicleBehavior.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\VehicleController.cs" />
+     <Compile Include="Assets\Standard Assets (Mobile)\Scripts\ZoomInOut.cs" />
      <Compile Include="Assets\TK2DROOT\Sprites\tk2dAnimatedSprite.cs" />
      <Compile Include="Assets\TK2DROOT\Sprites\tk2dBaseSprite.cs" />
      <Compile Include="Assets\TK2DROOT\Sprites\tk2dPixelPerfectHelper.cs" />

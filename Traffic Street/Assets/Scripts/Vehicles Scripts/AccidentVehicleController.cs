@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class VehicleController : MonoBehaviour {
+public class AccidentVehicleController : MonoBehaviour {
 	
 	public bool ImTheOneToMove;
 	private int curScore;
@@ -60,7 +60,7 @@ public class VehicleController : MonoBehaviour {
 	public float taxiStopTimer;
 	
 	public GameObject angerSpriteGo;
-	public GameObject myAngerSprite;
+	private GameObject myAngerSprite;
 	
 	public bool busStop;
 	
@@ -685,8 +685,7 @@ public class VehicleController : MonoBehaviour {
 			}
 			transform.Translate(transform.TransformDirection(transform.forward) * speed * Time.deltaTime, Space.Self);
 			
-			Ray ray = new Ray(transform.position, Vector3.left);
-			ReduceMeIfHit(ray);
+			
 		}
 		else if(_direction == StreetDirection.Right){
 			if(myVehicle.CurrentStreetNumber == 0){
@@ -694,8 +693,6 @@ public class VehicleController : MonoBehaviour {
 			}
 			transform.Translate(transform.TransformDirection(transform.forward) * speed * Time.deltaTime, Space.Self);
 			
-			Ray ray = new Ray(transform.position, Vector3.right);
-			ReduceMeIfHit(ray);
 		}
 		else if(_direction == StreetDirection.Down){
 			if(myVehicle.CurrentStreetNumber == 0){
@@ -703,8 +700,7 @@ public class VehicleController : MonoBehaviour {
 			}
 			transform.Translate(transform.TransformDirection(-1*transform.forward) * speed * Time.deltaTime, Space.Self);
 			
-			Ray ray = new Ray(transform.position, Vector3.back);
-			ReduceMeIfHit(ray);
+			
 		}
 		else if(_direction == StreetDirection.Up){
 			if(myVehicle.CurrentStreetNumber == 0){
@@ -713,8 +709,7 @@ public class VehicleController : MonoBehaviour {
 		
 			transform.Translate(transform.TransformDirection(-1*transform.forward) * speed * Time.deltaTime, Space.Self);
 			
-			Ray ray = new Ray(transform.position, Vector3.forward);
-			ReduceMeIfHit(ray);
+			
 		}
 	}
 	
