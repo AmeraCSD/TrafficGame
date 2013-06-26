@@ -18,6 +18,7 @@ public class Globals : MonoBehaviour {
 	public static float TAXI_SPEED = 25;
 	public static float THIEF_SPEED = 35;
 	public static float POLICE_SPEED = 37;
+	public static float ACCIDENT_SPEED = 36;
 	
 	public static List<AudioClip> Horns;
 	public List<AudioClip> HornsGos;

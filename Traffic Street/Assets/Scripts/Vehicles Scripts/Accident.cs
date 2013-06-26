@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 public class Accident : MonoBehaviour {
 	
-	public static List<float> ambulanceTimeSlots;
+	public static List<float> accidentTimeSlots;
 	
 	public static void InitInstances(){
-		ambulanceTimeSlots = new List<float>();
+		accidentTimeSlots = new List<float>();
 	}
 	
 	public  static void SetEventTime(List<float> eventTimes){
 		for (int i = 0 ; i<eventTimes.Count; i++){
 			
-			ambulanceTimeSlots.Add(eventTimes[i]);
+			accidentTimeSlots.Add(eventTimes[i]);
 			GameMaster.eventsWarningTimes.Add(eventTimes[i]+5);
-			GameMaster.eventsWarningNames.Add("ambulance");
+			GameMaster.eventsWarningNames.Add("accident");
 		}	
 		
 	}
@@ -23,25 +23,25 @@ public class Accident : MonoBehaviour {
 	public static bool InsideTimeSlotsList(float gameTime){
 		bool found = false;
 		int i=0;
-		while(!found && i < ambulanceTimeSlots.Count){
-			if(ambulanceTimeSlots [i] == gameTime)
+		while(!found && i < accidentTimeSlots.Count){
+			if(accidentTimeSlots [i] == gameTime)
 				found = true;
 			i++;
 		}
 		return found;
 	}
 	
-	public static void GenerateVehicle(GameObject ambulancePrefab, GamePath path){	
+	public static void GenerateVehicle(GameObject accidentPrefab, GamePath path){	
 					
-		if(ambulancePrefab != null){
+		if(accidentPrefab != null){
 			GameObject vehicle;
-			vehicle = Instantiate(ambulancePrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
+			vehicle = Instantiate(accidentPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
 			path.PathStreets[0].VehiclesNumber ++;
 			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
 			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 			//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
-			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Ambulance, 
-																				Globals.AMBULANCE_SPEED, 
+			vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Accident, 
+																				Globals.ACCIDENT_SPEED, 
 																				MathsCalculatios.getVehicleLargeSize(vehicle), 
 																				path.PathStreets[0].StreetLight.Type, 
 																				path.PathStreets[0], 

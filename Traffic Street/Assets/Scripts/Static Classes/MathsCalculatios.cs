@@ -296,7 +296,7 @@ public class MathsCalculatios  {
 			
 			if(direction == StreetDirection.Right && -1*transformForward.x < 0.01 && rotateNow && nextDirection == StreetDirection.Up){
 				vehScript.gameObject.transform.forward = -1*Vector3.forward;
-				Debug.Log("safwattttttttttttt");
+//				Debug.Log("safwattttttttttttt");
 				return true;
 			}
 			

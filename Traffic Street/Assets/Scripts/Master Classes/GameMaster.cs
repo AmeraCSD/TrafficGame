@@ -39,6 +39,7 @@ public class GameMaster : MonoBehaviour {
 	public GameObject thiefPrefab;
 	public GameObject policePrefab;
 	public GameObject taxiPrefab;
+	public GameObject accidentCarPrefab;
 	
 	public GameObject intersectionPrefab;	
 	
@@ -115,6 +116,12 @@ public class GameMaster : MonoBehaviour {
 	private int currentRateIndex;
 	
 	public AudioClip ambulanceSound;
+	
+	public GameObject accidentSmoke;
+	public AudioClip accidentSound;
+	
+	public bool accidentHere;
+	public bool accidentHereLocked;
 		
 	private void InitGUIVariables(){
 		eventWarningLabel = eventWarningLabelGo.GetComponent<UILabel>();
@@ -150,6 +157,9 @@ public class GameMaster : MonoBehaviour {
 		initVariables();
 		InitGUIVariables();
 		
+		accidentSmoke.SetActive(false);
+		accidentHere = false;
+		accidentHereLocked = false;
 	}
 	
 	
@@ -296,7 +306,7 @@ public class GameMaster : MonoBehaviour {
 		eventsNumbers.Add(1);
 		//3
 		List <float> busTimeslist = new List<float>();
-		busTimeslist.Add(280);
+		busTimeslist.Add(140);
 		eventTimes.Add(new EventTimes(busTimeslist));
 		//4
 		List <GamePath> busGamePathsList = new List<GamePath>();
@@ -340,10 +350,10 @@ public class GameMaster : MonoBehaviour {
 		//1
 		events.Add(VehicleType.Taxi);
 		//2
-		eventsNumbers.Add(3);
+		eventsNumbers.Add(2);
 		//3
 		List <float> taxiTimeslist = new List<float>();
-		taxiTimeslist.Add(293);
+	//	taxiTimeslist.Add(293);
 		taxiTimeslist.Add(213);
 		taxiTimeslist.Add(184);
 		
@@ -383,6 +393,22 @@ public class GameMaster : MonoBehaviour {
 		policeGamePathsList.Add(Paths[3]);
 		eventsPaths.Add(policeGamePathsList);
 		
+		
+		//accident
+		//1
+		events.Add(VehicleType.Accident);
+		//2
+		eventsNumbers.Add(1);
+		//3
+		List <float> accidentTimeslist = new List<float>();
+		accidentTimeslist.Add(285);
+		eventTimes.Add(new EventTimes(accidentTimeslist));
+		//4
+		List <GamePath> accidentGamePathsList = new List<GamePath>();
+		accidentGamePathsList.Add(Paths[8]);
+		eventsPaths.Add(accidentGamePathsList);
+		
+		//////////////////////////
 		currentLevel.LevelEvents = events;
 		currentLevel.EventsNumber = eventsNumbers;
 		currentLevel.EventsTimesList = eventTimes;
@@ -418,6 +444,11 @@ public class GameMaster : MonoBehaviour {
 			Taxi.InitInstances();
 			Taxi.SetEventTime(currentLevel.EventsTimesList[currentLevel.LevelEvents.IndexOf(VehicleType.Taxi)].TimesList);
 		}
+		
+		if(currentLevel.LevelEvents.Contains(VehicleType.Accident)){
+			Accident.InitInstances();
+			Accident.SetEventTime(currentLevel.EventsTimesList[currentLevel.LevelEvents.IndexOf(VehicleType.Accident)].TimesList);
+		}
 	}
 	
 	private void InstantiateIntersections(){
@@ -428,18 +459,7 @@ public class GameMaster : MonoBehaviour {
 		
 	}
 	
-	private void generateFirst15Cars(){
-		if(cancelInvokeFirst15Vehicles){
-			canInstatiateTheRest =true;
-			CancelInvoke("generateFirst15Cars");
-			
-		}
-		int pos = Random.Range(0, Paths.Count);
-		Material tx = GetRandomTexture(0, 4);
-		NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, existedVehicles);
-		vehicilesCounter++;
-		AdjustEach15Vehicle();
-	}
+	
 	
 	
 	//This method is called in the Start() it counts down the game time each second and generates the vehicles in the random time calculated at the first of the game
@@ -491,15 +511,24 @@ public class GameMaster : MonoBehaviour {
 		int counter =0;
 		for(int i= 0; i< vehiclesFound.Length; i++){
 			VehicleController tempScript = vehiclesFound[i].GetComponent<VehicleController>();
-			if(tempScript.myVehicle.Type != VehicleType.Normal){
-				tempLength--;
+			if(tempScript!= null){
+				if(tempScript.myVehicle.Type != VehicleType.Normal){
+					tempLength--;
+				}
+				else if(tempScript.myVehicle.NextStreet == null){
+					counter ++;
+				}
 			}
-			else if(tempScript.myVehicle.NextStreet == null){
-				counter ++;
+			else{
+				AccidentVehicleController tempScript2 = vehiclesFound[i].GetComponent<AccidentVehicleController>();
+				if(tempScript2.myVehicle.NextStreet == null){
+					counter ++;
+				}
 			}
 		}
-		if(counter == tempLength){
+		if(counter == tempLength || accidentHere){
 			currentGroupNumber ++;
+			accidentHere = false;
 			if(currentGroupNumber<currentLevel.VehicleGroups.Count){
 				vehiclesShouldGenerated = currentLevel.VehicleGroups[currentGroupNumber];
 			}
@@ -625,6 +654,18 @@ public class GameMaster : MonoBehaviour {
 					instantiationFlag = false;
 				}
 			}
+			
+			
+			else if(currentLevel.LevelEvents.Contains(VehicleType.Accident)&& Accident.InsideTimeSlotsList(gameTime)) {
+				vibrationMade = false;
+				showBox = false;
+			//	eventWarningLabelGo.SetActive(false);
+			//	eventWarningLabel.text = "";
+				Debug.Log("should be accident");
+				Accident.GenerateVehicle(accidentCarPrefab, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Accident)][Random.Range(0, currentLevel.EventsPaths[currentLevel.LevelEvents.IndexOf(VehicleType.Accident)].Count)]);
+				vehicilesCounter ++;
+				instantiationFlag = false;
+			}
 		}
 	}
 	
@@ -640,13 +681,12 @@ public class GameMaster : MonoBehaviour {
 			if(!isRepeatedPosition(randoms, pos)){
 				Material tx = GetRandomTexture(0, 4);
 				NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, existedVehicles);
+			//	Accident.GenerateNormalVehicle(pos, accidentCarPrefab, tx, Paths, existedVehicles);
 				vehiclesShouldGenerated--;
 				vehicilesCounter++;
-			//	AdjustEach15Vehicle();
 				randoms.Add(pos);
 			}
 		}
-//		Debug.Log("randoms toolha kedaa " + randoms.Count);
 		return randoms;
 	}
 	
@@ -831,6 +871,20 @@ public class GameMaster : MonoBehaviour {
 				eventWarningLabel.text = "Taxi is coming from the north";
 				//eventsSpriteGo.SetActive(true);
 				//eventsSprite.spriteName = "caravan1";
+			}
+			
+			if(eventsWarningNames[index] == "accident"){
+				//closeButtonGo.SetActive(true);
+				
+				eventWarningLabelGo.SetActive(true);
+			//	vibrationMade = false;
+				if(!vibrationMade && Globals.vibrationEnabled == true){
+					Handheld.Vibrate();
+					vibrationMade = true;
+				}
+				eventWarningLabel.text = "Accident .. Ya sater ya rab";
+				//eventsSpriteGo.SetActive(true);
+				//eventsSprite.spriteName = "ambulance1";
 			}
 			
 			//Time.timeScale = 0;

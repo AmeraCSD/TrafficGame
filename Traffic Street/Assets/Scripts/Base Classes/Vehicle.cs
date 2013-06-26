@@ -104,5 +104,6 @@ public enum VehicleType{
 	ServiceCar,
 	Taxi,
 	Thief,
-	Police
+	Police,
+	Accident
 }
