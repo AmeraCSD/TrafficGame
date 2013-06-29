@@ -26,13 +26,17 @@ public class Globals : MonoBehaviour {
 	public List<GameObject> busStoppersGos;
 	public static List<GameObject> busStoppers;
 	
+	
+	public AudioClip humanAnger;
+	public static AudioClip humanAngerCalled;
+	
 	// Use this for initialization
 	void Start () {
 		Horns = HornsGos;
 		busStoppers = busStoppersGos;
 		//vibrationEnabled = false;
 		
-		
+		humanAngerCalled = humanAnger;
 		
 		
 	}

@@ -7,20 +7,10 @@ public class IntersectionArea : MonoBehaviour {
 	public bool haveVehicleOnMe;
 	public List<GameObject> vehiclesOnMe;
 	
-	private GameMaster masterScript;
-	
-	private bool soundPlayed;
-	private bool accidentHappen;
-	
 	// Use this for initialization
 	void Start () {
 		//haveVehicleOnMe = false;
-		soundPlayed = false;
-		accidentHappen = false;
-		
 		vehiclesOnMe = new List<GameObject>();
-		
-		masterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
 	}
 	
 	// Update is called once per frame
@@ -34,50 +24,24 @@ public class IntersectionArea : MonoBehaviour {
 				checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
 				//here we goo accidenttttttttttt ************************************************************************
 				
+				vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
 				
 				
-				if(!accidentHappen ){
-					
-					int chance = Random.Range(0,20);
-					Debug.Log("the chance is ---> "+chance);
-					if(!masterScript.accidentHereLocked && chance == 1){
-						if(!soundPlayed){
-							masterScript.accidentSmoke.audio.Play();
-							soundPlayed = true;
+				/*
+							if(vehiclesOnMe[0].GetComponent<VehicleController>().ImTheOneToMove){
+								vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
+							}
+							else if(vehiclesOnMe[1].GetComponent<VehicleController>().ImTheOneToMove){
+								vehiclesOnMe[1].GetComponent<VehicleController>().speed = vehiclesOnMe[1].GetComponent<VehicleController>().myVehicle.Speed;
+							}
+							else{
+								vehiclesOnMe[0].GetComponent<VehicleController>().ImTheOneToMove = true;
+							}
+							*/
 							
-							
-							masterScript.accidentSmoke.SetActive(true);
-							masterScript.accidentSmoke.transform.position = transform.position;
-							masterScript.accidentHere = true;
-							masterScript.accidentHereLocked = true;
-							accidentHappen = true;
-						
-							
-							Debug.Log("Accident heeeeeeeeeeeeeeeeeeeeeee");
-						
-						}
-					}
-						
-				//	vehiclesOnMe[0].rigidbody.isKinematic = false;
-				//	vehiclesOnMe[1].rigidbody.isKinematic = false;
-					
-				//	vehiclesOnMe[0].rigidbody.AddForce(vehiclesOnMe[0].transform.forward );
-					
-					
-					else{
-						vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
-												
-					}
+							//GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().gameOver = true;
 				}
-				else{
-					vehiclesOnMe[0].GetComponent<VehicleController>().speed = 0;
-					vehiclesOnMe[1].GetComponent<VehicleController>().speed = 0;
-					vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = true;
-					vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed = true;
-				}
-			}
-			
-		//	soundPlayed = false;
+						//Debug.Log(transform.position +" ---->  " +Vector3.Angle(vehiclesOnMe[0].transform.forward, vehiclesOnMe[1].transform.forward));
 			
 		}
 		
@@ -88,7 +52,6 @@ public class IntersectionArea : MonoBehaviour {
 		for(int i=0; i<vehiclesOnMe.Count; i++){
 			if(!vehiclesOnMe[i].activeSelf){
 				vehiclesOnMe.Remove(vehiclesOnMe[i]);
-				accidentHappen = false;
 			}
 		}
 	}

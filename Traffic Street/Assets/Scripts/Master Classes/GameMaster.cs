@@ -394,6 +394,7 @@ public class GameMaster : MonoBehaviour {
 		eventsPaths.Add(policeGamePathsList);
 		
 		
+		/*
 		//accident
 		//1
 		events.Add(VehicleType.Accident);
@@ -408,6 +409,7 @@ public class GameMaster : MonoBehaviour {
 		accidentGamePathsList.Add(Paths[8]);
 		eventsPaths.Add(accidentGamePathsList);
 		
+		*/
 		//////////////////////////
 		currentLevel.LevelEvents = events;
 		currentLevel.EventsNumber = eventsNumbers;
