@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class Globals : MonoBehaviour {
 	
+	public static int WARNING_BEFORE_EVENT_SECONDS = 5;
+	public static int WARNING_MESSAGE_TIMER = 3;
+	
 	public static bool vibrationEnabled;
 	
 	public static float STREET_WIDTH = 23;
@@ -29,6 +32,24 @@ public class Globals : MonoBehaviour {
 	
 	public AudioClip humanAnger;
 	public static AudioClip humanAngerCalled;
+	
+	
+	// Messages Bar Texts
+	public static string AMBULANCE_WARNING_MSG = "Ambulance is Coming from the east";
+	public static string BUS_WARNING_MSG = "Bus is Coming from the west";
+	public static string SERVICE_CAR_WARNING_MSG = "Service Car is Coming from the west";
+	public static string THIEF_WARNING_MSG = "A Thief is coming from the west";
+	public static string POLICE_WARNING_MSG = "help the police to catch him";
+	public static string CARAVAN_WARNING_MSG = "Caravan is Coming";
+	public static string TAXI_WARNING_MSG = "Taxi is coming from the north";
+
+	public static string ANGERY_CAR_MESSAGE = "Some car is going to be angery";
+	public static string ANGERY_HUMAN_MESSAGE = "Some pedestrian is going to be angery";
+	public static string SATISTFY_BAR_MSG_1 = "The Mayor is proud of you!";
+	public static string SATISTFY_BAR_MSG_2 = "Attention! the mayor is going to be angery!!";
+	public static string SATISTFY_BAR_MSG_3 = "The Mayor is angery!!";
+	public static string SATISTFY_BAR_MSG_4 = "What the hell are you doing??!!";
+	public static string SATISTFY_BAR_MSG_5 = "You are about to lose !!";
 	
 	// Use this for initialization
 	void Start () {

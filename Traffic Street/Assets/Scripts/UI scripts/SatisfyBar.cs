@@ -13,6 +13,9 @@ public class SatisfyBar : MonoBehaviour {
 	private UIFilledSprite satisfyBarFill;
 	private UILabel satisfyBarValue;
 	
+	private GameMaster gameMasterScript;
+
+	private bool playedAlert;
 	
 	//GUIStyle style;
 //	Texture2D texture;
@@ -23,13 +26,16 @@ public class SatisfyBar : MonoBehaviour {
 		satisfyBarFill = satisfyBarFillGo.GetComponent<UIFilledSprite>();
 		
 		barLength = 0 ;
+		
+		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
+		playedAlert = false;
+		AddjustSatisfaction(0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		satisfyBarValue.text = (int)curValue+"" + "/" + maxValue+"";
 	  	satisfyBarFill.fillAmount = barLength;
-		AddjustSatisfaction(0);
 		
 	}
 	/*
@@ -53,6 +59,10 @@ public class SatisfyBar : MonoBehaviour {
 	
 	
 	public void AddjustSatisfaction(float adj){
+		
+		
+		
+		
 		curValue += adj;
 		if(curValue < 0)
 			curValue = 0;
@@ -61,5 +71,43 @@ public class SatisfyBar : MonoBehaviour {
 		if(maxValue < 1)
 			maxValue = 1;
 		barLength = (float)(curValue/(float)maxValue);
+		SendBarMessages();
+	}
+	
+	private void SendBarMessages(){
+	//	Debug.Log( "the bar length  " +barLength*10);
+		
+		if(barLength*10 >= 9){
+			if(!MessageBar.messagesQ.Contains(Globals.SATISTFY_BAR_MSG_5))
+				MessageBar.messagesQ.Enqueue(Globals.SATISTFY_BAR_MSG_5);
+		//	gameMasterScript.eventWarningLabel.text = Globals.SATISTFY_BAR_MSG_5;
+		//	MessageBar.notifyNow = true;
+		}
+		if(barLength*10 >= 8){
+			if(!MessageBar.messagesQ.Contains(Globals.SATISTFY_BAR_MSG_4))
+				MessageBar.messagesQ.Enqueue(Globals.SATISTFY_BAR_MSG_4);
+		//	gameMasterScript.eventWarningLabel.text = Globals.SATISTFY_BAR_MSG_4;
+		//	MessageBar.notifyNow = true;
+		}
+		if(barLength*10 >= 6){
+			if(!MessageBar.messagesQ.Contains(Globals.SATISTFY_BAR_MSG_3))
+				MessageBar.messagesQ.Enqueue(Globals.SATISTFY_BAR_MSG_3);
+		//	gameMasterScript.eventWarningLabel.text = Globals.SATISTFY_BAR_MSG_3;
+		//	MessageBar.notifyNow = true;
+		}
+		if(barLength*10 >= 4){
+			if(!MessageBar.messagesQ.Contains(Globals.SATISTFY_BAR_MSG_2))
+				MessageBar.messagesQ.Enqueue(Globals.SATISTFY_BAR_MSG_2);
+		//	gameMasterScript.eventWarningLabel.text = Globals.SATISTFY_BAR_MSG_2;
+		//	MessageBar.notifyNow = true;
+		}
+		if(barLength*10 <= 1.5f){
+			if(!MessageBar.messagesQ.Contains(Globals.SATISTFY_BAR_MSG_1))
+				MessageBar.messagesQ.Enqueue(Globals.SATISTFY_BAR_MSG_1);
+		//	gameMasterScript.eventWarningLabel.text = Globals.SATISTFY_BAR_MSG_1;
+		//	MessageBar.notifyNow = true;
+		}
+		
+		
 	}
 }

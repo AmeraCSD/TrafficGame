@@ -19,6 +19,7 @@ public class HumanController: MonoBehaviour {
 	
 	public HumanPath myHumanPath;
 	
+	private bool playedAlert;
 	
 	void Awake(){
 		
@@ -31,7 +32,9 @@ public class HumanController: MonoBehaviour {
 		
 		stoppingTimerforAnger = 0;
 		stoppingTimerforAngerSet = false;
-		angerMount = .5f;
+		angerMount = .2f;
+		
+		playedAlert = false;
 	}
 	
 	// Use this for initialization
@@ -45,6 +48,13 @@ public class HumanController: MonoBehaviour {
 	}
 
 	public void ReStratHuman(){
+		myAngerSprite.SetActive(false);
+		
+		stoppingTimerforAnger = 0;
+		stoppingTimerforAngerSet = false;
+		angerMount = .2f;
+		
+		playedAlert = false;
 		humanGeneratorScript = GameObject.FindGameObjectWithTag("master").GetComponent<HumanGenerator>();
 	//	humanGeneratorScript.humanPaths[humanGeneratorScript.humanPaths.IndexOf(myHumanPath)].IsLocked = true;
 		animation.Play(myHumanPath.WalkAnimationName);
@@ -52,10 +62,12 @@ public class HumanController: MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		myAngerSprite.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);
-		myAngerSprite.transform.parent = GameObject.FindGameObjectWithTag("panel").transform;
-		myAngerSprite.transform.position = new Vector3(transform.position.x-5 , transform.position.y, transform.position.z+6);
-		
+	//	if(myAngerSprite!= null){
+			myAngerSprite.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);	
+		//	if(myAngerSprite.transform.parent!= null)
+				myAngerSprite.transform.parent = GameObject.FindGameObjectWithTag("panel").transform;
+			myAngerSprite.transform.position = new Vector3(transform.position.x-5 , transform.position.y, transform.position.z+6);
+	//	}
 		
 		if(myHumanPath.PassAnimationName!="none"){
 			if( isHumanWalked()) {
@@ -81,8 +93,6 @@ public class HumanController: MonoBehaviour {
 //			Debug.Log("it is none");
 			if(isHumanWalked()){
 				
-				
-				
 				humanGeneratorScript.humanPaths[GetMyPathIndex()].IsLocked = false;
 			//	Debug.Log("el ragel meshy 5lasss >>> "+humanGeneratorScript.humanPaths[humanGeneratorScript.humanPaths.IndexOf(myHumanPath)].IsLocked);
 				humanGeneratorScript.existedHumans.Enqueue(gameObject);
@@ -99,8 +109,14 @@ public class HumanController: MonoBehaviour {
 			if(! stoppingTimerforAngerSet){
 				stoppingTimerforAnger = gameMasterScript.gameTime - Globals.ANGER_TIMER ;
 				stoppingTimerforAngerSet = true;
+				playedAlert = false;
 			}
-		
+			if(gameMasterScript.gameTime <= stoppingTimerforAnger+ Globals.WARNING_MESSAGE_TIMER && !playedAlert){
+				MessageBar.messagesQ.Enqueue(Globals.ANGERY_HUMAN_MESSAGE);
+				//gameMasterScript.eventWarningLabel.text = Globals.ANGERY_HUMAN_MESSAGE;
+				//MessageBar.notifyNow = true;
+				playedAlert = true;
+			}
 			if(gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(angerMount);

@@ -177,6 +177,8 @@ public class MathsCalculatios  {
 			
 			if(transform.position.x < endPosition.x+5 ){
 				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.speed = 10;
+					vehScript.haveToReduceMySpeed = true;
 					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
 				} 
 				
@@ -191,6 +193,8 @@ public class MathsCalculatios  {
 			
 			if(transform.position.z < endPosition.z +5){
 				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.speed = 10;
+					vehScript.haveToReduceMySpeed = true;
 					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
 				} 
 				
@@ -203,6 +207,8 @@ public class MathsCalculatios  {
 		//	if(transform.position.x > endPosition.x - 1 && transform.position.x < endPosition.x){
 			if(transform.position.x > endPosition.x - 5){
 				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.speed = 10;
+					vehScript.haveToReduceMySpeed = true;
 					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
 				} 
 				return true;
@@ -214,6 +220,8 @@ public class MathsCalculatios  {
 			
 			if(transform.position.z > endPosition.z - 5){
 				if(vehScript.rotateAroundPosition == Vector3.zero){
+					vehScript.speed = 10;
+					vehScript.haveToReduceMySpeed = true;
 					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
 				} 
 				return true;
@@ -226,7 +234,7 @@ public class MathsCalculatios  {
 		}
 		return false;
 	}
-	
+	/*
 	public static bool IsLeavingTheStreet_Rotate(GameObject [] corners, Transform transform, StreetDirection direction,Vector3 endPosition, Street street, StreetDirection nextDirection, AccidentVehicleController vehScript){
 		Vector3 obPos = transform.position;
 		
@@ -283,7 +291,7 @@ public class MathsCalculatios  {
 		}
 		return false;
 	}
-	
+	*/
 	public static bool HasFinishedRotation(Vector3 transformForward, bool rotateNow, StreetDirection direction, StreetDirection nextDirection, VehicleController vehScript){
 		//Debug.Log("direc is >>  " + direction);
 		if(direction != nextDirection){
@@ -408,12 +416,15 @@ public class MathsCalculatios  {
 	
 	public static bool HaveToAccelerate(Transform transform, StreetDirection direction,Vector3 endPosition, Street street, VehicleController vehScript){
 		//Debug.Log("amiraaaaaaaaaaa");
+		float rate = (vehScript.myVehicle.Speed - 10)/1.5f;
+		
 		if(direction == StreetDirection.Left){
 			
-			if(transform.position.x < endPosition.x +10 ){
+			if(transform.position.x < endPosition.x +15 ){
 				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
+					vehScript.speed -= rate;
 				}
+				vehScript.haveToReduceMySpeed = true;
 				return true;
 				
 			}
@@ -421,77 +432,38 @@ public class MathsCalculatios  {
 		
 	
 		if(direction == StreetDirection.Right){
-			if(transform.position.x > endPosition.x -10){
+			if(transform.position.x > endPosition.x -15){
 				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
+					vehScript.speed -= rate;
 				}
+				vehScript.haveToReduceMySpeed = true;
 				return true;
 			}
 		}
 		
 		
 		if(direction == StreetDirection.Up){
-			if(transform.position.z > endPosition.z -10){
+			if(transform.position.z > endPosition.z -15){
 				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
+					vehScript.speed -= rate;
 				}
+				vehScript.haveToReduceMySpeed = true;
 				return true;
 			}
 		}
 		
 		if(direction == StreetDirection.Down){
-			if(transform.position.z < endPosition.z +10){
+			if(transform.position.z < endPosition.z +15){
 				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
+					vehScript.speed -= rate;
 				}
+				vehScript.haveToReduceMySpeed = true;
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static bool HaveToAccelerate(Transform transform, StreetDirection direction,Vector3 endPosition, Street street, AccidentVehicleController vehScript){
-		//Debug.Log("amiraaaaaaaaaaa");
-		if(direction == StreetDirection.Left){
-			
-			if(transform.position.x < endPosition.x +10 ){
-				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
-				}
-				return true;
-				
-			}
-		}
-		
 	
-		if(direction == StreetDirection.Right){
-			if(transform.position.x > endPosition.x -10){
-				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
-				}
-				return true;
-			}
-		}
-		
-		
-		if(direction == StreetDirection.Up){
-			if(transform.position.z > endPosition.z -10){
-				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
-				}
-				return true;
-			}
-		}
-		
-		if(direction == StreetDirection.Down){
-			if(transform.position.z < endPosition.z +10){
-				if(vehScript.speed > 0){
-					vehScript.speed -= 10.1f;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
 	
 }

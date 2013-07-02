@@ -2,15 +2,18 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Vehicles Scripts\VehicleController.cs">
     <Files>
-      <File FileName="Assets\Scripts\Vehicles Scripts\VehicleController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Master Classes\GameMaster.cs" Line="41" Column="25" />
+      <File FileName="Assets\Scripts\Master Classes\GameMaster.cs" Line="812" Column="63" />
+      <File FileName="Assets\Scripts\Static Classes\Globals.cs" Line="39" Column="70" />
       <File FileName="Assets\Scripts\Vehicles Scripts\NormalVehicle.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Static Classes\Globals.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Vehicles Scripts\Accident.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Map Objects Classes\IntersectionArea.cs" Line="23" Column="77" />
-      <File FileName="Assets\Scripts\Base Classes\Vehicle.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Vehicles Scripts\Ambulance.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Static Classes\MathsCalculatios.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Vehicles Scripts\VehicleController.cs" Line="97" Column="20" />
+      <File FileName="Assets\Scripts\Static Classes\MathsCalculatios.cs" Line="419" Column="52" />
+      <File FileName="Assets\Scripts\Humans Classes\HumanController.cs" Line="43" Column="51" />
+      <File FileName="Assets\Scripts\UI scripts\SatisfyBar.cs" Line="78" Column="4" />
+      <File FileName="Assets\Scripts\UI scripts\MessageBar.cs" Line="25" Column="5" />
+      <File FileName="Assets\Scripts\Humans Classes\HumansData.cs" Line="32" Column="1" />
+      <File FileName="Assets\Scripts\UI scripts\ScoreCounting.cs" Line="15" Column="3" />
+      <File FileName="Assets\Scripts\Map Objects Classes\IntersectionArea.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -188,6 +188,7 @@
      <Compile Include="Assets\Scripts\Player Classes\LightsGamer.cs" />
      <Compile Include="Assets\Scripts\Static Classes\Globals.cs" />
      <Compile Include="Assets\Scripts\Static Classes\MathsCalculatios.cs" />
+     <Compile Include="Assets\Scripts\Static Classes\UIObjects.cs" />
      <Compile Include="Assets\Scripts\UI scripts\BackToMainMenuButton.cs" />
      <Compile Include="Assets\Scripts\UI scripts\CloseButton.cs" />
      <Compile Include="Assets\Scripts\UI scripts\CompanyNameLabel.cs" />
@@ -197,6 +198,7 @@
      <Compile Include="Assets\Scripts\UI scripts\GoToMainMenu.cs" />
      <Compile Include="Assets\Scripts\UI scripts\GoToMapButton.cs" />
      <Compile Include="Assets\Scripts\UI scripts\LockedMapButton.cs" />
+     <Compile Include="Assets\Scripts\UI scripts\MessageBar.cs" />
      <Compile Include="Assets\Scripts\UI scripts\NextLevelButton.cs" />
      <Compile Include="Assets\Scripts\UI scripts\PanWithAcceleration.cs" />
      <Compile Include="Assets\Scripts\UI scripts\PauseButton.cs" />

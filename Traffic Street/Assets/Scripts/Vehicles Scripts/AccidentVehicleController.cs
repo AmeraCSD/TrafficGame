@@ -161,17 +161,17 @@ public class AccidentVehicleController : MonoBehaviour {
 		SetStopOffset();
 		CheckPosition_DeqIfPassed();
 		
-		if(_direction != _nextDirection)
-			MathsCalculatios.HaveToAccelerate(transform, _direction, _endPosition, _street, this);
+		//if(_direction != _nextDirection)
+		//	MathsCalculatios.HaveToAccelerate(transform, _direction, _endPosition, _street, this);
 		
 		if(!rotateNow )
 			Move();
 		
 		if(myVehicle.NextStreet!=null){
 			if(_direction != _nextDirection){
-				if(MathsCalculatios.IsLeavingTheStreet_Rotate(corners, transform, _direction, _endPosition, _street, _nextDirection, this)){
+//				if(MathsCalculatios.IsLeavingTheStreet_Rotate(corners, transform, _direction, _endPosition, _street, _nextDirection, this)){
 					rotateNow = true;
-				}
+			//	}
 			}
 			else {
 				if(MathsCalculatios.IsLeavingTheStreet(transform, _direction, _endPosition, _street)){

@@ -7,36 +7,37 @@ using System.Collections.Generic;
 public class VehicleController : MonoBehaviour {
 	
 	public bool ImTheOneToMove;
-	private int curScore;
 	private GameObject []  corners;
  
-	public Vehicle myVehicle;
-	private float angerMount;
-	//for the street
-	private Street _street;
-	private GamePath _path;
-	private TrafficLight _light;
-	private float _stopPosition;
-	private Vector3 _endPosition;
-	public Queue _myQueue;
-	private int _queueSize;
-	private bool rotateNow;
+	public  Vehicle myVehicle;
 	
+	
+	private Street 			_street;
+	private GamePath 		_path;
+	private TrafficLight 	_light;
+	private float 			_stopPosition;
+	private Vector3 		_endPosition;
+	
+	public 	Queue 			_myQueue;
+	public  StreetDirection _direction;
+	private StreetDirection _nextDirection;
+	
+	private bool rotateNow;
 	
 	public Vector3 rotateAroundPosition;
 	
 	//for the vehicle
 	
-	public  StreetDirection _direction;
-	private StreetDirection _nextDirection;
 	
-	public float speed;
+	
+	public 	float speed;
 	private float _size;
-	public VehicleType vehType;
+	public 	VehicleType vehType;
 	
 	private BoxCollider boxColl;	
 	private GameObject triggeredObject;
 	
+	private float angerMount;
 	private bool passed;
 	private bool dequeued;
 	private bool enqueued;
@@ -46,7 +47,6 @@ public class VehicleController : MonoBehaviour {
 	public bool haveToReduceMySpeed;
 	
 	private float Offset;
-	private int carsStillInsideNumber;
 	
 	private GameMaster gameMasterScript;
 	private float stoppingTimerforAnger;
@@ -56,7 +56,6 @@ public class VehicleController : MonoBehaviour {
 	private List<int> taxiStops;
 	
 	public float busStopTimer;
-	public float serviceCarStopTimer;
 	public float taxiStopTimer;
 	
 	public GameObject angerSpriteGo;
@@ -67,14 +66,17 @@ public class VehicleController : MonoBehaviour {
 	public List <Vector3>  wayPoints;
 	private int currentWayPoint;
 	
+	private bool playedAlert;
+	
 	// Use this for initialization
 	void Awake(){
+		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
+		boxColl = GetComponent<BoxCollider>();
+		corners = gameMasterScript.Corners;
+		
 		wayPoints = new List<Vector3>();
 		
 		
-		
-		rotateAroundPosition = Vector3.zero;
-		angerMount = .5f;
 		initInstancesAtFirst();
 		
 		angerSpriteGo = GameObject.FindGameObjectWithTag("comic");
@@ -87,10 +89,10 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	public void initInstancesAtFirst(){
-		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
-		boxColl = GetComponent<BoxCollider>();
 		
-		corners = gameMasterScript.Corners;
+		rotateAroundPosition = Vector3.zero;
+		angerMount = .5f;
+		playedAlert = false;
 		Offset = 0;
 		dequeued = false;
 		enqueued = false;
@@ -100,7 +102,6 @@ public class VehicleController : MonoBehaviour {
 		stoppingTimerforAngerSet = false;
 		haveToReduceMySpeed = false;
 		busStopTimer = 0;
-		serviceCarStopTimer = 0;
 		taxiStopTimer =0;
 		
 		ImTheOneToMove = false;
@@ -132,13 +133,9 @@ public class VehicleController : MonoBehaviour {
 		_stopPosition 	= _street.StopPosition;
 		_endPosition 	= _street.EndPoint;
 		_myQueue 		= _street.StrQueue;
-		_queueSize 		= _myQueue.Count;
 		
 		_nextDirection = myVehicle.NextStreet.StreetLight.Type;
-		
-	//	if(vehType == VehicleType.ServiceCar){
-	//		serviceCarStops = ServiceCar.SetGetServiceCarRandomStops(gameMasterScript.gameTime -9, gameMasterScript.gameTime-15);
-	//	}
+	
 		
 		if(vehType == VehicleType.Taxi){
 			taxiStops = Taxi.SetGetTaxiRandomStops(gameMasterScript.gameTime -5, gameMasterScript.gameTime-10);
@@ -150,26 +147,24 @@ public class VehicleController : MonoBehaviour {
 	
 	// Update is called once per frame
 	
-	void Update () {
-		
+	private void SetAngerSpriteWithMe(){
 		myAngerSprite.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);
 		myAngerSprite.transform.parent = GameObject.FindGameObjectWithTag("panel").transform;
 		myAngerSprite.transform.position = new Vector3(transform.position.x-10 , transform.position.y, transform.position.z+12);
-		
-		
+	}
+	
+	private void ClampSpeed(){
 		if(speed < 0){
 			speed = 0.0f;
 		}
-		PerformEnqueue();
-		SetStopOffset();
-		CheckPosition_DeqIfPassed();
-		
+	}
+	
+	private void CheckPosition_Deaccelerate(){
 		if(_direction != _nextDirection)
 			MathsCalculatios.HaveToAccelerate(transform, _direction, _endPosition, _street, this);
-		
-		if(!rotateNow && !busStop)
-			Move();
-		
+	}
+	
+	private void LeaveStreet_Rotate(){
 		if(myVehicle.NextStreet!=null){
 			if(_direction != _nextDirection){
 				if(MathsCalculatios.IsLeavingTheStreet_Rotate(corners, transform, _direction, _endPosition, _street, _nextDirection, this)){
@@ -181,88 +176,34 @@ public class VehicleController : MonoBehaviour {
 					TransfereToNextStreet();
 				}
 			}
-		//	Debug.Log("yaaady el neelah el soodaaaaaaaaaaa");
-			
-			
 		}
-		
-		///////////////////////rotationnnn
 		if(rotateNow && _direction != _nextDirection){
 			RotateVehicle();
 		}
-		
-//		Debug.Log(-1*transform.forward + " compared with  " + Vector3.forward);
-		
-//		Debug.LogWarning(transform.forward);
-		
-		
-		
 		if(_direction != _nextDirection && MathsCalculatios.HasFinishedRotation(transform.forward, rotateNow,_direction, _nextDirection, this)){
-			//Debug.Log("hall mn mazeeeeeeeed");
 			rotateNow = false;
 			haveToReduceMySpeed = false;
 			TransfereToNextStreet();
-			//rotateAroundPosition = Vector3.zero;
 		}
-	//	Debug.Log(rotateNow);
-		//////////////////////////////////////////////////////////////
-		
-		
-		
-		
-		CheckAndDeactivateAtEnd();
-		
-		
-		if(!passed){
-			if(vehType != VehicleType.Thief &&  vehType != VehicleType.Police)
-				StopMovingOnRed();
-		}
-//		CheckServiceCarStops();
-		CheckTaxiStops();
-		CheckMyAnger();
-		
-		/*
-		if(busStopTimer >= gameMasterScript.gameTime){
-			speed = myVehicle.Speed;
-		}
-		*/
-		
-		
-		if(!(_light.Stopped) && !haveToReduceMySpeed){
-			speed = myVehicle.Speed;
-			
-		}
-		
-		/////Taxi's spot
+	}
+	
+	private void StopTheBus(){
 		if(busStop){
 			speed = 5;
-			//haveToReduceMySpeed = true;
 			int rate=3; 
-			//Vector3 target = Vector3.zero;
 			if(currentWayPoint < wayPoints.Count){
 		 
 		        Vector3 target= wayPoints[currentWayPoint];
 		 		Vector3 Position = transform.position;
 				
 				if(currentWayPoint == 0){
-					//speed = 35;
-					//transform.LookAt(target);
 					if(Position.x<target.x)
 					{
-						
 						Position.x +=5*Time.deltaTime ;
 						transform.position = Position;
 					}	
-					
-				//	transform.Translate(transform.TransformDirection(-1*transform.forward) * speed * Time.deltaTime, Space.Self);
-					
-					
 				}
 		       	else{
-		    
-			    	//transform.LookAt(-1*target);
-					
-//					Debug.Log("currentWayPoint "+currentWayPoint);
 					if(currentWayPoint == 1 ){
 					 	transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(-1*target - transform.position),rate*.5f*Time.deltaTime );
 					}
@@ -307,25 +248,12 @@ public class VehicleController : MonoBehaviour {
 					else{
 						
 						if(Position.z>target.z){
-						/*	if(currentWayPoint == 3){  
-								
-									Position.z -=2*Time.deltaTime ;
-									
-									transform.position = Position;
-								}
-							}
-							else{
-						*/
-								Position.z -=2*Time.deltaTime ;
-								
-								transform.position = Position;
-									
-							//}
+							Position.z -=2*Time.deltaTime ;
+							transform.position = Position;
 						}
 					}
 				}
 				if((target - transform.position).magnitude <1){
-				//if(transform.position.x>target.x && ){
 					currentWayPoint++;
 					Debug.Log("bus is here");
 					if(currentWayPoint == wayPoints.Count){
@@ -333,11 +261,45 @@ public class VehicleController : MonoBehaviour {
 						transform.forward = -1*Vector3.right;
 					}
 				}
-				
-			//	Debug.Log("safwatttttttttt "+ -1*transform.right);
-				//transform.Translate(transform.TransformDirection(-1*transform.forward) * 10 * Time.deltaTime, Space.World);
 			}
 		}
+	}
+	
+	void Update () {
+		
+		
+		SetAngerSpriteWithMe();
+		ClampSpeed();
+		
+		PerformEnqueue();
+		SetStopOffset();
+		CheckPosition_DeqIfPassed();
+		
+		CheckPosition_Deaccelerate();
+		
+		if(!rotateNow && !busStop)
+			Move();
+	
+		LeaveStreet_Rotate();
+		
+		CheckAndDeactivateAtEnd();
+		
+		
+		if(!passed){
+			if(vehType != VehicleType.Thief &&  vehType != VehicleType.Police)
+				StopMovingOnRed();
+		}
+		
+		CheckTaxiStops();
+		CheckMyAnger();
+		
+		
+		if(!(_light.Stopped) && !haveToReduceMySpeed){
+			speed = myVehicle.Speed;
+			
+		}
+		
+		StopTheBus();
 		
 	}
 	
@@ -481,7 +443,6 @@ public class VehicleController : MonoBehaviour {
 			_stopPosition 	= _street.StopPosition;
 			_endPosition 	= _street.EndPoint;
 			_myQueue 		= _street.StrQueue;
-			_queueSize 		= _street.StrQueue.Count;
 			
 			Offset = 0;
 			dequeued = false;
@@ -537,7 +498,8 @@ public class VehicleController : MonoBehaviour {
 				if(!haveToReduceMySpeed)
 					speed = myVehicle.Speed;
 				if(triggeredObject != null && triggeredObject.tag == "intersection"){
-					if(triggeredObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1){
+					if(triggeredObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1 ){
+						
 						haveToReduceMySpeed = false;
 						speed = myVehicle.Speed;
 					}
@@ -547,35 +509,6 @@ public class VehicleController : MonoBehaviour {
 		}
 	}
 	
-	/*
-	private void CheckServiceCarStops(){
-		if(vehType == VehicleType.ServiceCar){
-			if(ServiceCar.InsideServiceCarStops(serviceCarStops , gameMasterScript.gameTime)){
-				if(serviceCarStopTimer ==0){
-					serviceCarStopTimer = gameMasterScript.gameTime-2;
-					//stop
-					//Debug.Log("Stopping the service car" + gameMasterScript.gameTime );
-					speed = 0;
-					haveToReduceMySpeed = true;
-				}
-				
-			}
-			
-			else if(gameMasterScript.gameTime <= serviceCarStopTimer){
-				//move
-				//Debug.Log("Moving the service car againnn" + gameMasterScript.gameTime );
-				haveToReduceMySpeed = false;
-				serviceCarStopTimer = 0;
-			}
-			if(serviceCarStopTimer != 0) {
-				speed = 0;
-				haveToReduceMySpeed = true;
-			}
-		}
-		 
-			
-	}
-	*/
 	
 	private void CheckTaxiStops(){
 		if(vehType == VehicleType.Taxi){
@@ -606,13 +539,20 @@ public class VehicleController : MonoBehaviour {
 	
 	private void CheckMyAnger(){
 		if(speed == 0 && GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped){
-			SetLightTimer();
 				if(! stoppingTimerforAngerSet){
 					stoppingTimerforAnger = gameMasterScript.gameTime - Globals.ANGER_TIMER ;
 					stoppingTimerforAngerSet = true;
+					playedAlert = false;
 				}
 		}
+		
 		if(GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped && vehType!=VehicleType.Taxi){
+			if(gameMasterScript.gameTime <= stoppingTimerforAnger+ Globals.WARNING_MESSAGE_TIMER && !playedAlert){
+				MessageBar.messagesQ.Enqueue(Globals.ANGERY_CAR_MESSAGE);
+				//	gameMasterScript.eventWarningLabel.text = Globals.ANGERY_CAR_MESSAGE;
+			//	MessageBar.notifyNow = true;
+				playedAlert = true;
+			}
 			if(gameMasterScript.gameTime <= stoppingTimerforAnger){
 				stoppingTimerforAngerSet = false;
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(angerMount);
@@ -628,34 +568,6 @@ public class VehicleController : MonoBehaviour {
 		}
 	}
 	
-	public void SetLightTimer(){
-		if(_street.StreetLight.tLight!= null ){
-			if(_street.StreetLight.tLight.tag == "lightLeft"){
-				GameObject.FindGameObjectWithTag("timerLightLeft").GetComponent<LightTimerManager>().startTimer = true;
-			}
-			else if(_street.StreetLight.tLight.tag == "lightLeft1"){
-				GameObject.FindGameObjectWithTag("timerLightLeft1").GetComponent<LightTimerManager>().startTimer = true;
-			}
-			else if(_street.StreetLight.tLight.tag == "lightRight"){
-				GameObject.FindGameObjectWithTag("timerLightRight").GetComponent<LightTimerManager>().startTimer = true;
-			}
-			else if(_street.StreetLight.tLight.tag == "lightRight1"){
-				GameObject.FindGameObjectWithTag("timerLightRight1").GetComponent<LightTimerManager>().startTimer = true;
-			}
-			else if(_street.StreetLight.tLight.tag == "lightUp"){
-				GameObject.FindGameObjectWithTag("timerLightUp").GetComponent<LightTimerManager>().startTimer = true;
-			}
-			else if(_street.StreetLight.tLight.tag == "lightUp1"){
-				GameObject.FindGameObjectWithTag("timerLightUp1").GetComponent<LightTimerManager>().startTimer = true;
-			}
-			else if(_street.StreetLight.tLight.tag == "lightDown"){
-				GameObject.FindGameObjectWithTag("timerLightDown").GetComponent<LightTimerManager>().startTimer = true;
-			}
-			else if(_street.StreetLight.tLight.tag == "lightDown1"){
-				GameObject.FindGameObjectWithTag("timerLightDown1").GetComponent<LightTimerManager>().startTimer = true;
-			}
-		}
-	}
 	
 	private int GetMyOrderInQueue(){
 		object [] array  = _myQueue.ToArray();
@@ -733,7 +645,7 @@ public class VehicleController : MonoBehaviour {
 					haveToReduceMySpeed = true;
 				}
 				else if(hit.collider.tag == "intersection"){
-					if(hit.collider.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1){
+					if(hit.collider.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1 ){
 						haveToReduceMySpeed = false;
 						
 					}

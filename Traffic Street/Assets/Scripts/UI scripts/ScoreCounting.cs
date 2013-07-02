@@ -12,7 +12,7 @@ public class ScoreCounting : MonoBehaviour {
 		for(float i=0; i<score; i = i+(rating/200) ){
 				yield return new WaitForSeconds((float)3/score);
 				gameObject.GetComponent<UILabel>().text = (int)i+"";
-				Debug.Log("ggggggggggg");
+//				Debug.Log("ggggggggggg");
 			}
 		gameObject.GetComponent<UILabel>().text = score+"";
 		
