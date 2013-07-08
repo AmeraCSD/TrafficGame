@@ -12,9 +12,9 @@ public class VehicleController : MonoBehaviour {
 	public  Vehicle myVehicle;
 	
 	
-	private Street 			_street;
+	private Street 			_street; 
 	private GamePath 		_path;
-	private TrafficLight 	_light;
+	public TrafficLight 	_light;
 	private float 			_stopPosition;
 	private Vector3 		_endPosition;
 	
@@ -35,7 +35,8 @@ public class VehicleController : MonoBehaviour {
 	public 	VehicleType vehType;
 	
 	private BoxCollider boxColl;	
-	private GameObject triggeredObject;
+	public GameObject triggeredObject;
+	public List <GameObject> triggeredIntersections;
 	
 	private float angerMount;
 	private bool passed;
@@ -45,8 +46,6 @@ public class VehicleController : MonoBehaviour {
 	private bool satisfyAdjustedOnTime;
 	
 	public bool haveToReduceMySpeed;
-	
-	private float Offset;
 	
 	private GameMaster gameMasterScript;
 	private float stoppingTimerforAnger;
@@ -67,6 +66,10 @@ public class VehicleController : MonoBehaviour {
 	private int currentWayPoint;
 	
 	private bool playedAlert;
+	
+	
+	//accleration variables
+	public float dist;
 	
 	// Use this for initialization
 	void Awake(){
@@ -89,11 +92,10 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	public void initInstancesAtFirst(){
-		
+		triggeredIntersections = new List<GameObject>();
 		rotateAroundPosition = Vector3.zero;
 		angerMount = .5f;
 		playedAlert = false;
-		Offset = 0;
 		dequeued = false;
 		enqueued = false;
 		passed = false;
@@ -106,7 +108,7 @@ public class VehicleController : MonoBehaviour {
 		
 		ImTheOneToMove = false;
 		rotateNow = false;
-		
+		dist = 0;
 	}
 	
 	void Start () {
@@ -189,6 +191,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private void StopTheBus(){
 		if(busStop){
+			haveToReduceMySpeed = true;
 			speed = 5;
 			int rate=3; 
 			if(currentWayPoint < wayPoints.Count){
@@ -272,7 +275,6 @@ public class VehicleController : MonoBehaviour {
 		ClampSpeed();
 		
 		PerformEnqueue();
-		SetStopOffset();
 		CheckPosition_DeqIfPassed();
 		
 		CheckPosition_Deaccelerate();
@@ -285,17 +287,21 @@ public class VehicleController : MonoBehaviour {
 		CheckAndDeactivateAtEnd();
 		
 		
-		if(!passed){
+		if(!passed && GetMyOrderInQueue()==0){
 			if(vehType != VehicleType.Thief &&  vehType != VehicleType.Police)
 				StopMovingOnRed();
 		}
+		
 		
 		CheckTaxiStops();
 		CheckMyAnger();
 		
 		
 		if(!(_light.Stopped) && !haveToReduceMySpeed){
-			speed = myVehicle.Speed;
+			speed += MathsCalculatios.CalculateAcclerationByNewtonFormula(speed, myVehicle.Speed, Globals.ACCELERATE_FORWARD_RANGE );
+		//	speed = myVehicle.Speed;
+			
+			dist = 0;
 			
 		}
 		
@@ -362,10 +368,6 @@ public class VehicleController : MonoBehaviour {
 			_myQueue.Enqueue(gameObject);	
 			enqueued = true;
 		}
-	}
-	
-	private void SetStopOffset(){
-		Offset = _size*4 + (GetMyOrderInQueue() * (_size + 9));
 	}
 	
 	private void CheckPosition_DeqIfPassed(){
@@ -444,12 +446,13 @@ public class VehicleController : MonoBehaviour {
 			_endPosition 	= _street.EndPoint;
 			_myQueue 		= _street.StrQueue;
 			
-			Offset = 0;
 			dequeued = false;
 			enqueued = false;
 			passed = false;
+			stoppingTimerforAnger = 0;
 			stoppingTimerforAngerSet = false;
-			//haveToReduceMySpeed = false;
+			angerMount = 0.5f;
+			dist = 0;
 		}
 	}
 	
@@ -476,37 +479,51 @@ public class VehicleController : MonoBehaviour {
 		
 	}
 	
+	
+	
 	private void StopMovingOnRed(){
-		if(_light.Stopped ){
-			if( (_direction == StreetDirection.Right && transform.position.x > _stopPosition - Offset ) ||
-				(_direction == StreetDirection.Left && transform.position.x < _stopPosition + Offset) ||
-				(_direction == StreetDirection.Down && transform.position.z < _stopPosition + Offset) ||
-				(_direction == StreetDirection.Up && transform.position.z > _stopPosition - Offset)  ){
-				//haveToReduceMySpeed = true;
+		if(_light.Stopped){
+		//	int result = MathsCalculatios.CheckStoppingPosition(_direction, transform.position, _stopPosition );
+			
+			if(MathsCalculatios.CheckStoppingPosition(_direction, transform.position, _stopPosition)){
+				if(dist==0){
+					dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, _stopPosition , _direction);
+				}
+			//	Debug.Log(dist);
 				
-				speed = 0;
+				speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+																					0, 
+																					dist);
 				
+				 
+			
+			}
+			if(MathsCalculatios.EndAccelerationOnArrival(_direction, transform.position, _stopPosition)){
+				speed =0;
+				haveToReduceMySpeed = false;
+				dist = 0;
+			}
+			
+			if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
+				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
+				gameMasterScript.satisfyBar += 2;
+				satisfyAdjustedOnTime = true;
+			}
+			
 				
-				if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
-					GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
-					gameMasterScript.satisfyBar += 2;
-					Debug.Log("Ambulance stopped ... not good");
-					satisfyAdjustedOnTime = true;
+		}
+		else{
+			/*
+			if(triggeredObject != null && triggeredObject.tag == "intersection"){
+				if(triggeredObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1 ){
+					//speed += MathsCalculatios.CalculateAcclerationByNewtonFormula(speed, myVehicle.Speed, 5 );
+					haveToReduceMySpeed = false;
+					speed = myVehicle.Speed;
 				}
 			}
-			else{
-				if(!haveToReduceMySpeed)
-					speed = myVehicle.Speed;
-				if(triggeredObject != null && triggeredObject.tag == "intersection"){
-					if(triggeredObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1 ){
-						
-						haveToReduceMySpeed = false;
-						speed = myVehicle.Speed;
-					}
-				}
-				
-			}	
-		}
+				*/
+		}	
+		
 	}
 	
 	
@@ -590,7 +607,6 @@ public class VehicleController : MonoBehaviour {
 	
 	
 	private void Move(){
-		
 		if(_direction == StreetDirection.Left){
 			if(myVehicle.CurrentStreetNumber == 0){
     			transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
@@ -632,23 +648,77 @@ public class VehicleController : MonoBehaviour {
 	
 	private void ReduceMeIfHit(Ray ray){
 		RaycastHit hit ;
-		if(vehType!= VehicleType.Thief && Physics.Raycast(ray, out hit, 8) ){
+		if(vehType!= VehicleType.Thief && Physics.Raycast(ray, out hit, Globals.RAY_CAST_RANGE) ){
 			Debug.DrawLine (ray.origin, hit.point);
 			VehicleController hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
-			if(hitVehicleController !=null && (hitVehicleController.speed < speed || haveToReduceMySpeed)  ){
-				speed = hitVehicleController.speed;
+			if(hitVehicleController !=null && (hitVehicleController.speed < speed || haveToReduceMySpeed || hitVehicleController.haveToReduceMySpeed)  ){
+				//speed = hitVehicleController.speed;
+				if(dist==0){
+					dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, hit.collider.transform.position , _direction);
+				}
+				//Debug.Log(dist);
+				if(speed > hitVehicleController.speed){
+					
+						
+					speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+																					hitVehicleController.speed, 
+																					Globals.RAY_CAST_RANGE/3);
+				}
 				haveToReduceMySpeed = true;
+				
 			}
 			else{
+				/////////////////////////////************************** we will return here
 				if(hit.collider.tag == "human"){
 					speed = 0;
 					haveToReduceMySpeed = true;
 				}
+				
 				else if(hit.collider.tag == "intersection"){
-					if(hit.collider.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count <= 1 ){
-						haveToReduceMySpeed = false;
+					IntersectionArea intersection = hit.collider.gameObject.GetComponent<IntersectionArea>();
+					
+					if(intersection.vehiclesOnMe.Count !=0){
+						
+						if(intersection.vehiclesOnMe.Count == 1 &&  triggeredIntersections.Contains(hit.collider.gameObject) ){
+							haveToReduceMySpeed = false;
+						}
+						else{
+							if(dist==0){
+								dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, hit.collider.transform.position , _direction);
+							}
+							speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+																							0, 
+																							13);
+							
+							haveToReduceMySpeed = true;
+						}
+					}
+					/*
+					
+					if(triggeredObject==null && intersection.vehiclesOnMe.Count >= 1 ){
+						VehicleController vehCtrl = intersection.vehiclesOnMe[0].GetComponent<VehicleController>();
+						if(vehCtrl.speed < speed ){
+							if(vehCtrl._direction == _direction){
+								speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( speed, 
+																								vehCtrl.speed, 
+																								10);
+							//	speed = vehCtrl.speed;
+							}
+							else{
+								speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( speed, 
+																								0, 
+																								10);
+							//	speed = 0;
+							}
+							haveToReduceMySpeed = true;
+						}
 						
 					}
+					*/
+					else{
+							haveToReduceMySpeed = false;
+					}
+					
 				}
 				else
 					haveToReduceMySpeed = false;
@@ -664,9 +734,20 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider other) {
-		
+	//	dist =0;
 		triggeredObject = other.gameObject;
 		
+		if(other.tag == "intersection" && !triggeredIntersections.Contains(other.gameObject)){
+		//	Debug.Log(other.gameObject +" has been added");
+			triggeredIntersections.Add(other.gameObject);
+		}
+		if(other.tag == "intersection"){
+			if(_light.Stopped){
+				haveToReduceMySpeed = false;
+				speed = myVehicle.Speed;
+			}
+		}
+		/*
 	//	if(triggeredObject.tag == "human"){
 	//		speed = 0;
 	//		haveToReduceMySpeed = true;
@@ -678,7 +759,7 @@ public class VehicleController : MonoBehaviour {
 		if(vehType == VehicleType.Thief && other.gameObject.tag == "vehicle"){
 			if(vehType == VehicleType.Thief){
 				gameObject.SetActive(false);
-				other.gameObject.GetComponent<VehicleController>().myAngerSprite.SetActive(false);;
+				other.gameObject.GetComponent<VehicleController>().myAngerSprite.SetActive(false);
 				//other.gameObject.SetActive(false);
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(-1);
 				gameMasterScript.satisfyBar -= 1;
@@ -687,19 +768,38 @@ public class VehicleController : MonoBehaviour {
 			}
 			
 		}
-		
+		*/
 		if(other.tag == "vehicle"){
+			
 			if(other.gameObject.GetComponent<VehicleController>().ImTheOneToMove){
-				other.gameObject.GetComponent<VehicleController>().haveToReduceMySpeed = true;
-				other.gameObject.GetComponent<VehicleController>().speed = 0.0f;
+				haveToReduceMySpeed = true;
+				speed = 0.0f;
+				
+			//	if(other.gameObject.GetComponent<VehicleController>()._direction == _direction)
+				//	speed =	other.gameObject.GetComponent<VehicleController>().speed;
 			}
 			else{
 				ImTheOneToMove = true;
+				haveToReduceMySpeed = false;
 			}
+			
 			//gameMasterScript.gameOver = true;
 		}
+		/*
 		else if(other.tag == "intersection"){
-			if(other.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count >= 1){
+			if(other.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count == 1 ){
+				haveToReduceMySpeed = false;
+				speed = myVehicle.Speed;
+			}
+			else {
+				speed = 0;
+				haveToReduceMySpeed = true;
+			}
+		}
+		*/
+		/*
+		else if(other.tag == "intersection"){
+			if(other.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count >= 1 ){
 				speed = 0;
 				haveToReduceMySpeed = true;
 			}
@@ -713,16 +813,22 @@ public class VehicleController : MonoBehaviour {
 			}
 			
 		}
-		
+		*/
 		
 		
    	}	
 	
 	void OnTriggerExit(Collider other) {
+		if(triggeredIntersections.Remove(other.gameObject)){
+//			Debug.Log("removing "+ other.gameObject );
+		}
+		
+		
 		if(triggeredObject != null && triggeredObject.tag == "human"){
 			haveToReduceMySpeed = false;
 		}
 		else{
+			haveToReduceMySpeed = false;
 			triggeredObject = null;
 			if(other.transform.tag == "vehicle"){
 				VehicleController vecCont = other.gameObject.GetComponent<VehicleController>();

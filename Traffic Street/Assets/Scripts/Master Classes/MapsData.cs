@@ -63,23 +63,23 @@ public class MapsData : MonoBehaviour {
 		"5%(75.0, 5.0, -25.0)%(115.0, 5.0, -25.0)%0%Right%none%false%2\n" +
 		"6%(25.0, 5.0, -15.0)%(-105.0, 5.0, -15.0)%0%Left%none%false%8\n" +
 		"7%(75.0, 5.0, -15.0)%(25.0, 5.0, -15.0)%50%Left%lightLeft1%true%3\n" +
-		"8%(115.0, 5.0, -15.0)%(75.0, 5.0, -15.0)%95%Left%lightLeft%true%2\n" +
+		"8%(115.0, 5.0, -15.0)%(75.0, 5.0, -15.0)%95%Left%lightLeft%true%1\n" +
 		"9%(25.0, 5.0, -5.0)%(-115.0, 5.0, -5.0)%0%Left%none%false%8\n" +
 		"10%(85.0, 5.0, -5.0)%(25.0, 5.0, -5.0)%50%Left%lightLeft1%true%3\n" +
-		"11%(115.0, 5.0, -5.0)%(85.0, 5.0, -5.0)%95%Left%lightLeft%true%2\n" +
+		"11%(115.0, 5.0, -5.0)%(85.0, 5.0, -5.0)%95%Left%lightLeft%true%1\n" +
 		"12%(25.0, 5.0, 15.0)%(25.0, 5.0, -5.0)%0%Down%none%false%1\n" +
 		"13%(35.0, 5.0, 35.0)%(35.0, 5.0, -25.0)%0%Down%none%false%3\n" +
 		"14%(75.0, 5.0, -15.0)%(75.0, 5.0, 35.0)%0%Up%none%false%3\n" +
 		"15%(85.0, 5.0, -5.0)%(85.0, 5.0, 45.0)%0%Up%none%false%4\n" +
-		"16%(-105.0, 5.0, 15.0)%(-55.0, 5.0, 15.0)%-60%Right%none%false%5\n" +
+		"16%(-105.0, 5.0, 15.0)%(-55.0, 5.0, 15.0)%-70%Right%lightRight1%true%2\n" +
 		"17%(-55.0, 5.0, 15.0)%(25.0, 5.0, 15.0)%0%Right%none%false%7\n" +
-		"18%(-105.0, 5.0, 25.0)%(-45.0, 5.0, 25.0)%-60%Right%none%false%6\n" +
+		"18%(-105.0, 5.0, 25.0)%(-45.0, 5.0, 25.0)%-70%Right%lightRight1%true%2\n" +
 		"19%(25.0, 5.0, 45.0)%(25.0, 5.0, 15.0)%0%Down%none%false%1\n" +
 		"20%(-55.0, 5.0, 35.0)%(-55.0, 5.0, 15.0)%0%Down%none%false%1\n" +
 		"21%(-45.0, 5.0, 25.0)%(-45.0, 5.0, 35.0)%0%Up%none%false%1\n" +
 		"22%(-55.0, 5.0, 35.0)%(-115.0, 5.0, 35.0)%0%Left%none%false%5\n" +
 		"23%(35.0, 5.0, 35.0)%(-55.0, 5.0, 35.0)%0%Left%none%false%6\n" +
-		"24%(75.0, 5.0, 35.0)%(35.0, 5.0, 35.0)%45%Left%lightLeft2%true%3\n" +
+		"24%(75.0, 5.0, 35.0)%(35.0, 5.0, 35.0)%45%Left%lightLeft2%true%2\n" +
 		"25%(-45.0, 5.0, 45.0)%(-115.0, 5.0, 45.0)%0%Left%none%false%5\n" +
 		"26%(25.0, 5.0, 45.0)%(-45.0, 5.0, 45.0)%0%Left%none%false%6\n" +
 		"27%(85.0, 5.0, 45.0)%(25.0, 5.0, 45.0)%45%Left%lightLeft2%true%4\n" +
@@ -765,6 +765,12 @@ public class MapsData : MonoBehaviour {
 				temp.Add(Streets[3]);
 				Lights[i].AttachedStreets = temp;
 				lightsList2.Add(Lights[i]);
+			}
+			else if(Lights[i].tLight.tag == "lightRight1"){
+				temp.Add(Streets[16]);
+				temp.Add(Streets[18]);
+				Lights[i].AttachedStreets = temp;
+				lightsList4.Add(Lights[i]);
 			}
 			else if(Lights[i].tLight.tag == "lightDown1"){
 				temp.Add(Streets[28]);

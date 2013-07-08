@@ -209,7 +209,6 @@
      <Compile Include="Assets\Scripts\UI scripts\ScoreCounting.cs" />
      <Compile Include="Assets\Scripts\UI scripts\WrittenLabelManager.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Accident.cs" />
-     <Compile Include="Assets\Scripts\Vehicles Scripts\AccidentVehicleController.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Ambulance.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Bus.cs" />
      <Compile Include="Assets\Scripts\Vehicles Scripts\Caravan.cs" />

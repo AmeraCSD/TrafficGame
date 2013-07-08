@@ -10,7 +10,7 @@ public class NormalVehicle : MonoBehaviour {
 			pos = Random.Range(0, Paths.Count);
 		}
 		
-		//pos = 11;
+		//pos = 3;
 		if(vehiclePrefab != null){
 		//*****************************optimization
 			GameObject vehicle;
@@ -21,7 +21,7 @@ public class NormalVehicle : MonoBehaviour {
 				vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 				//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 				vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																					Random.Range(Globals.NORMAL_AVG_VEHICLE_SPEED -1,Globals.NORMAL_AVG_VEHICLE_SPEED +2 ), 
+																					Random.Range(Globals.NORMAL_AVG_VEHICLE_SPEED -1,Globals.NORMAL_AVG_VEHICLE_SPEED +1 ), 
 																					MathsCalculatios.getVehicleLargeSize(vehicle), 
 																					Paths[pos].PathStreets[0].StreetLight.Type, 
 																					Paths[pos].PathStreets[0], 
@@ -41,7 +41,7 @@ public class NormalVehicle : MonoBehaviour {
 				
 				//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 				vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																					Random.Range(Globals.NORMAL_AVG_VEHICLE_SPEED -1,Globals.NORMAL_AVG_VEHICLE_SPEED +2 ), 
+																					Random.Range(Globals.NORMAL_AVG_VEHICLE_SPEED -1,Globals.NORMAL_AVG_VEHICLE_SPEED +1 ), 
 																					MathsCalculatios.getVehicleLargeSize(vehicle), 
 																					Paths[pos].PathStreets[0].StreetLight.Type, 
 																					Paths[pos].PathStreets[0], 

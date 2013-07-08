@@ -202,9 +202,9 @@ public class GameMaster : MonoBehaviour {
 			init_rates_intervals.Add(new int[2]{2,270});
 			init_rates_intervals.Add(new int[2]{4,260});
 			init_rates_intervals.Add(new int[2]{5,250});
-			init_rates_intervals.Add(new int[2]{8,240});
+			init_rates_intervals.Add(new int[2]{8,0});
 			
-			init_rates_intervals.Add(new int[2]{10,0});
+		//	init_rates_intervals.Add(new int[2]{10,0});
 			
 						
 			
@@ -370,7 +370,7 @@ public class GameMaster : MonoBehaviour {
 		eventsNumbers.Add(1);
 		//3
 		List <float> policeTimeslist = new List<float>();
-		policeTimeslist.Add(249);
+		policeTimeslist.Add(248);
 		
 		eventTimes.Add(new EventTimes(policeTimeslist));
 		//4
@@ -461,7 +461,7 @@ public class GameMaster : MonoBehaviour {
 		
 		if(gameTime%50 == 0){
 			Debug.Log ("the speed has been incremented ---> "+ Globals.NORMAL_AVG_VEHICLE_SPEED);
-			Globals.NORMAL_AVG_VEHICLE_SPEED += 3;
+			Globals.NORMAL_AVG_VEHICLE_SPEED += 1;
 		}
 		//if( GameObject.FindGameObjectsWithTag("vehicle").Length < 10){ //***********************should beeee 15
 			secondsCounterForAnger ++;
@@ -506,12 +506,7 @@ public class GameMaster : MonoBehaviour {
 					counter ++;
 				}
 			}
-			else{
-				AccidentVehicleController tempScript2 = vehiclesFound[i].GetComponent<AccidentVehicleController>();
-				if(tempScript2.myVehicle.NextStreet == null){
-					counter ++;
-				}
-			}
+			
 		}
 		if(counter == tempLength || accidentHere){
 			currentGroupNumber ++;

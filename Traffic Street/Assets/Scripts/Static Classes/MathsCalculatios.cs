@@ -5,6 +5,94 @@ using System.Collections.Generic;
 
 public class MathsCalculatios  {
 	
+	public static float CalculateAcclerationByNewtonFormula(float initialSpeed, float finalSpeed, float distance){
+		if(distance == 0 || initialSpeed==finalSpeed){
+			return 0;
+		}
+		float time = 2 * (distance-2) / (finalSpeed + initialSpeed);
+		
+		float accleration = (finalSpeed - initialSpeed)/time;
+		
+		
+		return accleration* Time.deltaTime;
+		
+	}
+	
+	public static float GetDistanceBetweenVehicleAndOtherPosition(Vector3 vehiclePos, float pos, StreetDirection direction) {
+		if(direction == StreetDirection.Right || direction == StreetDirection.Left){
+			return Mathf.Abs(pos - vehiclePos.x);
+		}
+		
+		else {
+			return Mathf.Abs(pos - vehiclePos.z);
+		}
+	}
+	
+	public static float GetDistanceBetweenVehicleAndOtherPosition(Vector3 vehiclePos, Vector3 pos, StreetDirection direction) {
+		if(direction == StreetDirection.Right || direction == StreetDirection.Left){
+			return Mathf.Abs(pos.x - vehiclePos.x);
+		}
+		
+		else {
+			return Mathf.Abs(pos.z - vehiclePos.z);
+		}
+	}
+	/*
+	public static int CheckStoppingPosition(StreetDirection direction, Vector3 vehiclePos, float stopPos){
+		if(direction == StreetDirection.Right && vehiclePos.x > stopPos - 15) 
+			return 1;
+		
+		else if(direction == StreetDirection.Left && vehiclePos.x < stopPos + 15) 
+			return 2;
+		
+		else if(direction == StreetDirection.Down && vehiclePos.z < stopPos + 15) 
+			return 3;
+		
+		else if(direction == StreetDirection.Up && vehiclePos.z > stopPos - 15) 
+			return 4;
+		
+		else 
+			return -1;
+	
+	}
+	*/
+	
+	public static bool CheckStoppingPosition(StreetDirection direction, Vector3 vehiclePos, float stopPos){
+		if(direction == StreetDirection.Right && vehiclePos.x > stopPos - 15) 
+			return true;
+		
+		else if(direction == StreetDirection.Left && vehiclePos.x < stopPos + 15) 
+			return true;
+		
+		else if(direction == StreetDirection.Down && vehiclePos.z < stopPos + 15) 
+			return true;
+		
+		else if(direction == StreetDirection.Up && vehiclePos.z > stopPos - 15) 
+			return true;
+		
+		else 
+			return false;
+	
+	}
+	
+	public static bool EndAccelerationOnArrival(StreetDirection direction, Vector3 vehiclePos, float stopPos){
+		if(direction == StreetDirection.Right && vehiclePos.x > stopPos ) 
+			return true;
+		
+		else if(direction == StreetDirection.Left && vehiclePos.x < stopPos) 
+			return true;
+		
+		else if(direction == StreetDirection.Down && vehiclePos.z < stopPos ) 
+			return true;
+		
+		else if(direction == StreetDirection.Up && vehiclePos.z > stopPos) 
+			return true;
+		
+		else 
+			return false;
+	
+	}
+	
 	public static Vector3 GetApproximatedPosition(Vector3 position){
 		int xPos  ;
 		xPos = Mathf.Abs((((int)(position.x * .1)) * 10))+5;
@@ -30,142 +118,66 @@ public class MathsCalculatios  {
 			return v.transform.localScale.z;
 	}
 	
-	public static bool IsLeavingTheStreet2(Transform transform, StreetDirection direction, Vector3 endPosition, Street nextStreet, StreetDirection nextDirection){
-		//For Lefts
-		if(direction == StreetDirection.Left && (nextStreet == null || nextDirection == StreetDirection.Left)){
-			if(transform.position.x < endPosition.x){
-				Debug.Log("left left");
-				return true;
-			}
-		}
-		
-		if(direction == StreetDirection.Left && nextDirection == StreetDirection.Down){
-			if(transform.position.x < endPosition.x - 3 && transform.position.z < endPosition.z - 3)
-				return true;
-		}
-		
-		if(direction == StreetDirection.Left && nextDirection == StreetDirection.Up){
-			if(transform.position.x < endPosition.x - 3 && transform.position.z > endPosition.z + 3){
-				Debug.Log("left up");
-				return true;
-			}
-		}
-		
-		//For Rights
-		if(direction == StreetDirection.Right && (nextStreet == null || nextDirection == StreetDirection.Right)){
-			if(transform.position.x > endPosition.x + 3)
-				return true;
-		}
-		
-		if(direction == StreetDirection.Right &&  nextDirection == StreetDirection.Down){
-			if(transform.position.x > endPosition.x + 3 && transform.position.z < endPosition.z - 3)
-				return true;
-		}
-		
-		if(direction == StreetDirection.Right && nextDirection == StreetDirection.Up){
-			if(transform.position.x > endPosition.x + 3 && transform.position.z > endPosition.z + 3)
-				return true;
-		}
-		
-		//For Ups
-		if(direction == StreetDirection.Up && (nextStreet == null || nextDirection == StreetDirection.Up)){
-			Debug.Log(nextDirection);
-			if(transform.position.z > endPosition.z + 3){
-				Debug.Log("up up");
-				return true;
-			}
-		}
-		
-		if(direction == StreetDirection.Up && nextDirection == StreetDirection.Right){
-			if(transform.position.z > endPosition.z + 3 && transform.position.x > endPosition.x + 3)
-				return true;
-		}
-		
-		if(direction == StreetDirection.Up && nextDirection == StreetDirection.Left){
-			if(transform.position.z > endPosition.z + 3 && transform.position.x < endPosition.x - 3){
-				Debug.Log("up left");
-				return true;
-			}
-		}
-		
-		//For Downs
-		if(direction == StreetDirection.Down && (nextStreet == null || nextDirection == StreetDirection.Down)){
-			if(transform.position.z < endPosition.z - 3)
-				return true;
-		}
-		
-		if(direction == StreetDirection.Down && nextDirection == StreetDirection.Right ){
-			if(transform.position.z < endPosition.z - 3 && transform.position.x > endPosition.x + 3)
-				return true;
-		}
-		
-		if(direction == StreetDirection.Down && nextDirection == StreetDirection.Left ){
-			if(transform.position.z < endPosition.z - 3 && transform.position.x < endPosition.x - 3)
-				return true;
-		}
-		return false;
-	}
-	
-	public static bool CheckMyEndPosition(Transform transform, StreetDirection direction, Vector3 endPosition){
-		
+	public static bool CompareTwoPositionsWRTDirections(StreetDirection direction, Vector3 firstPos, Vector3 secondPos, float offset){
 		if(direction == StreetDirection.Left){
-			if(transform.position.x < endPosition.x - 3){
+			if(firstPos.x < secondPos.x - offset){
 				return true;
 			}
 		}
 		if(direction == StreetDirection.Right){
-			if(transform.position.x > endPosition.x + 3)
+			if(firstPos.x > secondPos.x + offset)
 				return true;
 		}
 		if(direction == StreetDirection.Up ){
-			if(transform.position.z > endPosition.z + 3){
+			if(firstPos.z > secondPos.z + offset){
 				return true;
 			}
 		}
 		if(direction == StreetDirection.Down ){
-			if(transform.position.z < endPosition.z - 3)
+			if(firstPos.z < secondPos.z - offset)
 				return true;
 		}
 		
+		return false;
+			
+	}
+	
+	public static bool CompareTwoPositionsWRTDirections(StreetDirection direction, Vector3 firstPos, float secondPos, float offset){
+		if(direction == StreetDirection.Left){
+			if(firstPos.x < secondPos - offset){
+				return true;
+			}
+		}
+		if(direction == StreetDirection.Right){
+			if(firstPos.x > secondPos + offset)
+				return true;
+		}
+		if(direction == StreetDirection.Up ){
+			if(firstPos.z > secondPos + offset){
+				return true;
+			}
+		}
+		if(direction == StreetDirection.Down ){
+			if(firstPos.z < secondPos - offset)
+				return true;
+		}
+		
+		return false;
+			
+	}
+	
+	public static bool CheckMyEndPosition(Transform transform, StreetDirection direction, Vector3 endPosition){
+		
+		if(CompareTwoPositionsWRTDirections(direction, transform.position, endPosition, 3)){
+			return true;
+		}
 		return false;
 	}
 	
 	public static bool IsLeavingTheStreet(Transform transform, StreetDirection direction,Vector3 endPosition, Street street){
 		
-		if(direction == StreetDirection.Left){
-			
-		//	if(transform.position.x < endPosition.x + 1 && transform.position.x > endPosition.x ){
-			if(transform.position.x < endPosition.x  ){
-				//Debug.Log("it is leaving the street " + street.ID);
-				return true;
-				
-			}
-		}
-		
-	
-		if(direction == StreetDirection.Right){
-		//	if(transform.position.x > endPosition.x - 1 && transform.position.x < endPosition.x){
-			if(transform.position.x > endPosition.x ){
-				//Debug.Log("it is leaving the street " + street.ID);
-				return true;
-			}
-		}
-		
-		
-		if(direction == StreetDirection.Up){
-			if(transform.position.z > endPosition.z ){
-		//	if(transform.position.z > endPosition.z - 1 && transform.position.z < endPosition.z){
-				//Debug.Log("it is leaving the street " + street.ID);
-				return true;
-			}
-		}
-		
-		if(direction == StreetDirection.Down){
-		//	if(transform.position.z < endPosition.z + 1 && transform.position.z > endPosition.z){
-			if(transform.position.z < endPosition.z ){
-				//Debug.Log("it is leaving the street " + street.ID);
-				return true;
-			}
+		if(CompareTwoPositionsWRTDirections(direction, transform.position, endPosition, 0)){
+			return true;
 		}
 		return false;
 	}
@@ -173,125 +185,22 @@ public class MathsCalculatios  {
 	public static bool IsLeavingTheStreet_Rotate(GameObject [] corners, Transform transform, StreetDirection direction,Vector3 endPosition, Street street, StreetDirection nextDirection, VehicleController vehScript){
 		Vector3 obPos = transform.position;
 		
-		if(direction == StreetDirection.Left){
+		if(CompareTwoPositionsWRTDirections(direction, transform.position, endPosition, -5)){
+			if(vehScript.rotateAroundPosition == Vector3.zero){
+		//		vehScript.speed = 10;
+		//		vehScript.haveToReduceMySpeed = true;
+				vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
+			} 
 			
-			if(transform.position.x < endPosition.x+5 ){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.speed = 10;
-					vehScript.haveToReduceMySpeed = true;
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				
-				
-				//*******************************************************************
-				return true;
-				
-			}
+			return true;
 		}
-		
-		if(direction == StreetDirection.Down){
-			
-			if(transform.position.z < endPosition.z +5){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.speed = 10;
-					vehScript.haveToReduceMySpeed = true;
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				
-				return true;
-			}
-			
-		}
-		
-		if(direction == StreetDirection.Right){
-		//	if(transform.position.x > endPosition.x - 1 && transform.position.x < endPosition.x){
-			if(transform.position.x > endPosition.x - 5){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.speed = 10;
-					vehScript.haveToReduceMySpeed = true;
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				return true;
-			}
-		}
-		
-		
-		if(direction == StreetDirection.Up){
-			
-			if(transform.position.z > endPosition.z - 5){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.speed = 10;
-					vehScript.haveToReduceMySpeed = true;
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				return true;
-			}
-		}
-		
 		
 		else {
 			vehScript.rotateAroundPosition = Vector3.zero;
 		}
 		return false;
 	}
-	/*
-	public static bool IsLeavingTheStreet_Rotate(GameObject [] corners, Transform transform, StreetDirection direction,Vector3 endPosition, Street street, StreetDirection nextDirection, AccidentVehicleController vehScript){
-		Vector3 obPos = transform.position;
-		
-		if(direction == StreetDirection.Left){
-			
-			if(transform.position.x < endPosition.x+5 ){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				
-				
-				//*******************************************************************
-				return true;
-				
-			}
-		}
-		
-		if(direction == StreetDirection.Down){
-			
-			if(transform.position.z < endPosition.z +5){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				
-				return true;
-			}
-			
-		}
-		
-		if(direction == StreetDirection.Right){
-		//	if(transform.position.x > endPosition.x - 1 && transform.position.x < endPosition.x){
-			if(transform.position.x > endPosition.x - 5){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				return true;
-			}
-		}
-		
-		
-		if(direction == StreetDirection.Up){
-			
-			if(transform.position.z > endPosition.z - 5){
-				if(vehScript.rotateAroundPosition == Vector3.zero){
-					vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
-				} 
-				return true;
-			}
-		}
-		
-		
-		else {
-			vehScript.rotateAroundPosition = Vector3.zero;
-		}
-		return false;
-	}
-	*/
+	
 	public static bool HasFinishedRotation(Vector3 transformForward, bool rotateNow, StreetDirection direction, StreetDirection nextDirection, VehicleController vehScript){
 		//Debug.Log("direc is >>  " + direction);
 		if(direction != nextDirection){
@@ -299,22 +208,26 @@ public class MathsCalculatios  {
 //			Debug.Log("transformForward ... " + -1*transformForward.x );
 			if(direction == StreetDirection.Left && -1*transformForward.x > -0.01 && rotateNow && nextDirection == StreetDirection.Up){
 				vehScript.gameObject.transform.forward = -1*Vector3.forward;
+				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
 			
 			if(direction == StreetDirection.Right && -1*transformForward.x < 0.01 && rotateNow && nextDirection == StreetDirection.Up){
 				vehScript.gameObject.transform.forward = -1*Vector3.forward;
+				vehScript.speed = vehScript.myVehicle.Speed;
 //				Debug.Log("safwattttttttttttt");
 				return true;
 			}
 			
 			if(direction == StreetDirection.Up && -1*transformForward.z < 0.01 && rotateNow && nextDirection == StreetDirection.Left){
 				vehScript.gameObject.transform.forward = Vector3.right;
+				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
 			
 			if(direction == StreetDirection.Down && -1*transformForward.z > -0.01 && rotateNow && nextDirection == StreetDirection.Left){
 				vehScript.gameObject.transform.forward = Vector3.right;
+				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
 			///////////////////////////////////////////////////
@@ -322,21 +235,25 @@ public class MathsCalculatios  {
 			
 			if(direction == StreetDirection.Left &&  -1*transformForward.x > -0.01 && rotateNow && nextDirection == StreetDirection.Down){
 				vehScript.gameObject.transform.forward = Vector3.forward;
+				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
 			
 			if(direction == StreetDirection.Right &&  -1*transformForward.x < 0.01 && rotateNow && nextDirection == StreetDirection.Down){
 				vehScript.gameObject.transform.forward = Vector3.forward;
+				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
 			
 			if(direction == StreetDirection.Down && -1*transformForward.z > -0.01 && rotateNow && nextDirection == StreetDirection.Right){
 				vehScript.gameObject.transform.forward = -1*Vector3.right;
+				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
 			
 			if(direction == StreetDirection.Up && -1*transformForward.z < 0.01 && rotateNow && nextDirection == StreetDirection.Right){
 				vehScript.gameObject.transform.forward = -1*Vector3.right;
+				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
 			else
@@ -345,59 +262,7 @@ public class MathsCalculatios  {
 		return true;
 	}
 	
-	public static bool HasFinishedRotation(Vector3 transformForward, bool rotateNow, StreetDirection direction, StreetDirection nextDirection, AccidentVehicleController vehScript){
-		//Debug.Log("direc is >>  " + direction);
-		if(direction != nextDirection){
-			
-//			Debug.Log("transformForward ... " + -1*transformForward.x );
-			if(direction == StreetDirection.Left && -1*transformForward.x > -0.01 && rotateNow && nextDirection == StreetDirection.Up){
-				vehScript.gameObject.transform.forward = -1*Vector3.forward;
-				return true;
-			}
-			
-			if(direction == StreetDirection.Right && -1*transformForward.x < 0.01 && rotateNow && nextDirection == StreetDirection.Up){
-				vehScript.gameObject.transform.forward = -1*Vector3.forward;
-				Debug.Log("safwattttttttttttt");
-				return true;
-			}
-			
-			if(direction == StreetDirection.Up && -1*transformForward.z < 0.01 && rotateNow && nextDirection == StreetDirection.Left){
-				vehScript.gameObject.transform.forward = Vector3.right;
-				return true;
-			}
-			
-			if(direction == StreetDirection.Down && -1*transformForward.z > -0.01 && rotateNow && nextDirection == StreetDirection.Left){
-				vehScript.gameObject.transform.forward = Vector3.right;
-				return true;
-			}
-			///////////////////////////////////////////////////
-			
-			
-			if(direction == StreetDirection.Left &&  -1*transformForward.x > -0.01 && rotateNow && nextDirection == StreetDirection.Down){
-				vehScript.gameObject.transform.forward = Vector3.forward;
-				return true;
-			}
-			
-			if(direction == StreetDirection.Right &&  -1*transformForward.x < 0.01 && rotateNow && nextDirection == StreetDirection.Down){
-				vehScript.gameObject.transform.forward = Vector3.forward;
-				return true;
-			}
-			
-			if(direction == StreetDirection.Down && -1*transformForward.z > -0.01 && rotateNow && nextDirection == StreetDirection.Right){
-				vehScript.gameObject.transform.forward = -1*Vector3.right;
-				return true;
-			}
-			
-			if(direction == StreetDirection.Up && -1*transformForward.z < 0.01 && rotateNow && nextDirection == StreetDirection.Right){
-				vehScript.gameObject.transform.forward = -1*Vector3.right;
-				return true;
-			}
-			else
-				return false;
-		}
-		return true;
-	}
-	
+		
 	public static Vector3 GetNearestCorner(GameObject[] corners, Vector3 vehPosition){
 		List<float> temp =  new List<float>();
 		float tempValue;
@@ -409,58 +274,22 @@ public class MathsCalculatios  {
 				minIndex = i;
 			}
 		}
-		
-		//temp.Sort();
 		return corners[minIndex].transform.position;
 	}
 	
 	public static bool HaveToAccelerate(Transform transform, StreetDirection direction,Vector3 endPosition, Street street, VehicleController vehScript){
-		//Debug.Log("amiraaaaaaaaaaa");
-		float rate = (vehScript.myVehicle.Speed - 10)/1.5f;
+		float rate = 2;
 		
-		if(direction == StreetDirection.Left){
-			
-			if(transform.position.x < endPosition.x +15 ){
-				if(vehScript.speed > 0){
-					vehScript.speed -= rate;
-				}
-				vehScript.haveToReduceMySpeed = true;
-				return true;
-				
-			}
+		if(CompareTwoPositionsWRTDirections(direction, transform.position, endPosition, -15)){
+		//	if(!vehScript._light.Stopped && vehScript.speed > 0){
+		//		vehScript.speed -= rate ;
+		//	}
+			if(!vehScript._light.Stopped)
+				vehScript.speed = 18 ;
+			vehScript.haveToReduceMySpeed = true;
+			return true;
 		}
 		
-	
-		if(direction == StreetDirection.Right){
-			if(transform.position.x > endPosition.x -15){
-				if(vehScript.speed > 0){
-					vehScript.speed -= rate;
-				}
-				vehScript.haveToReduceMySpeed = true;
-				return true;
-			}
-		}
-		
-		
-		if(direction == StreetDirection.Up){
-			if(transform.position.z > endPosition.z -15){
-				if(vehScript.speed > 0){
-					vehScript.speed -= rate;
-				}
-				vehScript.haveToReduceMySpeed = true;
-				return true;
-			}
-		}
-		
-		if(direction == StreetDirection.Down){
-			if(transform.position.z < endPosition.z +15){
-				if(vehScript.speed > 0){
-					vehScript.speed -= rate;
-				}
-				vehScript.haveToReduceMySpeed = true;
-				return true;
-			}
-		}
 		return false;
 	}
 	

@@ -13,18 +13,15 @@ public class MessageBar : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		messagesQ = new Queue();
-	//	notifyNow = false;
 		displayTimer = 2;
 		InvokeRepeating("DisplayOneMessage", 1.0f, 2.0f);
 	}
 	
 	void DisplayOneMessage(){
-	//	Debug.Log(messagesQ.Peek());
 		if(messagesQ.Count != 0 ){
 			
-		//	Debug.Log(messagesQ.Count);
 			gameObject.GetComponent<UILabel>().text = messagesQ.Dequeue()as string;
-			audio.PlayOneShot(notification_sound);
+			//audio.PlayOneShot(notification_sound);
 			displayTimer = 0;
 		}
 		else if(displayTimer == 2){
@@ -37,10 +34,6 @@ public class MessageBar : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	//	if(notifyNow){
-	//		audio.PlayOneShot(notification_sound);
-	//		Debug.Log("plaaay");
-	//		notifyNow = false;
-	//	}
+	
 	}
 }

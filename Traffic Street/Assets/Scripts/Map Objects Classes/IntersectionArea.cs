@@ -95,7 +95,6 @@ public class IntersectionArea : MonoBehaviour {
 		if(vehCtrl_1._direction == StreetDirection.Up && vehCtrl_2._direction == StreetDirection.Left){
 			if( vehCtrl_1.gameObject.transform.position.z < vehCtrl_2.gameObject.transform.position.z && 
 				vehCtrl_1.gameObject.transform.position.x < vehCtrl_2.gameObject.transform.position.x){
-				Debug.Log("checkedddddddddddd");
 				return true;
 				
 			}

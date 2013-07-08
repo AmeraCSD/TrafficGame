@@ -40,7 +40,7 @@ public class ZoomInOut : MonoBehaviour {
 		
 	    else{
 	       	camera.fieldOfView = Mathf.Lerp(camera.fieldOfView,normal,Time.deltaTime*smooth);
-			transform.position = originalPos;
+		//	transform.position = originalPos; comented for the temp test ********************************8
 	    }
 		
 		
