@@ -81,7 +81,7 @@ public class MapProducer : MonoBehaviour {
 			Ray ray = cam.camera.ScreenPointToRay(Input.mousePosition);
     		RaycastHit hit ;
     		if (Physics.Raycast(ray, out hit)){
-				light = hit.collider.gameObject.tag;
+				light = hit.collider.gameObject.name;
    			}
 			Debug.Log("Direction: "+direction);
 			pressCounter ++;

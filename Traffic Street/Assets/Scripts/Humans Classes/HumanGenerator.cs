@@ -15,7 +15,7 @@ public class HumanGenerator : MonoBehaviour {
 	private float humanGenerationTimer;
 	
 	private HumansData data;
-	
+	/*
 	
 	// Use this for initialization
 	void Start () {
@@ -76,4 +76,5 @@ public class HumanGenerator : MonoBehaviour {
 	void Update () {
 		
 	}
+	*/
 }

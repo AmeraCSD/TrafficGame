@@ -348,8 +348,8 @@ public class VehicleController : MonoBehaviour {
 		}
 		
 		else if(_nextDirection == StreetDirection.Right && _direction == StreetDirection.Up){
-			transform.Rotate(-1*transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
-			transform.RotateAround(rotateAroundPosition, -1*Vector3.up, worldRotateSpeed  * Time.deltaTime);
+			transform.Rotate(transform.up* selfRotateSpeed * Time.deltaTime, Space.Self);
+			transform.RotateAround(rotateAroundPosition, Vector3.up, worldRotateSpeed  * Time.deltaTime);
 		}
 		
 		else if(_nextDirection == StreetDirection.Right && _direction == StreetDirection.Down){

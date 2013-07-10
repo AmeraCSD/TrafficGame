@@ -153,27 +153,52 @@ public class GameMaster : MonoBehaviour {
 	
 	private void InitTheCurrentLevel(){
 		MapsData data = new MapsData();
-		//levels = new List<Level>();
-		/*
-		if(Application.loadedLevelName == "Map 2"){
-			Map map = new Map(data.GetMap1Streets(), data.GetMap1Paths(), data.GetMap1Intersections(), data.GetMap1Lights());
-			
-			List<VehicleType> events = new List<VehicleType>();
-			events.Add(VehicleType.Ambulance);
-			events.Add(VehicleType.Bus);
-			List<int> eventsNumbers = new List<int>();
-			eventsNumbers.Add(1);
-			eventsNumbers.Add(1);
-			List<Range> ranges = new List<Range>();
-			ranges.Add(new Range(120, 130));
-			ranges.Add(new Range(130, 140));
-			EventRanges eventRangesObject = new EventRanges(ranges);
-			
-		//	currentLevel = new Level(1, map, 27.0f, 4, 200, 150, null, null, null, null);
-		}
-		*/
+		
 		if(Application.loadedLevelName == "Map 1"){
 			Map map = new Map(data.GetMap1Streets(), data.GetMap1Paths(), data.GetMap1Intersections(), data.GetMap1Lights(), data.GetMap1LightsGroups());
+			
+			List<int> groups = new List<int>();
+			
+			//25
+			groups.Add(1);
+			groups.Add(2);
+			groups.Add(3);
+			groups.Add(8);
+			groups.Add(15);
+			groups.Add(20);
+			
+			
+			//75
+			groups.Add(25);
+			groups.Add(30);
+			groups.Add(35);
+			groups.Add(40);
+			
+			//100
+			groups.Add(50);
+			groups.Add(50);
+			
+			List<int []> init_rates_intervals = new List<int[]>();
+			
+			init_rates_intervals.Add(new int[2]{1,280});
+			init_rates_intervals.Add(new int[2]{2,270});
+			init_rates_intervals.Add(new int[2]{4,260});
+			init_rates_intervals.Add(new int[2]{5,250});
+			init_rates_intervals.Add(new int[2]{8,0});
+			
+		//	init_rates_intervals.Add(new int[2]{10,0});
+			
+						
+			
+			
+			currentLevel = new Level(1, map, 20.0f, groups, init_rates_intervals, 200, 300, null, null, null, null, 1);
+			
+			vehiclesShouldGenerated = groups[0];
+			currentRateIndex = 0;
+			gameTime = currentLevel.GameTime;
+		}
+		else if(Application.loadedLevelName == "Map 2"){
+			Map map = new Map(data.GetMap2Streets(), data.GetMap2Paths(), data.GetMap2Intersections(), data.GetMap2Lights(), data.GetMap2LightsGroups());
 			
 			List<int> groups = new List<int>();
 			
@@ -215,7 +240,6 @@ public class GameMaster : MonoBehaviour {
 			currentRateIndex = 0;
 			gameTime = currentLevel.GameTime;
 		}
-		
 	}
 	
 	private void initVariables(){

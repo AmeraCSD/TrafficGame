@@ -11,50 +11,6 @@ public class MapsData : MonoBehaviour {
 	private List<Street> Streets;
 	
 	
-	private string Map2FileString =  "0%(-145.0, 5.0, -45.0)%(-65.0, 5.0, -45.0)%-75%Right%lightRight%true%5\n" +
-		"1%(-145.0, 5.0, -35.0)%(-55.0, 5.0, -35.0)%-75%Right%lightRight%true%5\n" +
-		"2%(-65.0, 5.0, -45.0)%(-65.0, 5.0, -75.0)%0%Down%none%false%2\n" +
-		"3%(-55.0, 5.0, -35.0)%(-55.0, 5.0, -75.0)%0%Down%none%false%2\n" +
-		"4%(-45.0, 5.0, -85.0)%(-45.0, 5.0, -25.0)%-55%Up%lightUp1%true%2\n" +
-		"5%(-35.0, 5.0, -85.0)%(-35.0, 5.0, -15.0)%-55%Up%lightUp1%true%2\n" +
-		"6%(-65.0, 5.0, -45.0)%(35.0, 5.0, -45.0)%0%Right%none%false%5\n" +
-		"7%(-55.0, 5.0, -35.0)%(55.0, 5.0, -35.0)%0%Right%none%false%5\n" +
-		"8%(35.0, 5.0, -45.0)%(35.0, 5.0, -75.0)%0%Down%none%false%2\n" +
-		"9%(45.0, 5.0, -25.0)%(45.0, 5.0, -75.0)%0%Down%none%false%2\n" +
-		"10%(55.0, 5.0, -75.0)%(55.0, 5.0, -35.0)%-55%Up%lightUp%true%2\n" +
-		"11%(65.0, 5.0, -75.0)%(65.0, 5.0, -15.0)%-55%Up%lightUp%true%2\n" +
-		"12%(145.0, 5.0, -25.0)%(45.0, 5.0, -25.0)%75%Left%lightLeft%true%5\n" +
-		"13%(145.0, 5.0, -15.0)%(65.0, 5.0, -15.0)%75%Left%lightLeft%true%5\n" +
-		"14%(45.0, 5.0, -25.0)%(-35.0, 5.0, -25.0)%0%Left%none%false%5\n" +
-		"15%(65.0, 5.0, -15.0)%(-35.0, 5.0, -15.0)%0%Left%none%false%5\n" +
-		"16%(-65.0, 5.0, 15.0)%(-65.0, 5.0, -45.0)%0%Down%none%false%2\n" +
-		"17%(-55.0, 5.0, 25.0)%(-55.0, 5.0, -35.0)%0%Down%none%false%2\n" +
-		"18%(-45.0, 5.0, -25.0)%(-45.0, 5.0, 35.0)%0%Up%none%false%2\n" +
-		"19%(-35.0, 5.0, -15.0)%(-35.0, 5.0, 15.0)%0%Up%none%false%2\n" +
-		"20%(35.0, 5.0, 15.0)%(35.0, 5.0, -15.0)%0%Down%none%false%2\n" +
-		"21%(45.0, 5.0, 35.0)%(45.0, 5.0, -25.0)%0%Down%none%false%2\n" +
-		"22%(55.0, 5.0, -35.0)%(55.0, 5.0, 25.0)%0%Up%none%false%2\n" +
-		"23%(65.0, 5.0, -15.0)%(65.0, 5.0, 45.0)%0%Up%none%false%2\n" +
-		"24%(-145.0, 5.0, 15.0)%(-65.0, 5.0, 15.0)%-75%Right%lightRight1%true%5\n" +
-		"25%(-145.0, 5.0, 25.0)%(-55.0, 5.0, 25.0)%-75%Right%lightRight1%true%5\n" +
-		"26%(-35.0, 5.0, 15.0)%(35.0, 5.0, 15.0)%0%Right%none%false%5\n" +
-		"27%(-55.0, 5.0, 25.0)%(55.0, 5.0, 25.0)%0%Right%none%false%5\n" +
-		"28%(45.0, 5.0, 35.0)%(-45.0, 5.0, 35.0)%0%Left%none%false%5\n" +
-		"29%(65.0, 5.0, 45.0)%(-35.0, 5.0, 45.0)%0%Left%none%false%5\n" +
-		"30%(145.0, 5.0, 35.0)%(45.0, 5.0, 35.0)%75%Left%lightLeft1%true%5\n" +
-		"31%(145.0, 5.0, 45.0)%(65.0, 5.0, 45.0)%75%Left%lightLeft1%true%5\n" +
-		"32%(-65.0, 5.0, 85.0)%(-65.0, 5.0, 15.0)%55%Down%lightDown1%true%2\n" +
-		"33%(-55.0, 5.0, 85.0)%(-55.0, 5.0, 25.0)%55%Down%lightDown1%true%2\n" +
-		"34%(-45.0, 5.0, 35.0)%(-45.0, 5.0, 75.0)%0%Up%none%false%2\n" +
-		"35%(-35.0, 5.0, 45.0)%(-35.0, 5.0, 75.0)%0%Up%none%false%2\n" +
-		"36%(35.0, 5.0, 85.0)%(35.0, 5.0, 15.0)%55%Down%lightDown%true%2\n" +
-		"37%(45.0, 5.0, 85.0)%(45.0, 5.0, 25.0)%55%Down%lightDown%true%2\n" +
-		"38%(55.0, 5.0, 25.0)%(55.0, 5.0, 75.0)%0%Up%none%false%2\n" +
-		"39%(65.0, 5.0, 45.0)%(65.0, 5.0, 85.0)%0%Up%none%false%2\n" +
-		"40%(-35.0, 5.0, -25.0)%(-45.0, 5.0, -25.0)%0%Left%none%false%1\n" +
-		"41%(-65.0, 5.0, 15.0)%(-35.0, 5.0, 15.0)%0%Right%none%false%1\n" +
-		"42%(-35.0, 5.0, 15.0)%(-35.0, 5.0, 45.0)%0%Up%none%false%1";
-	
 	private string Map1FileString = "0%(-115.0, 5.0, -35.0)%(25.0, 5.0, -35.0)%15%Right%lightRight%true%8\n" +
 		"1%(25.0, 5.0, -75.0)%(25.0, 5.0, -35.0)%-45%Up%lightUp%true%3\n" +
 		"2%(25.0, 5.0, -35.0)%(115.0, 5.0, -35.0)%0%Right%none%false%8\n" +
@@ -90,7 +46,33 @@ public class MapsData : MonoBehaviour {
 		"32%(75.0, 5.0, -25.0)%(75.0, 5.0, -15.0)%0%Up%none%false%1\n" +
 		"33%(-45.0, 5.0, 35.0)%(-45.0, 5.0, 45.0)%0%Up%none%false%1\n"+
 		"34%(25.0, 5.0, -35.0)%(25.0, 5.0, -15.0)%0%Up%none%false%2";
-
+	
+	private string Map2FileString =  "0%(-45.0, 5.0, -25.0)%(-45.0, 5.0, -75.0)%0%Down%none%false%2\n" +
+		"1%(-35.0, 5.0, -85.0)%(-35.0, 5.0, -35.0)%-45%Up%lightUp2%true%2\n" +
+		"2%(-105.0, 5.0, -35.0)%(-35.0, 5.0, -35.0)%-55%Right%lightRight4%true%3\n" +
+		"3%(-45.0, 5.0, -25.0)%(-105.0, 5.0, -25.0)%0%Left%none%false%3\n" +
+		"4%(-35.0, 5.0, -35.0)%(35.0, 5.0, -35.0)%20%Right%lightRight3%true%3\n" +
+		"5%(45.0, 5.0, -25.0)%(-45.0, 5.0, -25.0)%-25%Left%lightLeft2%true%3\n" +
+		"6%(35.0, 5.0, -35.0)%(35.0, 5.0, -75.0)%0%Down%none%false%2\n" +
+		"7%(45.0, 5.0, -75.0)%(45.0, 5.0, -25.0)%-45%Up%lightUp1%true%2\n" +
+		"8%(35.0, 5.0, -35.0)%(105.0, 5.0, -35.0)%0%Right%none%false%3\n" +
+		"9%(95.0, 5.0, -25.0)%(45.0, 5.0, -25.0)%55%Left%lightLeft4%true%3\n" +
+		"10%(-45.0, 5.0, 25.0)%(-45.0, 5.0, -25.0)%-10%Down%lightDown4%true%3\n" +
+		"11%(-35.0, 5.0, -35.0)%(-35.0, 5.0, 35.0)%10%Up%lightUp4%true%3\n" +
+		"12%(35.0, 5.0, 35.0)%(35.0, 5.0, -35.0)%-10%Down%lightDown3%true%3\n" +
+		"13%(45.0, 5.0, -25.0)%(45.0, 5.0, 25.0)%15%Up%lightUp3%true%3\n" +
+		"14%(-95.0, 5.0, 25.0)%(-45.0, 5.0, 25.0)%-55%Right%lightRight1%true%3\n" +
+		"15%(-35.0, 5.0, 35.0)%(-95.0, 5.0, 35.0)%0%Left%none%false%3\n" +
+		"16%(-45.0, 5.0, 25.0)%(45.0, 5.0, 25.0)%25%Right%lightRight2%true%3\n" +
+		"17%(35.0, 5.0, 35.0)%(-35.0, 5.0, 35.0)%-25%Left%lightLeft3%true%3\n" +
+		"18%(45.0, 5.0, 25.0)%(95.0, 5.0, 25.0)%0%Right%none%false%3\n" +
+		"19%(95.0, 5.0, 35.0)%(35.0, 5.0, 35.0)%55%Left%lightLeft1%true%3\n" +
+		"20%(-45.0, 5.0, 75.0)%(-45.0, 5.0, 25.0)%50%Down%lightDown1%true%2\n" +
+		"21%(-35.0, 5.0, 35.0)%(-35.0, 5.0, 75.0)%0%Up%none%false%2\n" +
+		"22%(35.0, 5.0, 75.0)%(35.0, 5.0, 35.0)%45%Down%lightDown2%true%2\n" +
+		"23%(45.0, 5.0, 25.0)%(45.0, 5.0, 75.0)%0%Up%none%false%2";
+	
+	
 	public List<Street> GetMap2Streets(){
 		Lights = new List<TrafficLight>();
 		Streets = new List<Street>();
@@ -164,65 +146,25 @@ public class MapsData : MonoBehaviour {
 		List<Vector3> intersectionsList = new List<Vector3>();
 		
 		//here weeee goooooooooooo
-		intersectionsList.Add(new Vector3(-65.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(-45.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(-35.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(65.0f, 5.0f, -45.0f));
-		intersectionsList.Add(new Vector3(65.0f, 5.0f, -25.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, -25.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, -25.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, -25.0f));
-		intersectionsList.Add(new Vector3(-35.0f, 5.0f, -25.0f));
-		intersectionsList.Add(new Vector3(-45.0f, 5.0f, -25.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, -25.0f));
-		intersectionsList.Add(new Vector3(-65.0f, 5.0f, -35.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, -35.0f));
 		intersectionsList.Add(new Vector3(-45.0f, 5.0f, -35.0f));
 		intersectionsList.Add(new Vector3(-35.0f, 5.0f, -35.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, -35.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, -35.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, -35.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, -15.0f));
-		intersectionsList.Add(new Vector3(-45.0f, 5.0f, -15.0f));
-		intersectionsList.Add(new Vector3(-35.0f, 5.0f, -15.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, -15.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, -15.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, -15.0f));
-		intersectionsList.Add(new Vector3(65.0f, 5.0f, -15.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, 15.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, 15.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, 15.0f));
-		intersectionsList.Add(new Vector3(-35.0f, 5.0f, 15.0f));
-		intersectionsList.Add(new Vector3(-45.0f, 5.0f, 15.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, 15.0f));
-		intersectionsList.Add(new Vector3(-65.0f, 5.0f, 15.0f));
-		intersectionsList.Add(new Vector3(-65.0f, 5.0f, 25.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, 25.0f));
+		intersectionsList.Add(new Vector3(-35.0f, 5.0f, -25.0f));
+		intersectionsList.Add(new Vector3(-45.0f, 5.0f, -25.0f));
 		intersectionsList.Add(new Vector3(-45.0f, 5.0f, 25.0f));
 		intersectionsList.Add(new Vector3(-35.0f, 5.0f, 25.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, 25.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, 25.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, 25.0f));
-		intersectionsList.Add(new Vector3(65.0f, 5.0f, 35.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, 35.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, 35.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, 35.0f));
 		intersectionsList.Add(new Vector3(-35.0f, 5.0f, 35.0f));
 		intersectionsList.Add(new Vector3(-45.0f, 5.0f, 35.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, 35.0f));
-		intersectionsList.Add(new Vector3(-65.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(-55.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(-45.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(-35.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(45.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(55.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(65.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(85.0f, 5.0f, -85.0f));	
+		intersectionsList.Add(new Vector3(35.0f, 5.0f, 35.0f));
+		intersectionsList.Add(new Vector3(45.0f, 5.0f, 35.0f));
+		intersectionsList.Add(new Vector3(45.0f, 5.0f, 25.0f));
+		intersectionsList.Add(new Vector3(35.0f, 5.0f, 25.0f));
+		intersectionsList.Add(new Vector3(45.0f, 5.0f, -25.0f));
+		intersectionsList.Add(new Vector3(35.0f, 5.0f, -25.0f));
+		intersectionsList.Add(new Vector3(35.0f, 5.0f, -35.0f));
+		intersectionsList.Add(new Vector3(45.0f, 5.0f, -35.0f));
+		intersectionsList.Add(new Vector3(75.0f, 5.0f, -75.0f));
+
+
 
 		
 		return intersectionsList;
@@ -278,175 +220,133 @@ public class MapsData : MonoBehaviour {
 		
 		//path 0
 		tempPath = new List<Street>();
-		Debug.Log(Streets[0].ID);
-		tempPath.Add(Streets[0]);
-		tempPath.Add(Streets[6]);
+		tempPath.Add(Streets[2]);
+		tempPath.Add(Streets[4]);
 		tempPath.Add(Streets[8]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[0].StartPoint , Streets[8].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[2].StartPoint , Streets[8].EndPoint, false));
 		
 		//path 1
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[1]);
-		tempPath.Add(Streets[7]);
-		tempPath.Add(Streets[22]);
-		tempPath.Add(Streets[38]);
+		tempPath.Add(Streets[2]);
+		tempPath.Add(Streets[4]);
+		tempPath.Add(Streets[6]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[1].StartPoint , Streets[38].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[2].StartPoint , Streets[6].EndPoint, false));
+		
 		
 		//path 2
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[4]);
-		tempPath.Add(Streets[18]);
-		tempPath.Add(Streets[34]);
+		tempPath.Add(Streets[1]);
+		tempPath.Add(Streets[11]);
+		tempPath.Add(Streets[21]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[4].StartPoint , Streets[34].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[1].StartPoint , Streets[21].EndPoint, false));
+		
 		
 		//path 3
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[5]);
-		tempPath.Add(Streets[19]);
-		tempPath.Add(Streets[42]);
-		tempPath.Add(Streets[35]);
-		
-		Paths.Add(new GamePath(tempPath, Streets[5].StartPoint , Streets[35].EndPoint, false));
-		
-		/*
-		//path 4
-		tempPath = new List<Street>();
-		tempPath.Add(Streets[5]);
-		tempPath.Add(Streets[6]);
+		tempPath.Add(Streets[1]);
+		tempPath.Add(Streets[4]);
 		tempPath.Add(Streets[8]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[5].StartPoint , Streets[8].EndPoint, false));
-		*/
+		Paths.Add(new GamePath(tempPath, Streets[1].StartPoint , Streets[8].EndPoint, false));
+		
+		//path 4
+		tempPath = new List<Street>();
+		tempPath.Add(Streets[7]);
+		tempPath.Add(Streets[13]);
+		tempPath.Add(Streets[23]);
+		
+		Paths.Add(new GamePath(tempPath, Streets[7].StartPoint , Streets[23].EndPoint, false));
+		
 		//path 5
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[10]);
-		tempPath.Add(Streets[22]);
-		tempPath.Add(Streets[38]);
+		tempPath.Add(Streets[7]);
+		tempPath.Add(Streets[13]);
+		tempPath.Add(Streets[18]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[10].StartPoint , Streets[38].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[7].StartPoint , Streets[18].EndPoint, false));
 		
 		//path 6
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[11]);
+		tempPath.Add(Streets[9]);
+		tempPath.Add(Streets[13]);
 		tempPath.Add(Streets[23]);
-		tempPath.Add(Streets[39]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[11].StartPoint , Streets[39].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[9].StartPoint , Streets[23].EndPoint, false));
 		
 		//path 7
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[12]);
 		tempPath.Add(Streets[9]);
+		tempPath.Add(Streets[5]);
+		tempPath.Add(Streets[3]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[12].StartPoint , Streets[9].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[9].StartPoint , Streets[3].EndPoint, false));
 		
 		//path 8
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[13]);
-		tempPath.Add(Streets[23]);
-		tempPath.Add(Streets[39]);
+		tempPath.Add(Streets[14]);
+		tempPath.Add(Streets[16]);
+		tempPath.Add(Streets[18]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[13].StartPoint , Streets[39].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[14].StartPoint , Streets[18].EndPoint, false));
 		
 		//path 9
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[13]);
-		tempPath.Add(Streets[15]);
-		tempPath.Add(Streets[19]);
-		tempPath.Add(Streets[42]);
-		tempPath.Add(Streets[35]);
+		tempPath.Add(Streets[14]);
+		tempPath.Add(Streets[10]);
+		tempPath.Add(Streets[0]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[13].StartPoint , Streets[35].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[14].StartPoint , Streets[0].EndPoint, false));
 		
 		//path 10
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[30]);
-		tempPath.Add(Streets[21]);
-		tempPath.Add(Streets[9]);
+		tempPath.Add(Streets[19]);
+		tempPath.Add(Streets[17]);
+		tempPath.Add(Streets[15]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[30].StartPoint , Streets[9].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[19].StartPoint , Streets[15].EndPoint, false));
 		
 		//path 11
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[31]);
-		tempPath.Add(Streets[29]);
-		tempPath.Add(Streets[35]);
+		tempPath.Add(Streets[19]);
+		tempPath.Add(Streets[17]);
+		tempPath.Add(Streets[21]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[31].StartPoint , Streets[35].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[19].StartPoint , Streets[21].EndPoint, false));
 		
 		//path 12
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[36]);
-		tempPath.Add(Streets[20]);
-		tempPath.Add(Streets[8]);
+		tempPath.Add(Streets[22]);
+		tempPath.Add(Streets[17]);
+		tempPath.Add(Streets[15]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[36].StartPoint , Streets[8].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[22].StartPoint , Streets[15].EndPoint, false));
 		
 		//path 13
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[37]);
-		tempPath.Add(Streets[21]);
-		tempPath.Add(Streets[9]);
+		tempPath.Add(Streets[22]);
+		tempPath.Add(Streets[12]);
+		tempPath.Add(Streets[6]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[37].StartPoint , Streets[9].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[22].StartPoint , Streets[6].EndPoint, false));
 		
 		//path 14
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[32]);
-		tempPath.Add(Streets[16]);
-		tempPath.Add(Streets[2]);
+		tempPath.Add(Streets[20]);
+		tempPath.Add(Streets[10]);
+		tempPath.Add(Streets[0]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[32].StartPoint , Streets[2].EndPoint, false));
+		Paths.Add(new GamePath(tempPath, Streets[20].StartPoint , Streets[0].EndPoint, false));
 		
 		//path 15
 		tempPath = new List<Street>();
-		tempPath.Add(Streets[33]);
-		tempPath.Add(Streets[17]);
+		tempPath.Add(Streets[20]);
+		tempPath.Add(Streets[10]);
 		tempPath.Add(Streets[3]);
 		
-		Paths.Add(new GamePath(tempPath, Streets[33].StartPoint , Streets[3].EndPoint, false));
-		
-		//path 16
-		tempPath = new List<Street>();
-		tempPath.Add(Streets[12]);
-		tempPath.Add(Streets[14]);
-		tempPath.Add(Streets[40]);
-		tempPath.Add(Streets[18]);
-		tempPath.Add(Streets[34]);
-		
-		Paths.Add(new GamePath(tempPath, Streets[12].StartPoint , Streets[34].EndPoint, false));
-		
-		//path 17
-		tempPath = new List<Street>();
-		tempPath.Add(Streets[24]);
-		tempPath.Add(Streets[41]);
-		tempPath.Add(Streets[26]);
-		tempPath.Add(Streets[20]);
-		tempPath.Add(Streets[8]);
-		
-		Paths.Add(new GamePath(tempPath, Streets[24].StartPoint , Streets[8].EndPoint, false));
-		
-		//path 18
-		tempPath = new List<Street>();
-		tempPath.Add(Streets[25]);
-		tempPath.Add(Streets[27]);
-		tempPath.Add(Streets[38]);
-		
-		Paths.Add(new GamePath(tempPath, Streets[25].StartPoint , Streets[38].EndPoint, false));
-		
-		//path 19
-		tempPath = new List<Street>();
-		tempPath.Add(Streets[24]);
-		tempPath.Add(Streets[16]);
-		tempPath.Add(Streets[2]);
-		
-		Paths.Add(new GamePath(tempPath, Streets[24].StartPoint , Streets[2].EndPoint, false));
-		
-		
-			
+		Paths.Add(new GamePath(tempPath, Streets[20].StartPoint , Streets[3].EndPoint, false));
 		
 		return Paths;
 	}
@@ -630,19 +530,19 @@ public class MapsData : MonoBehaviour {
 	
 	
 	
-	private TrafficLight MakeTheTrafficLight(string dirStr, string tag, string stoppedStr){
+	private TrafficLight MakeTheTrafficLight(string dirStr, string name, string stoppedStr){
 		TrafficLight light;
 		StreetDirection direction =	 (StreetDirection)Enum.Parse(typeof(StreetDirection), dirStr);
 		bool stopped = bool.Parse(stoppedStr);
 		
 		GameObject go;
-		if(tag == "none"){
+		if(name == "none"){
 			go = null;	
 			light = new TrafficLight(direction, go, stopped);
 			
 		}
 		else{
-			go = GameObject.FindGameObjectWithTag(tag);
+			go = GameObject.Find(name);
 			int index = ContainsLight(go);
 			if(index == -1){
 				light = new TrafficLight(direction, go, stopped);
@@ -680,54 +580,6 @@ public class MapsData : MonoBehaviour {
 		return Lights;
 	}
 	
-	private void Map2AttachStreetsToLights(){
-		List<Street> temp;
-		
-		for(int i= 0; i<Lights.Count; i++){
-			temp = new List<Street>();
-			if(Lights[i].tLight.tag == "lightRight"){
-				temp.Add(Streets[0]);
-				temp.Add(Streets[1]);
-				Lights[i].AttachedStreets = temp;
-				
-			}
-			else if(Lights[i].tLight.tag == "lightRight1"){
-				temp.Add(Streets[24]);
-				temp.Add(Streets[25]);
-				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightLeft"){
-				temp.Add(Streets[12]);
-				temp.Add(Streets[13]);
-				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightLeft1"){
-				temp.Add(Streets[30]);
-				temp.Add(Streets[31]);
-				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightUp1"){
-				temp.Add(Streets[4]);
-				temp.Add(Streets[5]);
-				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightUp"){
-				temp.Add(Streets[10]);
-				temp.Add(Streets[11]);
-				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightDown1"){
-				temp.Add(Streets[32]);
-				temp.Add(Streets[33]);
-				Lights[i].AttachedStreets = temp;
-			}
-			else if(Lights[i].tLight.tag == "lightDown"){
-				temp.Add(Streets[36]);
-				temp.Add(Streets[37]);
-				Lights[i].AttachedStreets = temp;
-			}
-		}
-	}
 	
 	private void Map1AttachStreetsToLights(){
 		List<Street> temp;
@@ -743,47 +595,47 @@ public class MapsData : MonoBehaviour {
 		for(int i= 0; i<Lights.Count; i++){
 			temp = new List<Street>();
 			
-			if(Lights[i].tLight.tag == "lightLeft"){
+			if(Lights[i].tLight.name == "lightLeft"){
 				temp.Add(Streets[11]);
 				temp.Add(Streets[8]);
 				Lights[i].AttachedStreets = temp;
 				lightsList1.Add(Lights[i]);
 			}
-			else if(Lights[i].tLight.tag == "lightLeft1"){
+			else if(Lights[i].tLight.name == "lightLeft1"){
 				temp.Add(Streets[10]);
 				temp.Add(Streets[7]);
 				Lights[i].AttachedStreets = temp;
 				lightsList1.Add(Lights[i]);
 			}
-			else if(Lights[i].tLight.tag == "lightUp"){
+			else if(Lights[i].tLight.name == "lightUp"){
 				temp.Add(Streets[1]);
 				Lights[i].AttachedStreets = temp;
 				lightsList2.Add(Lights[i]);
 			}
-			else if(Lights[i].tLight.tag == "lightRight"){
+			else if(Lights[i].tLight.name == "lightRight"){
 				temp.Add(Streets[0]);
 				temp.Add(Streets[3]);
 				Lights[i].AttachedStreets = temp;
 				lightsList2.Add(Lights[i]);
 			}
-			else if(Lights[i].tLight.tag == "lightRight1"){
+			else if(Lights[i].tLight.name == "lightRight1"){
 				temp.Add(Streets[16]);
 				temp.Add(Streets[18]);
 				Lights[i].AttachedStreets = temp;
 				lightsList4.Add(Lights[i]);
 			}
-			else if(Lights[i].tLight.tag == "lightDown1"){
+			else if(Lights[i].tLight.name == "lightDown1"){
 				temp.Add(Streets[28]);
 				Lights[i].AttachedStreets = temp;
 				lightsList4.Add(Lights[i]);
 			}
-			else if(Lights[i].tLight.tag == "lightDown"){
+			else if(Lights[i].tLight.name == "lightDown"){
 				temp.Add(Streets[30]);
 				temp.Add(Streets[31]);
 				Lights[i].AttachedStreets = temp;
 				lightsList3.Add(Lights[i]);
 			}
-			else if(Lights[i].tLight.tag == "lightLeft2"){
+			else if(Lights[i].tLight.name == "lightLeft2"){
 				temp.Add(Streets[24]);
 				temp.Add(Streets[27]);
 				Lights[i].AttachedStreets = temp;
@@ -798,18 +650,137 @@ public class MapsData : MonoBehaviour {
 		
 	}
 	
+	private void Map2AttachStreetsToLights(){
+		List<Street> temp;
+		
+		lightsGroups = new List<LightsGroup>() ;
+		
+		List<TrafficLight> lightsList1 = new List<TrafficLight>();
+		List<TrafficLight> lightsList2 = new List<TrafficLight>();
+		List<TrafficLight> lightsList3 = new List<TrafficLight>();
+		List<TrafficLight> lightsList4 = new List<TrafficLight>();	
+		
+		
+		TrafficLight [] temp1 = new TrafficLight[4];
+		TrafficLight [] temp2 = new TrafficLight[4];
+		TrafficLight [] temp3 = new TrafficLight[4];
+		TrafficLight [] temp4 = new TrafficLight[4];
+		
+		for(int i= 0; i<Lights.Count; i++){
+			temp = new List<Street>();
+			//group 1
+			if(Lights[i].tLight.name == "lightDown4"){
+				temp.Add(Streets[10]);
+				Lights[i].AttachedStreets = temp;
+				temp1[0] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightRight4"){
+				temp.Add(Streets[2]);
+				Lights[i].AttachedStreets = temp;
+				temp1[1] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightUp2"){
+				temp.Add(Streets[1]);
+				Lights[i].AttachedStreets = temp;
+				temp1[2] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightLeft2"){
+				temp.Add(Streets[5]);
+				Lights[i].AttachedStreets = temp;
+				temp1[3] = Lights[i];
+			}
+			
+			//group 2
+			else if(Lights[i].tLight.name == "lightDown1"){
+				temp.Add(Streets[20]);
+				Lights[i].AttachedStreets = temp;
+				temp2[0] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightRight1"){
+				temp.Add(Streets[14]);
+				Lights[i].AttachedStreets = temp;
+				temp2[1] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightUp4"){
+				temp.Add(Streets[11]);
+				Lights[i].AttachedStreets = temp;
+				temp2[2] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightLeft3"){
+				temp.Add(Streets[17]);
+				Lights[i].AttachedStreets = temp;
+				temp2[3] = Lights[i];
+			}
+			
+			
+			//group 3
+			else if(Lights[i].tLight.name == "lightDown3"){
+				temp.Add(Streets[12]);
+				Lights[i].AttachedStreets = temp;
+				temp3[0] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightRight3"){
+				temp.Add(Streets[4]);
+				Lights[i].AttachedStreets = temp;
+				temp3[1] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightUp1"){
+				temp.Add(Streets[7]);
+				Lights[i].AttachedStreets = temp;
+				temp3[2] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightLeft4"){
+				temp.Add(Streets[9]);
+				Lights[i].AttachedStreets = temp;
+				temp3[3] = Lights[i];
+			}
+			//group 4
+			else if(Lights[i].tLight.name == "lightDown2"){
+				temp.Add(Streets[22]);
+				Lights[i].AttachedStreets = temp;
+				temp4[0] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightRight2"){
+				temp.Add(Streets[16]);
+				Lights[i].AttachedStreets = temp;
+				temp4[1] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightUp3"){
+				temp.Add(Streets[13]);
+				Lights[i].AttachedStreets = temp;
+				temp4[2] = Lights[i];
+			}
+			else if(Lights[i].tLight.name == "lightLeft1"){
+				temp.Add(Streets[19]);
+				Lights[i].AttachedStreets = temp;
+				temp4[3] = Lights[i];
+			}
+			
+		}
+		
+		for(int i =0 ; i<4; i++){
+			lightsList1.Add(temp1[i]);
+			lightsList2.Add(temp2[i]);
+			lightsList3.Add(temp3[i]);
+			lightsList4.Add(temp4[i]);
+		}
+		
+		lightsGroups.Add(new LightsGroup(lightsList1));
+		lightsGroups.Add(new LightsGroup(lightsList2));
+		lightsGroups.Add(new LightsGroup(lightsList3));
+		lightsGroups.Add(new LightsGroup(lightsList4));
+	}
+	
+	
 	public List<LightsGroup> GetMap1LightsGroups(){
+		return lightsGroups;
+	}
+	public List<LightsGroup> GetMap2LightsGroups(){
 		return lightsGroups;
 	}
 	
 	void Start () {
 		
-		
-		
-		char[] delimiters = new char[]{','};
-		Debug.Log(float.Parse("-45.0)".Substring(0, "-45.0)".IndexOf(')')-1)));
-		Debug.Log("(-125.0, 5.0, -45.0)".Split(delimiters)[1]);
-		Debug.Log("(-125.0, 5.0, -45.0)".Split(delimiters)[2]);
 	}
 	
 	// Update is called once per frame

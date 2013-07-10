@@ -30,16 +30,10 @@ public class LightsGamer : MonoBehaviour {
 	
 	public List<GameObject> currentlyOpenedLights;
 	
-	public GameObject youCantOpenLightLabelGo;
-	public GameObject youCantOpenLightLabelVarGo;
-	//private UILabel youCantOpenLightLabel;
-	
+
 	void Awake(){
 		rotateArrow = true;
-		youCantOpenLightLabelGo.SetActive(false);
-		youCantOpenLightLabelVarGo.SetActive(false);
 
-	//	youCantOpenLightLabel = youCantOpenLightLabelGo.GetComponent<UILabel>();
 	}
 	
 	
@@ -51,7 +45,6 @@ public class LightsGamer : MonoBehaviour {
 		Streets = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().Streets; //To get the streets in the whole game here in one list
 		lights = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().Lights;
 		lightsGroups = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().LightsGroups;
-		max_lights_to_open = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>().currentLevel.MaxLightsToOpen;
 		InitLightsColors();	
 		
 	}
@@ -68,15 +61,17 @@ public class LightsGamer : MonoBehaviour {
 	private void InitLightsColors(){
 		for(int i=0; i<lightsGroups.Count ; i++ ){
 			Debug.Log("i = " + i);
-			lightsGroups[i].GroupOfLights[0].tLight.renderer.material.color = Color.green;
-			lightsGroups[i].GroupOfLights[0].Stopped = false;
-			if(lightsGroups[i].GroupOfLights.Count == 2){
-				lightsGroups[i].GroupOfLights[1].tLight.renderer.material.color = Color.red;
-				lightsGroups[i].GroupOfLights[1].Stopped = true;
+			for(int j =0; j<lightsGroups[i].GroupOfLights.Count;j++){
+				if(j %2 == 0){	//is even
+					lightsGroups[i].GroupOfLights[j].tLight.renderer.material.color = Color.green;
+					lightsGroups[i].GroupOfLights[j].Stopped = false;
+				}
+				else{
+					lightsGroups[i].GroupOfLights[j].tLight.renderer.material.color = Color.red;
+					lightsGroups[i].GroupOfLights[j].Stopped = true;
+				}
 			}
-		//	if(Streets[i].StreetLight.tLight != null){
-			//	Streets[i].StreetLight.tLight.renderer.material.color = Color.red;
-			//}
+		
 		}
 		
 	}
@@ -84,7 +79,7 @@ public class LightsGamer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(rotateArrow && rotOb!=null){
-			rotOb.transform.Rotate(Vector3.up *375* Time.deltaTime, Space.World);
+			rotOb.transform.Rotate(Vector3.up *600* Time.deltaTime, Space.World);
 		}
 		OnMousePressed();
 		
@@ -105,42 +100,14 @@ public class LightsGamer : MonoBehaviour {
 				int index = IndexOfTag(hit.collider.gameObject.tag);
 				if(index != -1 && !CheckIfAnyYellowInGroup(index)){
 					timer = Time.time ;
-					if(lightsGroups[index].GroupOfLights.Count == 2){
+				//	if(lightsGroups[index].GroupOfLights.Count == 2){
 						rotOb = hit.collider.gameObject;
 						rotateArrow = true;
-					//	ob.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
-						//hit.collider.gameObject.transform.Rotate(Vector3.up * Time.deltaTime, Space.World);
-					}
+					
+				//	}
 					PutOnHoldOnMouseHit(index);
 				}
-				//if(hit.collider.gameObject.renderer.material.color == Color.red){
-			//	if(hit.collider.gameObject.tag){
-				//	if(currentlyOpenedLights.Count < max_lights_to_open){
-					//	currentlyOpenedLights.Add(hit.collider.gameObject);
 				
-				
-						
-				//	}
-					/*
-					else{
-						Debug.Log("you cannot do thisssss");
-						youCantOpenLightLabelGo.SetActive(true);
-						youCantOpenLightLabelVarGo.SetActive(true);
-						youCantOpenLightLabelVarGo.GetComponent<UILabel>().text = max_lights_to_open+"";
-					}
-					*/
-				//}
-				/*
-				else if(hit.collider.gameObject.renderer.material.color == Color.green){
-					youCantOpenLightLabelGo.SetActive(false);
-					youCantOpenLightLabelVarGo.SetActive(false);
-					if(currentlyOpenedLights.Contains(hit.collider.gameObject)){
-						currentlyOpenedLights.Remove(hit.collider.gameObject);
-					}
-					timer = Time.time ;
-					PutOnHoldOnMouseHit(hit);
-				}
-				*/
    			}	
 		}
 	}
@@ -166,12 +133,9 @@ public class LightsGamer : MonoBehaviour {
 		}
 		return false;
 	}
-	//this method changes each level
 	private void PutOnHoldOnMouseHit(int index){
 		
-	//	int index = ContainsLight(hit.collider.gameObject);
-//		Debug.Log("the index is "+ index);
-	//	if(index != -1){
+
 		LightsGroup lightGroup = lightsGroups[index];
 		
 		for(int i=0; i< lightGroup.GroupOfLights.Count; i++){
@@ -180,48 +144,7 @@ public class LightsGamer : MonoBehaviour {
 			}
 			
 		}
-	//	}
-		/*
-		if(hit.collider.gameObject.tag == "lightRight"){
-			PutStateOnHold(Streets[0]);
-			PutStateOnHold(Streets[1]);
-		}
-		
-		if(hit.collider.gameObject.tag == "lightRight1"){
-			PutStateOnHold(Streets[24]);
-			PutStateOnHold(Streets[25]);
-		}
-		
-		if(hit.collider.gameObject.tag == "lightLeft"){
-			PutStateOnHold(Streets[12]);
-			PutStateOnHold(Streets[13]);
-		}
-		
-		if(hit.collider.gameObject.tag == "lightLeft1"){
-			PutStateOnHold(Streets[30]);
-			PutStateOnHold(Streets[31]);
-		}
-		
-		if(hit.collider.gameObject.tag == "lightUp1"){
-			PutStateOnHold(Streets[4]);
-			PutStateOnHold(Streets[5]);
-		}
-		
-		if(hit.collider.gameObject.tag == "lightUp"){
-			PutStateOnHold(Streets[10]);
-			PutStateOnHold(Streets[11]);
-		}
-		
-		if(hit.collider.gameObject.tag == "lightDown1"){
-			PutStateOnHold(Streets[32]);
-			PutStateOnHold(Streets[33]);
-		}
-		
-		if(hit.collider.gameObject.tag == "lightDown"){
-			PutStateOnHold(Streets[36]);
-			PutStateOnHold(Streets[37]);
-		}
-		*/
+	
 		
 	}
 	
@@ -244,7 +167,7 @@ public class LightsGamer : MonoBehaviour {
 			str.StreetLight.tLight.renderer.material.color = Color.yellow;
 			
 		//	timer += str.MinimumDistanceToOpenTrafficLight / MIN_VEHICLE_SPEED ;
-			timer += .5f;
+			timer += .2f;
 			//timer +=1;			
 			//Debug.Log("The current time is --->  " + Time.time + "and the timer is ---> " + timer);
 			if(timersQueue.Count == 0){

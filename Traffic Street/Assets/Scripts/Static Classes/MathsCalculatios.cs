@@ -190,6 +190,7 @@ public class MathsCalculatios  {
 		//		vehScript.speed = 10;
 		//		vehScript.haveToReduceMySpeed = true;
 				vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
+			//	Debug.Log(vehScript.rotateAroundPosition);
 			} 
 			
 			return true;
@@ -256,6 +257,7 @@ public class MathsCalculatios  {
 				vehScript.speed = vehScript.myVehicle.Speed;
 				return true;
 			}
+			
 			else
 				return false;
 		}
