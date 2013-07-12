@@ -60,7 +60,6 @@ public class LightsGamer : MonoBehaviour {
 	//This method for setting the lights at first all with red light "all stopped" (should be called in the Start() method)_
 	private void InitLightsColors(){
 		for(int i=0; i<lightsGroups.Count ; i++ ){
-			Debug.Log("i = " + i);
 			for(int j =0; j<lightsGroups[i].GroupOfLights.Count;j++){
 				if(j %2 == 0){	//is even
 					lightsGroups[i].GroupOfLights[j].tLight.renderer.material.color = Color.green;

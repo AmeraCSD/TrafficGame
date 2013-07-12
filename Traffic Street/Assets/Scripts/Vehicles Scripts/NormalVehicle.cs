@@ -18,6 +18,7 @@ public class NormalVehicle : MonoBehaviour {
 				vehicle = Instantiate(vehiclePrefab, Paths[pos].GenerationPointPosition ,Quaternion.identity) as GameObject;
 				vehicle.renderer.material = tx;
 				Paths[pos].PathStreets[0].VehiclesNumber ++;
+				//Debug.Log(Paths[pos].PathStreets[0].ID + " ----> "+ Paths[pos].PathStreets[0].VehiclesNumber );
 				vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 				//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 				vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
@@ -37,6 +38,7 @@ public class NormalVehicle : MonoBehaviour {
 				vehicle.GetComponent<VehicleController>().initInstancesAtFirst();
 				vehicle.SetActive(true);
 				Paths[pos].PathStreets[0].VehiclesNumber ++;
+			//	Debug.Log(Paths[pos].PathStreets[0].ID + " ----> "+ Paths[pos].PathStreets[0].VehiclesNumber );
 				vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 				
 				//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)

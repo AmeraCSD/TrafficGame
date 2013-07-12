@@ -18,11 +18,22 @@ public class IntersectionArea : MonoBehaviour {
 		
 		RemoveNullVehicles();
 		
+		
 		if(vehiclesOnMe.Count> 1 ){
 				
+			vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = false;
+			vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = false;
+			for(int i=1; i<vehiclesOnMe.Count; i++){
+				vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed = true;
+				
+				vehiclesOnMe[1].GetComponent<VehicleController>().speed = 0;
+				vehiclesOnMe[1].GetComponent<VehicleController>().pauseRotation = true;
+			}
+			
 			if( checkFaceToFaceVehicles(vehiclesOnMe[0].GetComponent<VehicleController>(), vehiclesOnMe[1].GetComponent<VehicleController>()) ||
 				checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
 				//here we goo accidenttttttttttt ************************************************************************
+				
 				
 				vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
 				
@@ -43,6 +54,9 @@ public class IntersectionArea : MonoBehaviour {
 				}
 						//Debug.Log(transform.position +" ---->  " +Vector3.Angle(vehiclesOnMe[0].transform.forward, vehiclesOnMe[1].transform.forward));
 			
+		}
+		else if (vehiclesOnMe.Count ==  1){
+			vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = false;
 		}
 		
 		
@@ -128,6 +142,7 @@ public class IntersectionArea : MonoBehaviour {
 	
 	void OnTriggerExit(Collider other) {
 		if(other.tag == "vehicle"){
+			
 			vehiclesOnMe.Remove(other.gameObject);
 			if(vehiclesOnMe.Count == 1){
 				

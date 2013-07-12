@@ -227,7 +227,7 @@ public class GameMaster : MonoBehaviour {
 			init_rates_intervals.Add(new int[2]{2,270});
 			init_rates_intervals.Add(new int[2]{4,260});
 			init_rates_intervals.Add(new int[2]{5,250});
-			init_rates_intervals.Add(new int[2]{8,0});
+			init_rates_intervals.Add(new int[2]{6,0});
 			
 		//	init_rates_intervals.Add(new int[2]{10,0});
 			
@@ -291,7 +291,7 @@ public class GameMaster : MonoBehaviour {
 		List<EventTimes> eventTimes = new List<EventTimes>();
 		List <List<GamePath>> eventsPaths = new List<List<GamePath>>();
 		
-		
+		/*
 		//ambulance
 		//1
 		events.Add(VehicleType.Ambulance);
@@ -323,7 +323,7 @@ public class GameMaster : MonoBehaviour {
 		eventsPaths.Add(busGamePathsList);
 		
 		
-		/*
+		
 		//Caravan
 		//1
 		events.Add(VehicleType.Caravan);
@@ -338,7 +338,7 @@ public class GameMaster : MonoBehaviour {
 		caravanGamePathsList.Add(Paths[6]);
 		//caravanGamePathsList.Add(Paths[3]);
 		eventsPaths.Add(caravanGamePathsList);
-		*/
+		
 		
 		//service car
 		//1
@@ -401,7 +401,7 @@ public class GameMaster : MonoBehaviour {
 		List <GamePath> policeGamePathsList = new List<GamePath>();
 		policeGamePathsList.Add(Paths[3]);
 		eventsPaths.Add(policeGamePathsList);
-		
+		*/
 		
 		/*
 		//accident
@@ -420,10 +420,12 @@ public class GameMaster : MonoBehaviour {
 		
 		*/
 		//////////////////////////
+		
 		currentLevel.LevelEvents = events;
 		currentLevel.EventsNumber = eventsNumbers;
 		currentLevel.EventsTimesList = eventTimes;
 		currentLevel.EventsPaths = eventsPaths;
+		
 	}
 	
 	private void InitEventsNeeds(){
@@ -722,18 +724,19 @@ public class GameMaster : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-				
+	//	Debug.Log(Paths[2].PathStreets[0].StreetCapacity +" --- " +Paths[2].PathStreets[0].VehiclesNumber);		
 //		Debug.Log("el group ahooooooo   "+currentLevel.VehicleGroups[currentGroupNumber]);	
 	//	Debug.Log("el rate nowww  " + currentLevel.InstatiationRateAndIntervals[currentRateIndex][0]);
 		
 		DisplayGUIs();
-		
-		if(gameTime == 260){
-			Paths[3].PathStreets[0].StreetCapacity = 0;
-		}
-		if(gameTime == 243){
-			Paths[3].PathStreets[0].StreetCapacity = 6;
-		}
+		////////////////////////////////************************* the thief event...
+	//	if(gameTime == 260){
+	//		Paths[3].PathStreets[0].StreetCapacity = 0;
+	//	}
+	//	if(gameTime == 243){
+	//		Paths[3].PathStreets[0].StreetCapacity = 6;
+	//	}
+		///////////////////////////////
 	}
 	
 	

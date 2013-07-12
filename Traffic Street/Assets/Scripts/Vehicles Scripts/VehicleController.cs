@@ -71,6 +71,7 @@ public class VehicleController : MonoBehaviour {
 	//accleration variables
 	public float dist;
 	
+	public bool pauseRotation;	
 	// Use this for initialization
 	void Awake(){
 		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
@@ -109,6 +110,7 @@ public class VehicleController : MonoBehaviour {
 		ImTheOneToMove = false;
 		rotateNow = false;
 		dist = 0;
+		pauseRotation = false;
 	}
 	
 	void Start () {
@@ -170,7 +172,9 @@ public class VehicleController : MonoBehaviour {
 		if(myVehicle.NextStreet!=null){
 			if(_direction != _nextDirection){
 				if(MathsCalculatios.IsLeavingTheStreet_Rotate(corners, transform, _direction, _endPosition, _street, _nextDirection, this)){
+					//if(myVehicle.NextStreet.VehiclesNumber < myVehicle.NextStreet.StreetCapacity)
 					rotateNow = true;
+					speed = 0;	
 				}
 			}
 			else {
@@ -179,7 +183,7 @@ public class VehicleController : MonoBehaviour {
 				}
 			}
 		}
-		if(rotateNow && _direction != _nextDirection){
+		if(rotateNow && _direction != _nextDirection && !pauseRotation){
 			RotateVehicle();
 		}
 		if(_direction != _nextDirection && MathsCalculatios.HasFinishedRotation(transform.forward, rotateNow,_direction, _nextDirection, this)){
@@ -483,6 +487,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private void StopMovingOnRed(){
 		if(_light.Stopped){
+			
 		//	int result = MathsCalculatios.CheckStoppingPosition(_direction, transform.position, _stopPosition );
 			
 			if(MathsCalculatios.CheckStoppingPosition(_direction, transform.position, _stopPosition)){
@@ -499,6 +504,7 @@ public class VehicleController : MonoBehaviour {
 			
 			}
 			if(MathsCalculatios.EndAccelerationOnArrival(_direction, transform.position, _stopPosition)){
+				//Debug.Log(gameObject.name + " " + speed);
 				speed =0;
 				haveToReduceMySpeed = false;
 				dist = 0;
@@ -607,6 +613,7 @@ public class VehicleController : MonoBehaviour {
 	
 	
 	private void Move(){
+		//Debug.Log("speeddd "+speed);
 		if(_direction == StreetDirection.Left){
 			if(myVehicle.CurrentStreetNumber == 0){
     			transform.localRotation = Quaternion.AngleAxis(90, Vector3.up);
@@ -681,8 +688,12 @@ public class VehicleController : MonoBehaviour {
 						
 						if(intersection.vehiclesOnMe.Count == 1 &&  triggeredIntersections.Contains(hit.collider.gameObject) ){
 							haveToReduceMySpeed = false;
+							
 						}
 						else{
+							//if(rotateNow){
+						//	pauseRotation = true;
+						//	}
 							if(dist==0){
 								dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, hit.collider.transform.position , _direction);
 							}
@@ -693,29 +704,15 @@ public class VehicleController : MonoBehaviour {
 							haveToReduceMySpeed = true;
 						}
 					}
-					/*
 					
-					if(triggeredObject==null && intersection.vehiclesOnMe.Count >= 1 ){
-						VehicleController vehCtrl = intersection.vehiclesOnMe[0].GetComponent<VehicleController>();
-						if(vehCtrl.speed < speed ){
-							if(vehCtrl._direction == _direction){
-								speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( speed, 
-																								vehCtrl.speed, 
-																								10);
-							//	speed = vehCtrl.speed;
-							}
-							else{
-								speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( speed, 
-																								0, 
-																								10);
-							//	speed = 0;
-							}
+					else{
+						if(_light.Stopped){
+							speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+																							0, 
+																							10);
 							haveToReduceMySpeed = true;
 						}
-						
-					}
-					*/
-					else{
+						else	
 							haveToReduceMySpeed = false;
 					}
 					
@@ -741,12 +738,14 @@ public class VehicleController : MonoBehaviour {
 		//	Debug.Log(other.gameObject +" has been added");
 			triggeredIntersections.Add(other.gameObject);
 		}
+		
 		if(other.tag == "intersection"){
 			if(_light.Stopped){
 				haveToReduceMySpeed = false;
 				speed = myVehicle.Speed;
 			}
 		}
+		
 		/*
 	//	if(triggeredObject.tag == "human"){
 	//		speed = 0;
@@ -769,6 +768,7 @@ public class VehicleController : MonoBehaviour {
 			
 		}
 		*/
+		/*
 		if(other.tag == "vehicle"){
 			
 			if(other.gameObject.GetComponent<VehicleController>().ImTheOneToMove){
@@ -781,10 +781,12 @@ public class VehicleController : MonoBehaviour {
 			else{
 				ImTheOneToMove = true;
 				haveToReduceMySpeed = false;
+			//	other.gameObject.GetComponent<VehicleController>().pauseRotation = true;
 			}
 			
 			//gameMasterScript.gameOver = true;
 		}
+		*/
 		/*
 		else if(other.tag == "intersection"){
 			if(other.gameObject.GetComponent<IntersectionArea>().vehiclesOnMe.Count == 1 ){
@@ -836,6 +838,7 @@ public class VehicleController : MonoBehaviour {
 				vecCont.haveToReduceMySpeed = false;
 				vecCont.speed = myVehicle.Speed;			//speed = myVehicle.Speed;
 				ImTheOneToMove = false;
+			//	pauseRotation = false;
 			}
 		}
 		//Debug.Log ("speed " + speed);
