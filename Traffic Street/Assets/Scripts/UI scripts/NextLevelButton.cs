@@ -18,5 +18,7 @@ public class NextLevelButton : MonoBehaviour {
 			Application.LoadLevel("Map 2");
 		}
 		
+		
+		
 	}
 }

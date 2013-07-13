@@ -67,7 +67,7 @@ public class VehicleController : MonoBehaviour {
 	
 	private bool playedAlert;
 	
-	
+	public RaycastHit hit ;
 	//accleration variables
 	public float dist;
 	
@@ -654,7 +654,7 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void ReduceMeIfHit(Ray ray){
-		RaycastHit hit ;
+		
 		if(vehType!= VehicleType.Thief && Physics.Raycast(ray, out hit, Globals.RAY_CAST_RANGE) ){
 			Debug.DrawLine (ray.origin, hit.point);
 			VehicleController hitVehicleController = hit.collider.gameObject.GetComponent<VehicleController>();
@@ -706,7 +706,7 @@ public class VehicleController : MonoBehaviour {
 					}
 					
 					else{
-						if(_light.Stopped){
+						if(_light.Stopped && !MathsCalculatios.CompareTwoPositionsWRTDirections(_direction, transform.position, _stopPosition, 3)){
 							speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																							0, 
 																							10);

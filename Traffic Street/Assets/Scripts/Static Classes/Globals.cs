@@ -23,7 +23,7 @@ public class Globals : MonoBehaviour {
 	public static float POLICE_SPEED = 37;
 	public static float ACCIDENT_SPEED = 36;
 	
-	public static float RAY_CAST_RANGE = 13;
+	public static float RAY_CAST_RANGE = 10;
 	public static float ACCELERATE_FORWARD_RANGE = 10;
 	
 	public static List<AudioClip> Horns;

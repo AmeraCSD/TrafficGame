@@ -20,15 +20,31 @@ public class IntersectionArea : MonoBehaviour {
 		
 		
 		if(vehiclesOnMe.Count> 1 ){
+			/*	
+			if(vehiclesOnMe.Count == 2 && vehiclesOnMe[0].GetComponent<VehicleController>().speed <= 0 && vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider == null ){
+				vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed = false;
+				vehiclesOnMe[1].GetComponent<VehicleController>().pauseRotation = false;
 				
-			vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = false;
-			vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = false;
-			for(int i=1; i<vehiclesOnMe.Count; i++){
-				vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed = true;
+				vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = true;
 				
-				vehiclesOnMe[1].GetComponent<VehicleController>().speed = 0;
-				vehiclesOnMe[1].GetComponent<VehicleController>().pauseRotation = true;
+				vehiclesOnMe[0].GetComponent<VehicleController>().speed = 0;
+				vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = true;
+				
+				Debug.Log("this is the case");
+				
 			}
+			else{
+			*/
+				vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = false;
+				vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = false;
+				for(int i=1; i<vehiclesOnMe.Count; i++){
+					vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed = true;
+					
+					vehiclesOnMe[1].GetComponent<VehicleController>().speed = 0;
+					vehiclesOnMe[1].GetComponent<VehicleController>().pauseRotation = true;
+				//	Debug.Log("this is the hit "+vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider.gameObject);
+				}
+		//	}
 			
 			if( checkFaceToFaceVehicles(vehiclesOnMe[0].GetComponent<VehicleController>(), vehiclesOnMe[1].GetComponent<VehicleController>()) ||
 				checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
@@ -57,6 +73,9 @@ public class IntersectionArea : MonoBehaviour {
 		}
 		else if (vehiclesOnMe.Count ==  1){
 			vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = false;
+			vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = false;
+		//	if(vehiclesOnMe[0].GetComponent<VehicleController>()._light.Stopped)
+			//	vehiclesOnMe[0].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().myVehicle.Speed;
 		}
 		
 		

@@ -184,9 +184,9 @@ public class GameMaster : MonoBehaviour {
 			init_rates_intervals.Add(new int[2]{2,270});
 			init_rates_intervals.Add(new int[2]{4,260});
 			init_rates_intervals.Add(new int[2]{5,250});
-			init_rates_intervals.Add(new int[2]{8,0});
+			init_rates_intervals.Add(new int[2]{8,200});
 			
-		//	init_rates_intervals.Add(new int[2]{10,0});
+			init_rates_intervals.Add(new int[2]{10,0});
 			
 						
 			
@@ -487,7 +487,7 @@ public class GameMaster : MonoBehaviour {
 		
 		if(gameTime%50 == 0){
 			Debug.Log ("the speed has been incremented ---> "+ Globals.NORMAL_AVG_VEHICLE_SPEED);
-			Globals.NORMAL_AVG_VEHICLE_SPEED += 1;
+			Globals.NORMAL_AVG_VEHICLE_SPEED += 3;
 		}
 		//if( GameObject.FindGameObjectsWithTag("vehicle").Length < 10){ //***********************should beeee 15
 			secondsCounterForAnger ++;

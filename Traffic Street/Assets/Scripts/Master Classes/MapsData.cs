@@ -199,11 +199,9 @@ public class MapsData : MonoBehaviour {
 		intersectionsList.Add(new Vector3(-45.0f, 5.0f, 45.0f));
 		intersectionsList.Add(new Vector3(25.0f, 5.0f, 45.0f));
 		intersectionsList.Add(new Vector3(35.0f, 5.0f, 45.0f));
-		intersectionsList.Add(new Vector3(85.0f, 5.0f, 45.0f));
+	//	intersectionsList.Add(new Vector3(85.0f, 5.0f, 45.0f));
 		intersectionsList.Add(new Vector3(75.0f, 5.0f, -75.0f));
 		intersectionsList.Add(new Vector3(-55.0f, 5.0f, 15.0f));
-	//	intersectionsList.Add(new Vector3(-55.0f, 5.0f, -35.0f));
-	//	intersectionsList.Add(new Vector3(-55.0f, 5.0f, -25.0f));
 		
 		
 		return intersectionsList;
