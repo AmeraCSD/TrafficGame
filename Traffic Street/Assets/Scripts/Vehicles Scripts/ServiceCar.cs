@@ -35,12 +35,11 @@ public class ServiceCar : MonoBehaviour {
 		return found;
 	}
 	
-	public static void GenerateVehicle(GameObject serviceCarPrefab, Material tx, GamePath path){	
+	public static void GenerateVehicle(GameObject serviceCarPrefab, GamePath path){	
 					
 		if(serviceCarPrefab != null){
 			GameObject vehicle;
 			vehicle = Instantiate(serviceCarPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
-			vehicle.renderer.material = tx;
 			path.PathStreets[0].VehiclesNumber ++;
 			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
 			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;

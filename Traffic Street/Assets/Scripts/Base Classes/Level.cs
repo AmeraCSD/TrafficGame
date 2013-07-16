@@ -27,8 +27,7 @@ public class Level : MonoBehaviour {
 				List<VehicleType> theLevelEvents, 
 				List<int> theEventsNumbers, 
 				List<EventTimes> theEventTimes, 
-				List<List <GamePath>>theEventsPaths,
-				int theMaxLightsToOpen){
+				List<List <GamePath>>theEventsPaths){
 		
 		
 		_id = anId;
@@ -42,7 +41,7 @@ public class Level : MonoBehaviour {
 		_eventsNumbers = theEventsNumbers;
 		_eventsTimes = theEventTimes;
 		_eventsPaths = theEventsPaths;
-		_maxLightsToOpen = theMaxLightsToOpen;
+	//	_maxLightsToOpen = theMaxLightsToOpen;
 	}
 	
 	public int ID{
@@ -55,7 +54,7 @@ public class Level : MonoBehaviour {
 		set{_map = value;}
 	}
 	
-	public float NormalVehicleMap{
+	public float NormalVehicleSpeed{
 		get{return _normalVehicleSpeed;}
 		set{_normalVehicleSpeed = value;}
 	}

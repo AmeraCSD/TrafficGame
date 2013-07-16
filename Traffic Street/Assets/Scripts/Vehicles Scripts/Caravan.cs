@@ -37,7 +37,7 @@ public class Caravan : MonoBehaviour {
 					
 		if(caravanPrefab != null){
 			GameObject vehicle;
-			vehicle = Instantiate(caravanPrefab, path.GenerationPointPosition ,Quaternion.identity) as GameObject;
+			vehicle = Instantiate(caravanPrefab, GameObject.Find("CaravanSpawnPoint").transform.position ,Quaternion.identity) as GameObject;
 			path.PathStreets[0].VehiclesNumber ++;
 			//vehicle.name = "Street # "+path.PathStreets[0].ID + " # " + path.PathStreets[0].VehiclesNumber;
 			vehicle.name = "Street # "+path.PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;

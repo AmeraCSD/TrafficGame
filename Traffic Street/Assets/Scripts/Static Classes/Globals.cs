@@ -4,14 +4,21 @@ using System.Collections.Generic;
 
 public class Globals : MonoBehaviour {
 	
+	//Timers
 	public static int WARNING_BEFORE_EVENT_SECONDS = 5;
 	public static int WARNING_MESSAGE_TIMER = 3;
+	public static int SATISFACTION_VEHICLES_DECREMENTER = 90;
+	public static int EMPTY_STREET_BEFORE_THIEF_TIMER = 10;
+	public static int EMPTY_STREET_AFTER_THIEF_TIMER = 7;
 	
+	//booleans
 	public static bool vibrationEnabled;
 	
+	//dimentions
 	public static float STREET_WIDTH = 23;
 	public static int ANGER_TIMER = 10;
 	
+	//speeds
 	public static float NORMAL_AVG_VEHICLE_SPEED = 25;
 	
 	public static float AMBULANCE_SPEED = 36;
@@ -23,18 +30,25 @@ public class Globals : MonoBehaviour {
 	public static float POLICE_SPEED = 37;
 	public static float ACCIDENT_SPEED = 36;
 	
+	//ranges
 	public static float RAY_CAST_RANGE = 10;
 	public static float ACCELERATE_FORWARD_RANGE = 10;
 	
+	
+	
+	//audios
 	public static List<AudioClip> Horns;
 	public List<AudioClip> HornsGos;
 	
+	public AudioClip humanAnger;
+	public static AudioClip humanAngerCalled;
+	
+	
+	//waypoints
 	public List<GameObject> busStoppersGos;
 	public static List<GameObject> busStoppers;
 	
 	
-	public AudioClip humanAnger;
-	public static AudioClip humanAngerCalled;
 	
 	
 	// Messages Bar Texts

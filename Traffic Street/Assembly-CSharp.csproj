@@ -167,6 +167,9 @@
      <Compile Include="Assets\Scripts\Base Classes\Street.cs" />
      <Compile Include="Assets\Scripts\Base Classes\TrafficLight.cs" />
      <Compile Include="Assets\Scripts\Base Classes\Vehicle.cs" />
+     <Compile Include="Assets\Scripts\Data Classes\DataCalculations.cs" />
+     <Compile Include="Assets\Scripts\Data Classes\Map1_Data.cs" />
+     <Compile Include="Assets\Scripts\Data Classes\Map2_Data.cs" />
      <Compile Include="Assets\Scripts\Humans Classes\HumanController.cs" />
      <Compile Include="Assets\Scripts\Humans Classes\HumanGenerator.cs" />
      <Compile Include="Assets\Scripts\Humans Classes\HumanPath.cs" />

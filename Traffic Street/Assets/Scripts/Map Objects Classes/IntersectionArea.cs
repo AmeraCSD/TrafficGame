@@ -20,12 +20,11 @@ public class IntersectionArea : MonoBehaviour {
 		
 		
 		if(vehiclesOnMe.Count> 1 ){
-			/*	
-			if(vehiclesOnMe.Count == 2 && vehiclesOnMe[0].GetComponent<VehicleController>().speed <= 0 && vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider == null ){
-				vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed = false;
+			/*
+			if(vehiclesOnMe.Count == 2 && vehiclesOnMe[0].GetComponent<VehicleController>().speed <= 0 &&  vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed &&  !vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed ){
 				vehiclesOnMe[1].GetComponent<VehicleController>().pauseRotation = false;
+				vehiclesOnMe[1].GetComponent<VehicleController>().speed = vehiclesOnMe[1].GetComponent<VehicleController>().myVehicle.Speed;
 				
-				vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = true;
 				
 				vehiclesOnMe[0].GetComponent<VehicleController>().speed = 0;
 				vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = true;
@@ -35,6 +34,7 @@ public class IntersectionArea : MonoBehaviour {
 			}
 			else{
 			*/
+			if(vehiclesOnMe[1].GetComponent<VehicleController>().vehType != VehicleType.Thief){
 				vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = false;
 				vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = false;
 				for(int i=1; i<vehiclesOnMe.Count; i++){
@@ -45,7 +45,7 @@ public class IntersectionArea : MonoBehaviour {
 				//	Debug.Log("this is the hit "+vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider.gameObject);
 				}
 		//	}
-			
+			}
 			if( checkFaceToFaceVehicles(vehiclesOnMe[0].GetComponent<VehicleController>(), vehiclesOnMe[1].GetComponent<VehicleController>()) ||
 				checkFaceToFaceVehicles(vehiclesOnMe[1].GetComponent<VehicleController>(), vehiclesOnMe[0].GetComponent<VehicleController>())){
 				//here we goo accidenttttttttttt ************************************************************************
