@@ -7,11 +7,10 @@ public class LightTimerManager : MonoBehaviour {
 	public GameObject analogousLight;
 	public bool startTimer;
 	
-	
 	// Use this for initialization
 	void Start () {
 		startTimer = false;
-		timer = Globals.ANGER_TIMER;
+		timer = Globals.angerMinTime;
 		InvokeRepeating("CountTimerDown", 1.0f, 1.0f);
 	}
 	
@@ -21,18 +20,18 @@ public class LightTimerManager : MonoBehaviour {
 				timer--;
 			}
 			else if(analogousLight.renderer.material.color != Color.red){
-				timer = Globals.ANGER_TIMER;
+				timer = Globals.angerMinTime;
 				startTimer = false;
 			}
 			if(timer < 0){
-				timer = Globals.ANGER_TIMER;
+				timer = Globals.angerMinTime;
 			}
 		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(timer == Globals.ANGER_TIMER){
+		if(timer == Globals.angerMinTime){
 			gameObject.GetComponent<UILabel>().text = "";
 		}
 		else{

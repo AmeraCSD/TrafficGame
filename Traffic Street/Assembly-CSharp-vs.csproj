@@ -184,6 +184,7 @@
      <Compile Include="Assets\Scripts\Map Objects Classes\Stopper3.cs" />
      <Compile Include="Assets\Scripts\Map Objects Classes\Stopper4.cs" />
      <Compile Include="Assets\Scripts\Map Objects Classes\Stopper5.cs" />
+     <Compile Include="Assets\Scripts\Master Classes\DataEnteryMaster.cs" />
      <Compile Include="Assets\Scripts\Master Classes\GameMaster.cs" />
      <Compile Include="Assets\Scripts\Master Classes\MapsData.cs" />
      <Compile Include="Assets\Scripts\Mayor Classes\Mayor.cs" />

@@ -6,6 +6,8 @@ public class Map2_Data : MonoBehaviour {
 	
 	//******************************************************************Vehicles Data***********************************************************//
 	
+	//private Globals globals = Globals.GetInstance();
+	
 	public static float NormalVehicleSpeed = 25;
 	public static int MinScore = 200;
 	public static float GameTime = 300;

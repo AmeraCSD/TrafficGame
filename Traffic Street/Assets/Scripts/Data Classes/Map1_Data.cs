@@ -6,6 +6,8 @@ public class Map1_Data : MonoBehaviour {
 	
 	//******************************************************************Vehicles Data***********************************************************//
 	
+	//public Globals globals = Globals.GetInstance();
+	
 	public static float NormalVehicleSpeed = 25;
 	public static int MinScore = 200;
 	public static float GameTime = 300;
@@ -13,7 +15,8 @@ public class Map1_Data : MonoBehaviour {
 	
 	public static List<int> VehiclesGroups(){
 		List<int> groups = new List<int>();
-			
+		
+		
 		//25
 		groups.Add(1);
 		groups.Add(2);
@@ -28,6 +31,7 @@ public class Map1_Data : MonoBehaviour {
 		groups.Add(30);
 		groups.Add(35);
 		groups.Add(40);
+		
 		
 		//100
 		groups.Add(50);

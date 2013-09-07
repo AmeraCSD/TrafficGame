@@ -11,6 +11,7 @@ using System.Collections.Generic;
 
 public class GameMaster : MonoBehaviour {
 	
+
 	//Level variables
 	public Level currentLevel;
 	
@@ -129,7 +130,6 @@ public class GameMaster : MonoBehaviour {
 	
 	int index =0 ;
 	void Awake(){
-		
 		currentGroupNumber = 0;
 		instantiationFlag = true;
 		eventsCounter = new List<int>();
@@ -145,6 +145,8 @@ public class GameMaster : MonoBehaviour {
 	
 	private void InitTheCurrentLevel(){
 		MapsData data = new MapsData();
+		
+		
 		
 		if(Application.loadedLevelName == "Map 1"){
 			Map map = new Map(data.GetMap1Streets(), data.GetMap1Paths(), data.GetMap1Intersections(), data.GetMap1Lights(), data.GetMap1LightsGroups());
@@ -173,7 +175,6 @@ public class GameMaster : MonoBehaviour {
 										null,  
 										null,  
 										null);
-			
 			vehiclesShouldGenerated = currentLevel.VehicleGroups[0];
 			currentRateIndex = 0;
 			gameTime = currentLevel.GameTime;
@@ -183,11 +184,11 @@ public class GameMaster : MonoBehaviour {
 						
 			currentLevel = new Level(	2, 
 										map, 
-										Map1_Data.NormalVehicleSpeed, 
-										Map1_Data.VehiclesGroups(), 
-										Map1_Data.InistantiationRatesIntervals(), 
-										Map1_Data.MinScore,  
-										Map1_Data.GameTime,  
+										Map2_Data.NormalVehicleSpeed, 
+										Map2_Data.VehiclesGroups(), 
+										Map2_Data.InistantiationRatesIntervals(), 
+										Map2_Data.MinScore,  
+										Map2_Data.GameTime, 
 										null,  
 										null,  
 										null,  
@@ -197,11 +198,13 @@ public class GameMaster : MonoBehaviour {
 			currentRateIndex = 0;
 			gameTime = currentLevel.GameTime;
 		}
+		
+		
 	}
 	
 	private void initVariables(){
 		
-		Globals.NORMAL_AVG_VEHICLE_SPEED = currentLevel.NormalVehicleSpeed;
+		//Globals.NORMAL_AVG_VEHICLE_SPEED = currentLevel.NormalVehicleSpeed;
 		
 		satisfyBarScript = GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>();		
 	
@@ -332,8 +335,8 @@ public class GameMaster : MonoBehaviour {
 	
 	private void ChangeSpeedOverTime(){
 		if(gameTime%50 == 0){
-			Debug.Log ("the speed has been incremented ---> "+ Globals.NORMAL_AVG_VEHICLE_SPEED);
-			Globals.NORMAL_AVG_VEHICLE_SPEED += 3;
+//			Debug.Log ("the speed has been incremented ---> "+ Globals.NORMAL_AVG_VEHICLE_SPEED);
+			Globals.starting_normal_avg_speed += Globals.speed_increase_rate;
 		}
 	}
 	
@@ -476,7 +479,7 @@ public class GameMaster : MonoBehaviour {
 			}
 			if(!isRepeatedPosition(randoms, pos)){
 				Material tx = GetRandomTexture(0, 4);
-				NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, existedVehicles);
+				NormalVehicle.GenerateNormalVehicle(pos, vehiclePrefab, tx, Paths, existedVehicles, Globals.starting_normal_avg_speed);
 				vehiclesShouldGenerated--;
 				vehicilesCounter++;
 				randoms.Add(pos);
@@ -587,7 +590,7 @@ public class GameMaster : MonoBehaviour {
 				if(!MessageBar.messagesQ.Contains(Globals.AMBULANCE_WARNING_MSG))
 					MessageBar.messagesQ.Enqueue(Globals.AMBULANCE_WARNING_MSG);
 			//	eventWarningLabel.text = "Ambulance is Coming from the east";
-				audio.PlayOneShot(ambulanceSound);
+				//audio.PlayOneShot(ambulanceSound);
 				
 			}
 			

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Globals : MonoBehaviour {
 	
+	
 	//Timers
 	public static int WARNING_BEFORE_EVENT_SECONDS = 5;
 	public static int WARNING_MESSAGE_TIMER = 3;
@@ -19,7 +20,7 @@ public class Globals : MonoBehaviour {
 	public static int ANGER_TIMER = 10;
 	
 	//speeds
-	public static float NORMAL_AVG_VEHICLE_SPEED = 25;
+	public static float starting_normal_avg_speed = 25;
 	
 	public static float AMBULANCE_SPEED = 36;
 	public static float BUS_SPEED = 12;
@@ -30,11 +31,16 @@ public class Globals : MonoBehaviour {
 	public static float POLICE_SPEED = 37;
 	public static float ACCIDENT_SPEED = 36;
 	
+	public static int speed_increase_rate = 3;
+	
 	//ranges
 	public static float RAY_CAST_RANGE = 10;
 	public static float ACCELERATE_FORWARD_RANGE = 10;
 	
-	
+	//anger data
+	public static int	angerMinTime = 10;
+	public static float angerMinAmount = .5f;
+	public static int nextAngerIncreaseRate = 2;
 	
 	//audios
 	public static List<AudioClip> Horns;
@@ -47,7 +53,6 @@ public class Globals : MonoBehaviour {
 	//waypoints
 	public List<GameObject> busStoppersGos;
 	public static List<GameObject> busStoppers;
-	
 	
 	
 	
@@ -68,6 +73,11 @@ public class Globals : MonoBehaviour {
 	public static string SATISTFY_BAR_MSG_4 = "What the hell are you doing??!!";
 	public static string SATISTFY_BAR_MSG_5 = "You are about to lose !!";
 	
+	void Awake(){
+		
+	}
+	
+	
 	// Use this for initialization
 	void Start () {
 		Horns = HornsGos;
@@ -78,7 +88,6 @@ public class Globals : MonoBehaviour {
 		
 		
 	}
-	
 	
 	
 	// Update is called once per frame

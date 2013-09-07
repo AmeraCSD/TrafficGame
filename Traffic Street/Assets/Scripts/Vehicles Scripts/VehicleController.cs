@@ -76,6 +76,7 @@ public class VehicleController : MonoBehaviour {
 	public float myRayCastRange ;
 	// Use this for initialization
 	void Awake(){
+		//globals = Globals.GetInstance();
 		gameMasterScript = GameObject.FindGameObjectWithTag("master").GetComponent<GameMaster>();
 		boxColl = GetComponent<BoxCollider>();
 		corners = gameMasterScript.Corners;
@@ -97,7 +98,7 @@ public class VehicleController : MonoBehaviour {
 	public void initInstancesAtFirst(){
 		triggeredIntersections = new List<GameObject>();
 		rotateAroundPosition = Vector3.zero;
-		angerMount = .5f;
+		angerMount = Globals.angerMinAmount;
 		playedAlert = false;
 		dequeued = false;
 		enqueued = false;
@@ -166,8 +167,11 @@ public class VehicleController : MonoBehaviour {
 	}
 	
 	private void CheckPosition_Deaccelerate(){
-		if(_direction != _nextDirection)
+		//Debug.Log(_nextDirection);
+		if(_direction != _nextDirection){
+			
 			MathsCalculatios.HaveToAccelerate(transform, _direction, _endPosition, _street, this);
+		}
 	}
 	
 	private void LeaveStreet_Rotate(){
@@ -433,8 +437,10 @@ public class VehicleController : MonoBehaviour {
 			myVehicle.CurrentDirection = myVehicle.CurrentStreet.StreetLight.Type;
 			myVehicle.CurrentStreetNumber ++;
 			
-			if(myVehicle.CurrentStreetNumber != _path.PathStreets.Count ){
-				myVehicle.NextStreet =_path.PathStreets[myVehicle.CurrentStreetNumber];
+			//Debug.Log(myVehicle.CurrentStreetNumber);
+			
+			if(myVehicle.CurrentStreetNumber+1 != _path.PathStreets.Count ){
+				myVehicle.NextStreet =_path.PathStreets[myVehicle.CurrentStreetNumber+1];
 				_nextDirection = myVehicle.NextStreet.StreetLight.Type;
 			}
 			else{
@@ -569,7 +575,7 @@ public class VehicleController : MonoBehaviour {
 	private void CheckMyAnger(){
 		if(speed < 0.7f && GetMyOrderInQueue()== 0 && _street.StreetLight.Stopped){
 				if(! stoppingTimerforAngerSet){
-					stoppingTimerforAnger = gameMasterScript.gameTime - Globals.ANGER_TIMER ;
+					stoppingTimerforAnger = gameMasterScript.gameTime - Globals.angerMinTime ;
 					stoppingTimerforAngerSet = true;
 					playedAlert = false;
 				}
@@ -589,7 +595,7 @@ public class VehicleController : MonoBehaviour {
 			//	satisfyAdjustedOnTime = true;
 				gameMasterScript.secondsCounterForAnger = 0;
 				stoppingTimerforAnger =0;
-				angerMount *= 2;
+				angerMount *= Globals.nextAngerIncreaseRate;
 				// comicccccccccccccccccccc and zamameeer
 				myAngerSprite.SetActive(true);
 				audio.PlayOneShot(myVehicle.Horn);

@@ -107,7 +107,7 @@ public class HumanController: MonoBehaviour {
 	private void CheckMyAnger(){
 		if(!animation.isPlaying){
 			if(! stoppingTimerforAngerSet){
-				stoppingTimerforAnger = gameMasterScript.gameTime - Globals.ANGER_TIMER ;
+				stoppingTimerforAnger = gameMasterScript.gameTime - Globals.angerMinTime ;
 				stoppingTimerforAngerSet = true;
 				playedAlert = false;
 			}

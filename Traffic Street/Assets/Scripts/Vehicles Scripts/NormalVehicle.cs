@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class NormalVehicle : MonoBehaviour {
 												// ***************** Groooooooopssssssssssssssss *******************
 	
-	public static void GenerateNormalVehicle(int pos,GameObject vehiclePrefab, Material tx, List<GamePath> Paths, Queue existedVehicles){	
+	public static void GenerateNormalVehicle(int pos,GameObject vehiclePrefab, Material tx, List<GamePath> Paths, Queue existedVehicles, float avgSpeed){	
 		while(Paths[pos].PathStreets[0].VehiclesNumber >= Paths[pos].PathStreets[0].StreetCapacity){
 			pos = Random.Range(0, Paths.Count);
 		}
 		
-	//	pos = 13;
+		//pos = 12;
 		if(vehiclePrefab != null){
 		//*****************************optimization
 			GameObject vehicle;
@@ -22,7 +22,7 @@ public class NormalVehicle : MonoBehaviour {
 				vehicle.name = "Street # "+Paths[pos].PathStreets[0].ID + " Car number " + GameMaster.vehicilesCounter;
 				//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 				vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																					Random.Range(Globals.NORMAL_AVG_VEHICLE_SPEED -1,Globals.NORMAL_AVG_VEHICLE_SPEED +1 ), 
+																					Random.Range(avgSpeed -1,avgSpeed +1 ), 
 																					MathsCalculatios.getVehicleLargeSize(vehicle), 
 																					Paths[pos].PathStreets[0].StreetLight.Type, 
 																					Paths[pos].PathStreets[0], 
@@ -43,7 +43,7 @@ public class NormalVehicle : MonoBehaviour {
 				
 				//	public Vehicle(VehicleType type,float speed,float size, Direction curDir, Street curStreet, Street nextStreet, Path path)
 				vehicle.GetComponent<VehicleController>().myVehicle = new Vehicle(	VehicleType.Normal, 
-																					Random.Range(Globals.NORMAL_AVG_VEHICLE_SPEED -1,Globals.NORMAL_AVG_VEHICLE_SPEED +1 ), 
+																					Random.Range(avgSpeed -1,avgSpeed +1 ), 
 																					MathsCalculatios.getVehicleLargeSize(vehicle), 
 																					Paths[pos].PathStreets[0].StreetLight.Type, 
 																					Paths[pos].PathStreets[0], 

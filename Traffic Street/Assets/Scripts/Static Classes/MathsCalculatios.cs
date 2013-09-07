@@ -187,10 +187,11 @@ public class MathsCalculatios  {
 		
 		if(CompareTwoPositionsWRTDirections(direction, transform.position, endPosition, -5)){
 			if(vehScript.rotateAroundPosition == Vector3.zero){
-		//		vehScript.speed = 10;
-		//		vehScript.haveToReduceMySpeed = true;
+			//	vehScript.speed = 10;
+			//	vehScript.haveToReduceMySpeed = true;
 				vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
 			//	Debug.Log(vehScript.rotateAroundPosition);
+				Debug.Log("the center " + vehScript.rotateAroundPosition);
 			} 
 			
 			return true;
@@ -281,11 +282,13 @@ public class MathsCalculatios  {
 	
 	public static bool HaveToAccelerate(Transform transform, StreetDirection direction,Vector3 endPosition, Street street, VehicleController vehScript){
 		float rate = 2;
-		
+		//Debug.Log("da5al hena ");
 		if(CompareTwoPositionsWRTDirections(direction, transform.position, endPosition, -15)){
 		//	if(!vehScript._light.Stopped && vehScript.speed > 0){
 		//		vehScript.speed -= rate ;
 		//	}
+			
+		//	Debug.Log("hello I'm here");
 			if(!vehScript._light.Stopped)
 				vehScript.speed = 18 ;
 			vehScript.haveToReduceMySpeed = true;
