@@ -268,7 +268,7 @@ public class VehicleController : MonoBehaviour {
 				}
 				if((target - transform.position).magnitude <1){
 					currentWayPoint++;
-					Debug.Log("bus is here");
+					//Debug.Log("bus is here");
 					if(currentWayPoint == wayPoints.Count){
 						busStop =false;
 						transform.forward = -1*Vector3.right;
@@ -308,8 +308,13 @@ public class VehicleController : MonoBehaviour {
 		
 		
 		if(!(_light.Stopped) && !haveToReduceMySpeed){
+			//supposed to accelerate
+			//float accAmount = 
 			speed += MathsCalculatios.CalculateAcclerationByNewtonFormula(speed, myVehicle.Speed, Globals.ACCELERATE_FORWARD_RANGE );
+			
+			
 		//	speed = myVehicle.Speed;
+			
 			
 			dist = 0;
 			
@@ -505,19 +510,24 @@ public class VehicleController : MonoBehaviour {
 				}
 			//	Debug.Log(dist);
 				
+				//SUPPOSED TO DEACCLERATE
 				speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																					0, 
 																					dist);
+//				Debug.Log(gameObject.name+" .. "+dist);
 				
 				 
 			
 			}
-			if(MathsCalculatios.EndAccelerationOnArrival(_direction, transform.position, _stopPosition)){
+	//		if(MathsCalculatios.EndAccelerationOnArrival(_direction, transform.position, _stopPosition)){
 				//Debug.Log(gameObject.name + " " + speed);
-				speed =0;
-				haveToReduceMySpeed = false;
-				dist = 0;
-			}
+	//			speed =0;
+				
+				//speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 0, 7);
+				
+	//			haveToReduceMySpeed = false;
+	//			dist = 0;
+	//		}
 			
 			if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
@@ -564,6 +574,7 @@ public class VehicleController : MonoBehaviour {
 			
 			if(taxiStopTimer != 0) {
 			//	speed -= 10;
+				//SUPPOSED TO DEACCLERATE
 				speed += MathsCalculatios.CalculateAcclerationByNewtonFormula(myVehicle.Speed, 0, 15 );
 				haveToReduceMySpeed = true;
 			}
@@ -678,7 +689,7 @@ public class VehicleController : MonoBehaviour {
 				//Debug.Log(dist);
 				if(speed > hitVehicleController.speed){
 					
-						
+					//SUPPOSED TO DEACCLERATE
 					speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																					hitVehicleController.speed, 
 																					myRayCastRange/3);
@@ -709,6 +720,7 @@ public class VehicleController : MonoBehaviour {
 							if(dist==0){
 								dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, hit.collider.transform.position , _direction);
 							}
+							//SUPPOSED TO DEACCLERATE
 							speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																							0, 
 																							myRayCastRange);
@@ -719,6 +731,7 @@ public class VehicleController : MonoBehaviour {
 					
 					else{
 						if(_light.Stopped && !MathsCalculatios.CompareTwoPositionsWRTDirections(_direction, transform.position, _stopPosition, 3)){
+							//SUPPOSED TO DEACCLERATE
 							speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																							0, 
 																							myRayCastRange-2);

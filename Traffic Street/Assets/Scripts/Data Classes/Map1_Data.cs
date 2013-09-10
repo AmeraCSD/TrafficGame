@@ -18,10 +18,10 @@ public class Map1_Data : MonoBehaviour {
 		
 		
 		//25
-		groups.Add(1);
-		groups.Add(2);
-		groups.Add(3);
-		groups.Add(8);
+		//groups.Add(1);
+		//groups.Add(2);
+		//groups.Add(3);
+		//groups.Add(8);
 		groups.Add(15);
 		groups.Add(20);
 		
@@ -217,7 +217,7 @@ public class Map1_Data : MonoBehaviour {
 		"15%(85.0, 5.0, -5.0)%(85.0, 5.0, 45.0)%0%Up%none%false%4\n" +
 		"16%(-105.0, 5.0, 15.0)%(-55.0, 5.0, 15.0)%-70%Right%lightRight1%true%2\n" +
 		"17%(-55.0, 5.0, 15.0)%(25.0, 5.0, 15.0)%0%Right%none%false%7\n" +
-		"18%(-105.0, 5.0, 25.0)%(-45.0, 5.0, 25.0)%-70%Right%lightRight1%true%2\n" +
+		"18%(-105.0, 5.0, 25.0)%(-45.0, 5.0, 25.0)%-65%Right%lightRight1%true%2\n" +
 		"19%(25.0, 5.0, 45.0)%(25.0, 5.0, 15.0)%0%Down%none%false%1\n" +
 		"20%(-55.0, 5.0, 35.0)%(-55.0, 5.0, 15.0)%0%Down%none%false%1\n" +
 		"21%(-45.0, 5.0, 25.0)%(-45.0, 5.0, 35.0)%0%Up%none%false%1\n" +

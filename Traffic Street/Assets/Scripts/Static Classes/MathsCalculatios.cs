@@ -7,6 +7,8 @@ public class MathsCalculatios  {
 	
 	public static float CalculateAcclerationByNewtonFormula(float initialSpeed, float finalSpeed, float distance){
 		if(distance == 0 || initialSpeed==finalSpeed){
+//			Debug.Log("I'm here   ");
+//			Debug.Log("looool "+distance);
 			return 0;
 		}
 		float time = 2 * (distance-2) / (finalSpeed + initialSpeed);
@@ -191,7 +193,7 @@ public class MathsCalculatios  {
 			//	vehScript.haveToReduceMySpeed = true;
 				vehScript.rotateAroundPosition = MathsCalculatios.GetNearestCorner(corners, transform.position);
 			//	Debug.Log(vehScript.rotateAroundPosition);
-				Debug.Log("the center " + vehScript.rotateAroundPosition);
+			//	Debug.Log("the center " + vehScript.rotateAroundPosition);
 			} 
 			
 			return true;

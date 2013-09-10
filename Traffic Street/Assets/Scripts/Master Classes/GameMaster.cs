@@ -271,7 +271,7 @@ public class GameMaster : MonoBehaviour {
 			Bus.InitInstances();
 			Bus.SetEventTime(currentLevel.EventsTimesList[currentLevel.LevelEvents.IndexOf(VehicleType.Bus)].TimesList);
 			eventsCounter.Add(0);
-			Debug.Log(eventsCounter.Count);
+			//Debug.Log(eventsCounter.Count);
 		}
 		if(currentLevel.LevelEvents.Contains(VehicleType.Caravan)){
 			Caravan.InitInstances();
@@ -323,7 +323,7 @@ public class GameMaster : MonoBehaviour {
 		
 		CountAngerAndChangeSatisfaction();
 	
-		CheckAndGenerateTheEventElseVehicle();
+		//CheckAndGenerateTheEventElseVehicle();
 		
 		ManageInstantiationAndRates();
 		
