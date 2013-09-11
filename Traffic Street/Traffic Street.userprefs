@@ -3,14 +3,13 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Data Classes\Map1_Data.cs">
     <Files>
       <File FileName="Assets\Scripts\Static Classes\MathsCalculatios.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Vehicles Scripts\VehicleController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Master Classes\GameMaster.cs" Line="152" Column="78" />
+      <File FileName="Assets\Scripts\Vehicles Scripts\VehicleController.cs" Line="761" Column="9" />
+      <File FileName="Assets\Scripts\Master Classes\GameMaster.cs" Line="437" Column="68" />
       <File FileName="Assets\Scripts\Static Classes\Globals.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Map Objects Classes\IntersectionArea.cs" Line="90" Column="24" />
-      <File FileName="Assets\Scripts\Map Objects Classes\MapProducer.cs" Line="19" Column="1" />
-      <File FileName="Assets\Scripts\Data Classes\Map1_Data.cs" Line="244" Column="53" />
-      <File FileName="Assets\Scripts\Data Classes\Map2_Data.cs" Line="374" Column="2" />
-      <File FileName="Assets\Scripts\Master Classes\MapsData.cs" Line="106" Column="14" />
+      <File FileName="Assets\Scripts\Map Objects Classes\IntersectionArea.cs" Line="26" Column="5" />
+      <File FileName="Assets\Scripts\Master Classes\MapsData.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UI scripts\MessageBar.cs" Line="27" Column="30" />
+      <File FileName="Assets\Scripts\Data Classes\Map1_Data.cs" Line="117" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

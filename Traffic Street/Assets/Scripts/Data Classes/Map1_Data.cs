@@ -62,12 +62,12 @@ public class Map1_Data : MonoBehaviour {
 		List<VehicleType> events = new List<VehicleType>();
 		
 		events.Add(VehicleType.Ambulance);
-		events.Add(VehicleType.Bus);
-		events.Add(VehicleType.Caravan);
+	//	events.Add(VehicleType.Bus);
+	//	events.Add(VehicleType.Caravan);
 		events.Add(VehicleType.ServiceCar);
-		events.Add(VehicleType.Taxi);
-		events.Add(VehicleType.Thief);
-		events.Add(VehicleType.Police);
+	//	events.Add(VehicleType.Taxi);
+	//	events.Add(VehicleType.Thief);
+	//	events.Add(VehicleType.Police);
 		
 		return events;
 	}
@@ -104,17 +104,17 @@ public class Map1_Data : MonoBehaviour {
 		busTimeslist.Add(240);
 		busTimeslist.Add(230);
 		
-		eventTimes.Add(new EventTimes(busTimeslist));
+//		eventTimes.Add(new EventTimes(busTimeslist));
 		
 		
 		//caravan
 		List <float> caravanTimeslist = new List<float>();
 		caravanTimeslist.Add(250);
-		eventTimes.Add(new EventTimes(caravanTimeslist));
+//		eventTimes.Add(new EventTimes(caravanTimeslist));
 		
 		//service car
 		List <float> serviceCarTimeslist = new List<float>();
-		serviceCarTimeslist.Add(270);
+		serviceCarTimeslist.Add(250);
 		eventTimes.Add(new EventTimes(serviceCarTimeslist));
 		
 		//taxi
@@ -156,14 +156,14 @@ public class Map1_Data : MonoBehaviour {
 		busGamePathsList.Add(Paths[2]);
 		busGamePathsList.Add(Paths[0]);
 		
-		eventsPaths.Add(busGamePathsList);
+//		eventsPaths.Add(busGamePathsList);
 		
 		//Caravan
 		
 		List <GamePath> caravanGamePathsList = new List<GamePath>();
 		caravanGamePathsList.Add(Paths[0]);
 		//caravanGamePathsList.Add(Paths[3]);
-		eventsPaths.Add(caravanGamePathsList);
+//		eventsPaths.Add(caravanGamePathsList);
 		
 		//service car
 		

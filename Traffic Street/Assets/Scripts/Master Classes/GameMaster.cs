@@ -323,7 +323,7 @@ public class GameMaster : MonoBehaviour {
 		
 		CountAngerAndChangeSatisfaction();
 	
-		//CheckAndGenerateTheEventElseVehicle();
+		CheckAndGenerateTheEventElseVehicle();
 		
 		ManageInstantiationAndRates();
 		

@@ -21,6 +21,9 @@ public class IntersectionArea : MonoBehaviour {
 		
 		if(vehiclesOnMe.Count> 1 ){
 			
+		//	if(vehiclesOnMe[0].GetComponent<VehicleController>()._direction == vehiclesOnMe[1].GetComponent<VehicleController>()._direction){
+		//		vehiclesOnMe[1].GetComponent<VehicleController>().speed = vehiclesOnMe[0].GetComponent<VehicleController>().speed;
+		//	}
 			
 			/**************** dah 7all supposed lel bug
 			if(vehiclesOnMe.Count == 2  &&  vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed &&  !vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed &&  vehiclesOnMe[1].GetComponent<VehicleController>().speed>=0 && vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider != null && vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider.gameObject.tag != "vehicle" ){

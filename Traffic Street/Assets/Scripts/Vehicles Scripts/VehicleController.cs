@@ -755,10 +755,18 @@ public class VehicleController : MonoBehaviour {
 							haveToReduceMySpeed = false;
 							
 						}
+						//else if(intersection.vehiclesOnMe[0].GetComponent<VehicleController>()._direction == _direction){
+						//		speed = intersection.vehiclesOnMe[0].GetComponent<VehicleController>().speed;
+								
+						//}
 						else{
+							
+							
 							//if(rotateNow){
 						//	pauseRotation = true;
 						//	}
+							
+							
 							if(dist==0){
 								dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, hit.collider.transform.position , _direction);
 							}
