@@ -20,19 +20,25 @@ public class IntersectionArea : MonoBehaviour {
 		
 		
 		if(vehiclesOnMe.Count> 1 ){
-			/*
-			if(vehiclesOnMe.Count == 2 && vehiclesOnMe[0].GetComponent<VehicleController>().speed <= 0 &&  vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed &&  !vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed ){
-				vehiclesOnMe[1].GetComponent<VehicleController>().pauseRotation = false;
-				vehiclesOnMe[1].GetComponent<VehicleController>().speed = vehiclesOnMe[1].GetComponent<VehicleController>().myVehicle.Speed;
+			
+			
+			/**************** dah 7all supposed lel bug
+			if(vehiclesOnMe.Count == 2  &&  vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed &&  !vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed &&  vehiclesOnMe[1].GetComponent<VehicleController>().speed>=0 && vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider != null && vehiclesOnMe[1].GetComponent<VehicleController>().hit.collider.gameObject.tag != "vehicle" ){
+			//	vehiclesOnMe[1].GetComponent<VehicleController>().pauseRotation = false;
+			//	vehiclesOnMe[1].GetComponent<VehicleController>().speed = vehiclesOnMe[1].GetComponent<VehicleController>().myVehicle.Speed;
 				
 				
-				vehiclesOnMe[0].GetComponent<VehicleController>().speed = 0;
-				vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = true;
+			//	vehiclesOnMe[0].GetComponent<VehicleController>().speed = 0;
+			//	vehiclesOnMe[0].GetComponent<VehicleController>().pauseRotation = true;
+				vehiclesOnMe[1].GetComponent<VehicleController>().haveToReduceMySpeed = true;
+				GameObject temp = vehiclesOnMe[0];
+				vehiclesOnMe[0] = vehiclesOnMe[1];
+				vehiclesOnMe[1] = temp;
 				
 				Debug.Log("this is the case");
 				
 			}
-			else{
+			//else{
 			*/
 			if(vehiclesOnMe[1].GetComponent<VehicleController>().vehType != VehicleType.Thief){
 				vehiclesOnMe[0].GetComponent<VehicleController>().haveToReduceMySpeed = false;

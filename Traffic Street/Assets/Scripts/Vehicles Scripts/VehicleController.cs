@@ -164,6 +164,9 @@ public class VehicleController : MonoBehaviour {
 		if(speed < 0){
 			speed = 0.0f;
 		}
+		if(speed > myVehicle.Speed){
+			speed = myVehicle.Speed;
+		}
 	}
 	
 	private void CheckPosition_Deaccelerate(){
@@ -303,14 +306,17 @@ public class VehicleController : MonoBehaviour {
 		}
 		
 		
+		
 		CheckTaxiStops();
 		CheckMyAnger();
 		
 		
 		if(!(_light.Stopped) && !haveToReduceMySpeed){
 			//supposed to accelerate
-			//float accAmount = 
-			speed += MathsCalculatios.CalculateAcclerationByNewtonFormula(speed, myVehicle.Speed, Globals.ACCELERATE_FORWARD_RANGE );
+			float accAmount = MathsCalculatios.CalculateAcclerationByNewtonFormula(speed, myVehicle.Speed, Globals.ACCELERATE_FORWARD_RANGE );
+			if(accAmount<0)
+				accAmount *= -1;
+			speed += accAmount;
 			
 			
 		//	speed = myVehicle.Speed;
@@ -504,21 +510,48 @@ public class VehicleController : MonoBehaviour {
 			
 		//	int result = MathsCalculatios.CheckStoppingPosition(_direction, transform.position, _stopPosition );
 			
+			
+			
 			if(MathsCalculatios.CheckStoppingPosition(_direction, transform.position, _stopPosition)){
+				
+				
+				
 				if(dist==0){
 					dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, _stopPosition , _direction);
 				}
 			//	Debug.Log(dist);
 				
-				//SUPPOSED TO DEACCLERATE
-				speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
-																					0, 
-																					dist);
-//				Debug.Log(gameObject.name+" .. "+dist);
+				float accAmount;
+				if(speed<=0 && !MathsCalculatios.FakeStoppingPosition(_direction, transform.position, _stopPosition) ){
+				//	accAmount = MathsCalculatios.CalculateAcclerationByNewtonFormula(0, myVehicle.Speed, 5 );
+				//	if(accAmount<0)
+				//		accAmount *= -1;
+				//	speed += accAmount;
+				//	haveToReduceMySpeed = true;
+					
+					speed = myVehicle.Speed;
+					
+					
+					dist = 0;
+				}
+			//	else{
 				
+					//SUPPOSED TO DEACCLERATE
+				
+					accAmount = MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+																						0, 
+																						dist);
+					if(accAmount>0)
+						accAmount *= -1;
+					speed += accAmount;
+	//				Debug.Log(gameObject.name+" .. "+dist);
+			//	}
 				 
 			
 			}
+			
+			
+			
 	//		if(MathsCalculatios.EndAccelerationOnArrival(_direction, transform.position, _stopPosition)){
 				//Debug.Log(gameObject.name + " " + speed);
 	//			speed =0;
@@ -528,6 +561,7 @@ public class VehicleController : MonoBehaviour {
 	//			haveToReduceMySpeed = false;
 	//			dist = 0;
 	//		}
+			
 			
 			if(!satisfyAdjustedOnTime && vehType == VehicleType.Ambulance){
 				GameObject.FindGameObjectWithTag("satisfyBar").GetComponent<SatisfyBar>().AddjustSatisfaction(2);
@@ -575,7 +609,10 @@ public class VehicleController : MonoBehaviour {
 			if(taxiStopTimer != 0) {
 			//	speed -= 10;
 				//SUPPOSED TO DEACCLERATE
-				speed += MathsCalculatios.CalculateAcclerationByNewtonFormula(myVehicle.Speed, 0, 15 );
+				float accAmount = MathsCalculatios.CalculateAcclerationByNewtonFormula(myVehicle.Speed, 0, 15 );
+				if(accAmount>0)
+					accAmount *= -1;
+				speed += accAmount;
 				haveToReduceMySpeed = true;
 			}
 		}
@@ -690,15 +727,20 @@ public class VehicleController : MonoBehaviour {
 				if(speed > hitVehicleController.speed){
 					
 					//SUPPOSED TO DEACCLERATE
-					speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+					float accAmount = MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																					hitVehicleController.speed, 
-																					myRayCastRange/3);
+																					myRayCastRange/2);
+					if(accAmount>0)
+						accAmount *= -1;
+					speed += accAmount;
 				}
 				haveToReduceMySpeed = true;
 				
 			}
 			else{
 				/////////////////////////////************************** we will return here
+				
+				
 				if(hit.collider.tag == "human"){
 					speed = 0;
 					haveToReduceMySpeed = true;
@@ -721,9 +763,12 @@ public class VehicleController : MonoBehaviour {
 								dist = MathsCalculatios.GetDistanceBetweenVehicleAndOtherPosition(transform.position, hit.collider.transform.position , _direction);
 							}
 							//SUPPOSED TO DEACCLERATE
-							speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+							float accAmount = MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																							0, 
 																							myRayCastRange);
+							if(accAmount>0)
+								accAmount *= -1;
+							speed += accAmount;
 							
 							haveToReduceMySpeed = true;
 						}
@@ -732,9 +777,12 @@ public class VehicleController : MonoBehaviour {
 					else{
 						if(_light.Stopped && !MathsCalculatios.CompareTwoPositionsWRTDirections(_direction, transform.position, _stopPosition, 3)){
 							//SUPPOSED TO DEACCLERATE
-							speed += MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
+							float accAmount = MathsCalculatios.CalculateAcclerationByNewtonFormula ( myVehicle.Speed, 
 																							0, 
 																							myRayCastRange-2);
+							if(accAmount>0)
+								accAmount *= -1;
+							speed += accAmount;
 							haveToReduceMySpeed = true;
 						}
 						else	
@@ -742,8 +790,10 @@ public class VehicleController : MonoBehaviour {
 					}
 					
 				}
-				else
+				else{
 					haveToReduceMySpeed = false;
+					
+				}
 			}
 		}
 		else{ 
@@ -753,6 +803,12 @@ public class VehicleController : MonoBehaviour {
 		//	}
 		//	if((vehType != VehicleType.Bus || vehType != VehicleType.ServiceCar || vehType != VehicleType.Taxi ||  vehType != VehicleType.Caravan)  &&(vehType != VehicleType.Caravan)&& (vehType != VehicleType.ServiceCar) && (vehType != VehicleType.Bus) && (vehType != VehicleType.Taxi))
 				haveToReduceMySpeed = false;
+			if(vehType != VehicleType.Thief){
+				if(_light.Stopped && GetMyOrderInQueue() != 0 && speed <=0 ){
+					speed = myVehicle.Speed;
+					dist = 0;
+				}
+			}
 		}
 
 	}

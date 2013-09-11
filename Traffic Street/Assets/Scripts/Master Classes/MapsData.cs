@@ -42,12 +42,12 @@ public class MapsData : MonoBehaviour {
 	
 	// Intersections
 	public List<Vector3> GetMap1Intersections(){
-		return Map2_Data.Intersections();
+		return Map1_Data.Intersections();
 	}
 	
 	// Paths
 	public List<GamePath> GetMap1Paths(){
-		return Map2_Data.Paths(Streets);
+		return Map1_Data.Paths(Streets);
 	}
 	
 	// Lights
@@ -98,12 +98,12 @@ public class MapsData : MonoBehaviour {
 	
 	//Intersections
 	public List<Vector3> GetMap2Intersections(){
-		return Map1_Data.Intersections();
+		return Map2_Data.Intersections();
 	}
 	
 	// Paths
 	public List<GamePath> GetMap2Paths(){
-		return Map1_Data.Paths(Streets);
+		return Map2_Data.Paths(Streets);
 	}
 	
 	// Lights

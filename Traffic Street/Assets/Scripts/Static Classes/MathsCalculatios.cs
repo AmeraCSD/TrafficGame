@@ -60,16 +60,36 @@ public class MathsCalculatios  {
 	*/
 	
 	public static bool CheckStoppingPosition(StreetDirection direction, Vector3 vehiclePos, float stopPos){
-		if(direction == StreetDirection.Right && vehiclePos.x > stopPos - 15) 
+		int offset = 15;
+		if(direction == StreetDirection.Right && vehiclePos.x > stopPos - offset) 
 			return true;
 		
-		else if(direction == StreetDirection.Left && vehiclePos.x < stopPos + 15) 
+		else if(direction == StreetDirection.Left && vehiclePos.x < stopPos + offset) 
 			return true;
 		
-		else if(direction == StreetDirection.Down && vehiclePos.z < stopPos + 15) 
+		else if(direction == StreetDirection.Down && vehiclePos.z < stopPos + offset) 
 			return true;
 		
-		else if(direction == StreetDirection.Up && vehiclePos.z > stopPos - 15) 
+		else if(direction == StreetDirection.Up && vehiclePos.z > stopPos - offset) 
+			return true;
+		
+		else 
+			return false;
+	
+	}
+	
+	public static bool FakeStoppingPosition(StreetDirection direction, Vector3 vehiclePos, float stopPos){
+		int offset = 5;
+		if(direction == StreetDirection.Right && vehiclePos.x > stopPos - offset) 
+			return true;
+		
+		else if(direction == StreetDirection.Left && vehiclePos.x < stopPos + offset) 
+			return true;
+		
+		else if(direction == StreetDirection.Down && vehiclePos.z < stopPos + offset) 
+			return true;
+		
+		else if(direction == StreetDirection.Up && vehiclePos.z > stopPos - offset) 
 			return true;
 		
 		else 
