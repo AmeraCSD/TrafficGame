@@ -8,7 +8,7 @@ public class Map1_Data : MonoBehaviour {
 	
 	//public Globals globals = Globals.GetInstance();
 	
-	public static float NormalVehicleSpeed = 25;
+	public static float NormalVehicleSpeed = 60;
 	public static int MinScore = 200;
 	public static float GameTime = 300;
 	
@@ -199,12 +199,12 @@ public class Map1_Data : MonoBehaviour {
 	
 	//******************************************************************Map Data***************************************************************//
 	
-	public static string streetsString = "0%(-115.0, 5.0, -40.0)%(25.0, 5.0, -40.0)%5%Right%lightRight%true%8\n" +
-		"1%(25.0, 5.0, -75.0)%(25.0, 5.0, -40.0)%-50%Up%lightUp%true%1\n" +
-		"2%(25.0, 5.0, -40.0)%(115.0, 5.0, -40.0)%0%Right%none%false%8\n" +
-		"3%(-115.0, 5.0, -30.0)%(35.0, 5.0, -30.0)%5%Right%lightRight%true%8\n" +
-		"4%(35.0, 5.0, -30.0)%(75.0, 5.0, -30.0)%0%Right%none%false%2\n" +
-		"5%(75.0, 5.0, -30.0)%(115.0, 5.0, -30.0)%0%Right%none%false%2\n" +
+	public static string streetsString = "0%(-115.0, 5.0, -45.0)%(25.0, 5.0, -45.0)%5%Right%lightRight%true%8\n" +
+		"1%(25.0, 5.0, -75.0)%(25.0, 5.0, -45.0)%-55%Up%lightUp%true%1\n" +
+		"2%(25.0, 5.0, -45.0)%(115.0, 5.0, -45.0)%0%Right%none%false%8\n" +
+		"3%(-115.0, 5.0, -35.0)%(35.0, 5.0, -35.0)%5%Right%lightRight%true%8\n" +
+		"4%(35.0, 5.0, -35.0)%(75.0, 5.0, -35.0)%0%Right%none%false%2\n" +
+		"5%(75.0, 5.0, -35.0)%(115.0, 5.0, -35.0)%0%Right%none%false%2\n" +
 		"6%(25.0, 5.0, -15.0)%(-105.0, 5.0, -15.0)%0%Left%none%false%8\n" +
 		"7%(75.0, 5.0, -15.0)%(25.0, 5.0, -15.0)%45%Left%lightLeft1%true%2\n" +
 		"8%(115.0, 5.0, -15.0)%(75.0, 5.0, -15.0)%100%Left%lightLeft%true%1\n" +
@@ -212,7 +212,7 @@ public class Map1_Data : MonoBehaviour {
 		"10%(85.0, 5.0, -5.0)%(25.0, 5.0, -5.0)%45%Left%lightLeft1%true%2\n" +
 		"11%(115.0, 5.0, -5.0)%(85.0, 5.0, -5.0)%100%Left%lightLeft%true%1\n" +
 		"12%(25.0, 5.0, 15.0)%(25.0, 5.0, -5.0)%0%Down%none%false%1\n" +
-		"13%(35.0, 5.0, 35.0)%(35.0, 5.0, -30.0)%0%Down%none%false%3\n" +
+		"13%(35.0, 5.0, 35.0)%(35.0, 5.0, -35.0)%0%Down%none%false%3\n" +
 		"14%(75.0, 5.0, -15.0)%(75.0, 5.0, 35.0)%0%Up%none%false%3\n" +
 		"15%(85.0, 5.0, -5.0)%(85.0, 5.0, 45.0)%0%Up%none%false%4\n" +
 		"16%(-105.0, 5.0, 15.0)%(-55.0, 5.0, 15.0)%-70%Right%lightRight1%true%2\n" +
@@ -231,20 +231,20 @@ public class Map1_Data : MonoBehaviour {
 		"29%(-45.0, 5.0, 45.0)%(-45.0, 5.0, 85.0)%0%Up%none%false%2\n" +
 		"30%(25.0, 5.0, 85.0)%(25.0, 5.0, 45.0)%55%Down%lightDown%true%2\n" +
 		"31%(35.0, 5.0, 85.0)%(35.0, 5.0, 35.0)%55%Down%lightDown%true%2\n" +
-		"32%(75.0, 5.0, -30.0)%(75.0, 5.0, -15.0)%0%Up%none%false%1\n" +
+		"32%(75.0, 5.0, -35.0)%(75.0, 5.0, -15.0)%0%Up%none%false%1\n" +
 		"33%(-45.0, 5.0, 35.0)%(-45.0, 5.0, 45.0)%0%Up%none%false%1\n"+
-		"34%(25.0, 5.0, -35.0)%(25.0, 5.0, -15.0)%0%Up%none%false%2";
+		"34%(25.0, 5.0, -45.0)%(25.0, 5.0, -15.0)%0%Up%none%false%2";
 	
 	
 	public static List<Vector3> Intersections(){
 		List<Vector3> intersectionsList = new List<Vector3>();
 		
 		//here weeee goooooooooooo
-		intersectionsList.Add(new Vector3 (25.0f, 5.0f, -40.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, -40.0f));
-		intersectionsList.Add(new Vector3(35.0f, 5.0f, -30.0f));
-		intersectionsList.Add(new Vector3(25.0f, 5.0f, -30.0f));
-		intersectionsList.Add(new Vector3(75.0f, 5.0f, -25.0f));
+		intersectionsList.Add(new Vector3 (25.0f, 5.0f, -45.0f));
+		intersectionsList.Add(new Vector3(35.0f, 5.0f, -45.0f));
+		intersectionsList.Add(new Vector3(35.0f, 5.0f, -35.0f));
+		intersectionsList.Add(new Vector3(25.0f, 5.0f, -35.0f));
+		intersectionsList.Add(new Vector3(75.0f, 5.0f, -35.0f));
 		intersectionsList.Add(new Vector3(75.0f, 5.0f, -15.0f));
 		intersectionsList.Add(new Vector3(35.0f, 5.0f, -15.0f));
 		intersectionsList.Add(new Vector3(25.0f, 5.0f, -15.0f));
@@ -269,7 +269,8 @@ public class Map1_Data : MonoBehaviour {
 	//	intersectionsList.Add(new Vector3(85.0f, 5.0f, 45.0f));
 		intersectionsList.Add(new Vector3(75.0f, 5.0f, -75.0f));
 		intersectionsList.Add(new Vector3(-55.0f, 5.0f, 15.0f));
-		
+		intersectionsList.Add(new Vector3(45.0f, 5.0f, -35.0f));
+		intersectionsList.Add(new Vector3(75.0f, 5.0f, -25.5f));
 
 		return intersectionsList;
 

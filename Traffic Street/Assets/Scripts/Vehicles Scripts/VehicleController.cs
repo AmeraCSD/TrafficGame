@@ -646,7 +646,7 @@ public class VehicleController : MonoBehaviour {
 				angerMount *= Globals.nextAngerIncreaseRate;
 				// comicccccccccccccccccccc and zamameeer
 				myAngerSprite.SetActive(true);
-				audio.PlayOneShot(myVehicle.Horn);
+//				audio.PlayOneShot(myVehicle.Horn);
 			}
 		}
 	}
